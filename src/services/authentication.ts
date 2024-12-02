@@ -1,39 +1,20 @@
-const API_URL = process.env.REACT_APP_API_URL;
-
-export const handLogin = async (username: string, password: string) : Promise<void> => {
+export const handLogin = async (username: string, password: string, role: string): Promise<boolean> => {
+  console.log(username, password, role)
+  const API_URL = process.env.REACT_APP_API_URL;
   try {
-    const response = await fetch(`${API_URL}/login'`, {
+    const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password, role }),
     });
 
-    if(!response.ok) throw new Error('Login Failed');
+    if (!response.ok) throw new Error('Login failed');
     const data = await response.json();
 
-    localStorage.setItem('token', data.token)
+    localStorage.setItem('token', data.token); 
+    return true;  
   } catch (err) {
-    console.error('Login error', err)
+    console.error('Login error', err);
+    return false;  
   }
-}
-
-export const fetchUserRole = async (): Promise<string | null> => {
-  const token = localStorage.getItem('token');
-  if(!token) return null;
-
-  try {
-    const response = await fetch(`${API_URL}/`, {
-      headers: { Authorization: `Bearer ${token}`}
-    });
-
-    if(!response.ok) throw new Error('Login Failed');
-    const data = await response.json();
-
-    return data.role;
-  } catch (err) {
-    console.error('Error fetchng user role: ' ,err)
-    return null
-  }
-
-}
-
+};

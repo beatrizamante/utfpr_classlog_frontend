@@ -6,14 +6,14 @@ import { ReactComponent as Logo } from "../../assets/icons/utfpr logo.svg";
 import { DropdownMenu } from "../../components/DropDown";
 import { useNavigate } from "react-router";
 import background from '../../assets/images/background.png';
-import { handLogin, fetchUserRole } from '../../services/authentication'
+import { handLogin } from '../../services/authentication'
 
 type formDataInput = {
   login: string;
   password: string;
+  role: string;
 };
 
-const initialDropdownValue = "Estudante";
 const items = [
   { title: "Estudante", action: () => {} },
   { title: "Professor", action: () => {} },
@@ -22,13 +22,12 @@ const items = [
 
 export default function LoginScreen() {
   const navigate = useNavigate();
-  const [selectedRole, setSelectedRole] = useState(initialDropdownValue);
-  const [formData, setFormData] = useState<formDataInput>({ login: "", password: "" });
+  const [formData, setFormData] = useState<formDataInput>({ login: "", password: "", role: "Estudante" });
   const [error, setError] = useState<string | null>(null);
 
   const inputConfig = [
-    { label: "RA + Matricula", name: "login", value: formData.login },
-    { label: "Senha", name: "password", value: formData.password },
+    { label: "RA + Matricula", name: "login", value: formData.login, type: "text" },
+    { label: "Senha", name: "password", value: formData.password, type: "password" },
   ];
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,26 +40,34 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      await handLogin(formData.login, formData.password);
+      const role = formData.role;
+      const loginSuccess = await handLogin(formData.login, formData.password, role);
 
-      const role = await fetchUserRole();
-
-      if(role === "professor") {
-        navigate('/professor');
-      } else if (role === "admin") {
-        navigate('admin');
+      if (loginSuccess) {
+        if(role === "Professor") {
+          navigate('/professor');
+        } else if (role === "Administrador") {
+          navigate('/admin');
+        } else if (role === "Estudante") {
+          navigate('/estudante');
+        } else {
+          setError("Role not recognized. Please contact support");
+        }
       } else {
-        setError("Role not recognized. Please contact support");
+        setError("Login failed. Please check your credentials.");
       }
     } catch (err) {
       console.error("Login error: ", err);
-      setError("Failed to login. Please check your credentials.");
+      setError("An error occurred during login. Please try again later.");
     }
   };
 
   const updatedItems = items.map((item) => ({
     ...item,
-    action: () => setSelectedRole(item.title),
+    action: () => setFormData(prevData => ({
+      ...prevData,
+      role: item.title, 
+    })),
   }));
 
   return (
@@ -80,7 +87,7 @@ export default function LoginScreen() {
               onChange={handleInputChange}
             />
           ))}
-          <DropdownMenu buttonLabel={selectedRole} items={updatedItems} />
+          <DropdownMenu buttonLabel={formData.role} items={updatedItems} />
 
           <div className="flex flex-col items-center gap-4 w-full">
             <Button onClick={handleLogin} color="utfpr_yellow">
