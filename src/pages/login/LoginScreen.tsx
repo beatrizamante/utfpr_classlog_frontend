@@ -82,6 +82,7 @@ export default function LoginScreen() {
             <Input
               key={input.name}
               label={input.label}
+              type={input.type}
               name={input.name}
               value={input.value}
               onChange={handleInputChange}
