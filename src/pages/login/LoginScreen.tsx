@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import Footer from "../../components/Footer";
 import Button from "../../components/Button";
 import Input from "../../components/Forms/Item/Input";
@@ -21,41 +21,42 @@ const items = [
 ];
 
 export default function LoginScreen() {
-  const navigate = useNavigate();;
+  const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState(initialDropdownValue);
-  const formData = useRef<formDataInput>({ login: "", password: "" });
-  const [error, setError] = useState<string | null>(null)
+  const [formData, setFormData] = useState<formDataInput>({ login: "", password: "" });
+  const [error, setError] = useState<string | null>(null);
 
   const inputConfig = [
-    { label: "RA + Matricula", name: "login", value: formData.current.login },
-    { label: "Senha", name: "password", value: formData.current.password },
+    { label: "RA + Matricula", name: "login", value: formData.login },
+    { label: "Senha", name: "password", value: formData.password },
   ];
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    if (name in formData.current) {
-      formData.current[name as keyof formDataInput] = value;
-    }
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value, 
+    }));
   };
 
   const handleLogin = async () => {
     try {
-      await handLogin(formData.current.login, formData.current.password);
+      await handLogin(formData.login, formData.password);
 
       const role = await fetchUserRole();
 
       if(role === "professor") {
-        navigate('/professor')
+        navigate('/professor');
       } else if (role === "admin") {
-        navigate('admin')
+        navigate('admin');
       } else {
-        setError("Role not recognized. Please contact support")
+        setError("Role not recognized. Please contact support");
       }
     } catch (err) {
-      console.error("Login error: ", err)
-      setError("Failed to login. Please check your credentials.")
+      console.error("Login error: ", err);
+      setError("Failed to login. Please check your credentials.");
     }
-  }
+  };
 
   const updatedItems = items.map((item) => ({
     ...item,

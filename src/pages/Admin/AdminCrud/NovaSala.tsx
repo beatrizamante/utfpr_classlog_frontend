@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
-import Card from '../../../components/Card'
 import Input from '../../../components/Forms/Item/Input'
 import LoadInput from '../../../components/Forms/Item/LoadInput';
+import Card from "../../../components/Forms/Card";
 
 type formDataInput = {
   identificacao: string;
