@@ -8,10 +8,13 @@ export const handLogin = async (username: string, password: string): Promise<boo
     });
 
     if (!response.ok) throw new Error('Login failed');
+
     const data = await response.json();
 
     localStorage.setItem('token', data.token); 
-    return true;  
+    
+    return true; 
+
   } catch (err) {
     console.error('Login error', err);
     return false;  
