@@ -41,15 +41,16 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     try {
       const role = formData.role;
+      if(role === "Estudante") {
+        navigate('/estudante');
+      }
+      
       const loginSuccess = await handLogin(formData.login, formData.password, role);
-
       if (loginSuccess) {
         if(role === "Professor") {
           navigate('/professor');
         } else if (role === "Administrador") {
           navigate('/admin');
-        } else if (role === "Estudante") {
-          navigate('/estudante');
         } else {
           setError("Role not recognized. Please contact support");
         }

@@ -1,5 +1,4 @@
 export const handLogin = async (username: string, password: string, role: string): Promise<boolean> => {
-  console.log(username, password, role)
   const API_URL = process.env.REACT_APP_API_URL;
   try {
     const response = await fetch(`${API_URL}/login`, {
