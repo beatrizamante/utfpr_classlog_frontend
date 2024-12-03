@@ -5,8 +5,8 @@ import Input from "../../components/Forms/Item/Input";
 import { ReactComponent as Logo } from "../../assets/icons/utfpr logo.svg";
 import { DropdownMenu } from "../../components/DropDown";
 import { useNavigate } from "react-router";
-import background from '../../assets/images/background.png';
-import { handLogin } from '../../services/authentication'
+import background from "../../assets/images/background.png";
+import { handLogin } from "../../services/authentication";
 
 type formDataInput = {
   login: string;
@@ -22,38 +22,51 @@ const items = [
 
 export default function LoginScreen() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<formDataInput>({ login: "", password: "", role: "Estudante" });
+  const [formData, setFormData] = useState<formDataInput>({
+    login: "",
+    password: "",
+    role: "Estudante",
+  });
   const [error, setError] = useState<string | null>(null);
 
   const inputConfig = [
-    { label: "RA + Matricula", name: "login", value: formData.login, type: "text" },
-    { label: "Senha", name: "password", value: formData.password, type: "password" },
+    {
+      label: "RA + Matricula",
+      name: "login",
+      value: formData.login,
+      type: "text",
+    },
+    {
+      label: "Senha",
+      name: "password",
+      value: formData.password,
+      type: "password",
+    },
   ];
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value, 
+      [name]: value,
     }));
   };
 
   const handleLogin = async () => {
     try {
       const role = formData.role;
-      if(role === "Estudante") {
-        navigate('/estudante');
-      }
-      
-      const loginSuccess = await handLogin(formData.login, formData.password, role);
-      if (loginSuccess) {
-        if(role === "Professor") {
-          navigate('/professor');
-        } else if (role === "Administrador") {
-          navigate('/admin');
-        } else {
-          setError("Role not recognized. Please contact support");
+      if (role === "Estudante") {
+        navigate("/estudante");
+      } else if (role === "Professor") {
+        const loginSuccess = await handLogin(
+          formData.login,
+          formData.password,
+        );
+        if (loginSuccess) {
+          navigate("/professor");
         }
+      } else if (role === "Administrador") {
+        navigate("/admin");
       } else {
         setError("Login failed. Please check your credentials.");
       }
@@ -65,14 +78,21 @@ export default function LoginScreen() {
 
   const updatedItems = items.map((item) => ({
     ...item,
-    action: () => setFormData(prevData => ({
-      ...prevData,
-      role: item.title, 
-    })),
+    action: () =>
+      setFormData((prevData) => ({
+        ...prevData,
+        role: item.title,
+      })),
   }));
 
   return (
-    <div className="min-h-screen flex flex-col bg-cover bg-center" style={{ backgroundImage: `url(${background})`, mixBlendMode: 'soft-light' }}>
+    <div
+      className="min-h-screen flex flex-col bg-cover bg-center"
+      style={{
+        backgroundImage: `url(${background})`,
+        mixBlendMode: "soft-light",
+      }}
+    >
       <div className="absolute inset-0 bg-utfpr_dark_gray opacity-40 z-0"></div>
 
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
@@ -95,7 +115,10 @@ export default function LoginScreen() {
             <Button onClick={handleLogin} color="utfpr_yellow">
               ENTRAR
             </Button>
-            <Button onClick={() => navigate("/recover-password")} color="utfpr_red">
+            <Button
+              onClick={() => navigate("/recover-password")}
+              color="utfpr_red"
+            >
               RECUPERAR SENHA
             </Button>
           </div>
