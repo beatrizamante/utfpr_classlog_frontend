@@ -1,7 +1,7 @@
 export const handLogin = async (username: string, password: string): Promise<boolean> => {
   const API_URL = process.env.REACT_APP_API_URL;
   try {
-    const response = await fetch(`${API_URL}/login`, {
+    const response = await fetch(`${API_URL}login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
