@@ -1,22 +1,25 @@
 export const handLogin = async (username: string, password: string): Promise<boolean> => {
   const API_URL = process.env.REACT_APP_API_URL;
+
   try {
-    const response = await fetch(`${API_URL}login`, {
+    const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ university_registry: username, password }), // Alinhando com o back
     });
 
-    if (!response.ok) throw new Error('Login failed');
+    const result = await response.text(); // Captura a mensagem de resposta do back como texto
 
-    const data = await response.json();
-
-    localStorage.setItem('token', data.token); 
-    
-    return true; 
+    if (response.ok && result.includes("user logged in successfully")) {
+      console.log("Login bem-sucedido!"); 
+      return true; 
+    } else {
+      console.error("Erro no login:", result); // Loga a mensagem de erro do back
+      return false;
+    }
 
   } catch (err) {
-    console.error('Login error', err);
+    console.error("Erro na conexão com a API:", err);
     return false;  
   }
 };
