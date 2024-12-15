@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function index() {
   return (
-    <div>Index for Professors page</div>
+    <div>Professor</div>
   )
 }
