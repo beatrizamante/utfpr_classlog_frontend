@@ -9,7 +9,7 @@ import background from "../../assets/images/background.png";
 import { handLogin } from "../../services/authentication";
 
 type formDataInput = {
-  login: string;
+  university_registry: string;
   password: string;
   role: string;
 };
@@ -23,7 +23,7 @@ const items = [
 export default function LoginScreen() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<formDataInput>({
-    login: "",
+    university_registry: "",
     password: "",
     role: "Estudante",
   });
@@ -32,8 +32,8 @@ export default function LoginScreen() {
   const inputConfig = [
     {
       label: "RA + Matricula",
-      name: "login",
-      value: formData.login,
+      name: "university_registry",
+      value: formData.university_registry,
       type: "text",
     },
     {
@@ -59,7 +59,7 @@ export default function LoginScreen() {
         navigate("/estudante");
       } else if (role === "Professor") {
         const loginSuccess = await handLogin(
-          formData.login,
+          formData.university_registry,
           formData.password,
         );
         if (loginSuccess) {

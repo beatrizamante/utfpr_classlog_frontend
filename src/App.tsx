@@ -12,15 +12,15 @@ import Listas from './pages/Admin/AdminCrud/ListaItems';
 function App() {
   return (
 
-    <Listas/>
-    // <Router>
-    //   <Routes>
-    //     <Route path="/" element={<LoginScreen />} />
-    //     <Route path="/professor" element={<ProfessorPage />} />
-    //     <Route path="/admin" element={<AdminPage />} />
-    //     <Route path="/estudante" element={<StudentPage />} />
-    //   </Routes>
-    // </Router>
+    //<Listas/>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginScreen />} />
+        <Route path="/professor" element={<ProfessorPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/estudante" element={<StudentPage />} />
+      </Routes>
+    </Router>
   );
 }
 export default App;
