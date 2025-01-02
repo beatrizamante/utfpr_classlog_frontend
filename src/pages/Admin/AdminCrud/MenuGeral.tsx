@@ -22,11 +22,11 @@ export default function RegisterPage() {
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
           <Card title={"CADASTRAR"} size="2xl" >
-            <Button onClick={() => handleClick()} height={"[80px]"}>SALA</Button>
+            <Button onClick={() => handleClick()} height="[80px]">SALA</Button>
             <Line />
-            <Button onClick={() => handleClick()} height={"[80px]"}>MATÉRIA</Button>
+            <Button onClick={() => handleClick()} height="[80px]">MATÉRIA</Button>
             <Line />
-            <Button onClick={() => handleClick()} height={"[80px]"}>BLOCO</Button>
+            <Button onClick={() => handleClick()} height="[80px]">BLOCO</Button>
           </Card>
         </div>
         <Footer />

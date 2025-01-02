@@ -4,12 +4,12 @@ import ProfessorPage from './pages/Professors';
 import AdminPage from './pages/Admin';
 import StudentPage from './pages/Guest/'
 import RegisterPage from './pages/Admin/AdminCrud/MenuGeral';
-import Cadastra from './pages/Admin/AdminCrud/Materias/Cadastrar';
+import Lista from './pages/Admin/AdminCrud/ListaItems';
 
 function App() {
   return (
 
-    <Cadastra/>
+    <Lista/>
     /*<Router>
       <Routes>
         <Route path="/" element={<LoginScreen />} />

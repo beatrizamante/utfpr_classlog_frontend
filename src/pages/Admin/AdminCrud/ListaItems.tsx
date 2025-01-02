@@ -8,6 +8,7 @@ import { Classroom } from "../../../interfaces/AdmInterfaces";
 import List from "../../../components/List/List";
 import { useNavigate } from "react-router";
 import DeleteModal from "../../../components/deleteModal";
+import mockRooms from '../../../mocks/mockRooms'
 
 export default function Listas() {
   const [rooms, setRooms] = useState<Classroom[]>([]);
@@ -24,6 +25,9 @@ export default function Listas() {
         setShowModal(false);
         setSelectId(null);
         handleList();
+
+        // Simulate removal from the mock data
+        setRooms((prevRooms) => prevRooms.filter((room) => room.room_id !== selectId));
       } else {
         console.error("Classroom ID is missing!");
       }
@@ -36,11 +40,15 @@ export default function Listas() {
     try {
       // const response = await apiClient.getClassrooms();
       // setRooms(response.data);
+      setRooms(mockRooms)
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
     }
   };
+  
+  const getClassroomLabel = (item: Classroom): string => item.identificacao;
+  const getClassroomId = (item: Classroom): number => item.room_id;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -82,13 +90,12 @@ export default function Listas() {
             <div className="mx-4 mb-4">
               <ul ref={listRef}>
                 <List
-                  listOfClassrooms={rooms.map((room) => ({
+                  listOf={rooms.map((room) => ({
                     ...room,
                     id: room.room_id,
                   }))}
-                  onSelectedRoom={(id: number | null) => setSelectId(id)}
-                  selectedRoomId={selectId}
-                />
+                  onSelected={(id: number | null) => setSelectId(id)}
+                  selectedId={selectId} getItemLabel={getClassroomLabel} getItemId={getClassroomId}                />
               </ul>
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">

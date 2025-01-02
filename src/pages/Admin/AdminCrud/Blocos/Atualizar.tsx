@@ -29,7 +29,7 @@ export default function AtualizaBloco() {
     const fetchBlock = async () => {
       try {
         if (blockId) {
-          // const response = await apiClient.getClassroomById(roomId.toString());
+          // const response = await apiClient.getClassroomById(blockId.toString());
           // if (response.data) {
           //   setFormData({
           //     bloco: response.data.bloco,
@@ -72,7 +72,7 @@ export default function AtualizaBloco() {
           formDataToUpload.append("planta", formData.planta);
         }
 
-        // await apiClient.updateRoom(roomId.toString(), formDataToUpload);
+        // await apiClient.updateRoom(blockId.toString(), formDataToUpload);
         console.log("Room successfully updated.");
         // navigate("/ListaItems"); // Redirect after successful update
       } else {
