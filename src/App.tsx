@@ -4,23 +4,20 @@ import ProfessorPage from './pages/Professors';
 import AdminPage from './pages/Admin';
 import StudentPage from './pages/Guest/'
 import RegisterPage from './pages/Admin/AdminCrud/MenuGeral';
-import NovaSala from './pages/Admin/AdminCrud/Cadastrar';
-import AtualizaSala from './pages/Admin/AdminCrud/Atualizar';
-import DeleteModal from './components/deleteModal';
-import Listas from './pages/Admin/AdminCrud/ListaItems';
+import Cadastra from './pages/Admin/AdminCrud/Materias/Cadastrar';
 
 function App() {
   return (
 
-    //<Listas/>
-    <Router>
+    <Cadastra/>
+    /*<Router>
       <Routes>
         <Route path="/" element={<LoginScreen />} />
         <Route path="/professor" element={<ProfessorPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/estudante" element={<StudentPage />} />
       </Routes>
-    </Router>
+    </Router>*/
   );
 }
 export default App;

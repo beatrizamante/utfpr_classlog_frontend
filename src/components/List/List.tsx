@@ -1,6 +1,6 @@
 import React from "react";
 import Item from "./Item/ItemClassroom";
-import { Classroom } from "../../interfaces/Classroom";
+import { Classroom } from "../../interfaces/AdmInterfaces";
 
 interface ListProps {
   listOfClassrooms: Classroom[];

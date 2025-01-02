@@ -4,7 +4,7 @@ import Button from "../../../components/Button";
 import Footer from "../../../components/Footer";
 import background from "../../../assets/images/background.png";
 import Header from "../../../components/Header";
-import { Classroom } from "../../../interfaces/Classroom";
+import { Classroom } from "../../../interfaces/AdmInterfaces";
 import List from "../../../components/List/List";
 import { useNavigate } from "react-router";
 import DeleteModal from "../../../components/deleteModal";

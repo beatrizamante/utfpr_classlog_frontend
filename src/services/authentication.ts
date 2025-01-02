@@ -7,6 +7,7 @@ export const handLogin = async (university_registry: string, password: string): 
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ university_registry, password }), 
     });
+    console.log("Body? _____________________", university_registry, password)
 
     const result = await response.text(); 
 
