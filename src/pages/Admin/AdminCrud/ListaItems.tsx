@@ -8,7 +8,7 @@ import { Classroom } from "../../../interfaces/AdmInterfaces";
 import List from "../../../components/List/List";
 import { useNavigate } from "react-router";
 import DeleteModal from "../../../components/deleteModal";
-import mockRooms from '../../../mocks/mockRooms'
+import mockRooms from "../../../mocks/mockRooms";
 
 export default function Listas() {
   const [rooms, setRooms] = useState<Classroom[]>([]);
@@ -27,7 +27,9 @@ export default function Listas() {
         handleList();
 
         // Simulate removal from the mock data
-        setRooms((prevRooms) => prevRooms.filter((room) => room.room_id !== selectId));
+        setRooms((prevRooms) =>
+          prevRooms.filter((room) => room.room_id !== selectId)
+        );
       } else {
         console.error("Classroom ID is missing!");
       }
@@ -40,23 +42,20 @@ export default function Listas() {
     try {
       // const response = await apiClient.getClassrooms();
       // setRooms(response.data);
-      setRooms(mockRooms)
+      setRooms(mockRooms);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
     }
   };
-  
+
   const getClassroomLabel = (item: Classroom): string => item.identificacao;
-  const getClassroomId = (item: Classroom): number => item.room_id;
+  const getMappedItemId = (item: Classroom & { id: number | null }): number | null => item.id;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      if (
-        listRef.current &&
-        !listRef.current.contains(target)
-      ) {
+      if (listRef.current && !listRef.current.contains(target)) {
         if (!showModal) {
           setSelectId(null);
         }
@@ -95,7 +94,10 @@ export default function Listas() {
                     id: room.room_id,
                   }))}
                   onSelected={(id: number | null) => setSelectId(id)}
-                  selectedId={selectId} getItemLabel={getClassroomLabel} getItemId={getClassroomId}                />
+                  selectedId={selectId}
+                  getItemLabel={getClassroomLabel}
+                  getItemId={getMappedItemId}
+                />
               </ul>
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">

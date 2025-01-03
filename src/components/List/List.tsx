@@ -6,7 +6,7 @@ interface ListProps<T> {
   onSelected: (id: number | null) => void;
   selectedId?: number | null;
   getItemLabel: (item: T) => string; 
-  getItemId: (item: T) => number;   
+  getItemId: (item: T) => number | null;  
 }
 
 export default function List<T>({
@@ -17,12 +17,12 @@ export default function List<T>({
   getItemId,
 }: ListProps<T>) {
   return (
-    <div className="flex justify-center pb-8 relative mx-8 py-4 -z-0 bg-transparent max-h-[500px] overflow-y-auto overflow-x-hidden">
+    <div className="flex justify-center pb-8 relative mx-8 py-4 -z-0 bg-transparent max-h-[30vh] overflow-y-auto overflow-x-hidden">
       <ul className="space-y-8">
         {listOf.map((item) => (
           <Item
-            key={getItemId(item)} // Use dynamic key
-            label={getItemLabel(item)} // Get the label dynamically
+            key={getItemId(item)} 
+            label={getItemLabel(item)} 
             onClick={() => onSelected(getItemId(item))}
             isSelected={getItemId(item) === selectedId}
           />
