@@ -7,7 +7,7 @@ import Header from "../../../components/Header";
 import { Classroom } from "../../../interfaces/AdmInterfaces";
 import List from "../../../components/List/List";
 import { useNavigate } from "react-router";
-import DeleteModal from "../../../components/deleteModal";
+import Modal from "../../../components/Modal";
 import mockRooms from "../../../mocks/mockRooms";
 
 export default function Listas() {
@@ -18,6 +18,7 @@ export default function Listas() {
   const listRef = useRef<HTMLUListElement>(null);
 
   const handleDelete = async () => {
+    console.log(selectId);
     try {
       if (selectId != null) {
         // await apiClient.deleteRoom(selectId.toString());
@@ -26,7 +27,6 @@ export default function Listas() {
         setSelectId(null);
         handleList();
 
-        // Simulate removal from the mock data
         setRooms((prevRooms) =>
           prevRooms.filter((room) => room.room_id !== selectId)
         );
@@ -50,15 +50,23 @@ export default function Listas() {
   };
 
   const getClassroomLabel = (item: Classroom): string => item.identificacao;
-  const getMappedItemId = (item: Classroom & { id: number | null }): number | null => item.id;
+  const getMappedItemId = (
+    item: Classroom & { id: number | null }
+  ): number | null => item.id;
+
+  useEffect(() => {
+    console.log("Item clicked with id after state update:", selectId);
+  }, [selectId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      if (listRef.current && !listRef.current.contains(target)) {
-        if (!showModal) {
-          setSelectId(null);
-        }
+      const clickedInsideList =
+        listRef.current && listRef.current.contains(target);
+      const clickedOnButton = (event.target as HTMLElement).closest("button");
+
+      if (!showModal && !clickedInsideList && !clickedOnButton) {
+        setSelectId(null);
       }
     };
 
@@ -67,7 +75,7 @@ export default function Listas() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showModal]);
+  }, [showModal, selectId]);
 
   useEffect(() => {
     handleList();
@@ -93,7 +101,9 @@ export default function Listas() {
                     ...room,
                     id: room.room_id,
                   }))}
-                  onSelected={(id: number | null) => setSelectId(id)}
+                  onSelected={(id: number | null) => {
+                    setSelectId(id);
+                  }}
                   selectedId={selectId}
                   getItemLabel={getClassroomLabel}
                   getItemId={getMappedItemId}
@@ -104,14 +114,19 @@ export default function Listas() {
               <Button
                 onClick={() => {
                   if (selectId) {
-                    // navigate(`/atualizar/${selectId}`);
+                    console.log(`Navegar para atualizar o ID: ${selectId}`);
                   }
                 }}
+                disabled={!selectId}
               >
                 ATUALIZAR
               </Button>
               <Button
-                onClick={() => setShowModal(true)}
+                onClick={() => {
+                  if (selectId) {
+                    setShowModal(true);
+                  }
+                }}
                 color="utfpr_red"
                 disabled={!selectId}
               >
@@ -122,7 +137,8 @@ export default function Listas() {
         </div>
       </div>
       <Footer />
-      <DeleteModal
+      <Modal
+        message="Tem certeza que deseja deletar essas informações?"
         isVisible={showModal}
         onCancel={() => setShowModal(false)}
         onConfirm={handleDelete}
