@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import Card from "../../../components/Forms/Card";
-import Button from "../../../components/Button";
-import Footer from "../../../components/Footer";
-import background from "../../../assets/images/background.png";
-import Header from "../../../components/Header";
-import { Classroom } from "../../../interfaces/AdmInterfaces";
-import List from "../../../components/List/List";
+import background from "../../../../assets/images/background.png";
 import { useNavigate } from "react-router";
-import Modal from "../../../components/Modal";
-import mockRooms from "../../../mocks/mockRooms";
+import { Subjects } from "../../../../interfaces/AdmInterfaces";
+import Header from "../../../../components/Header";
+import Card from "../../../../components/Forms/Card";
+import List from "../../../../components/List/List";
+import Button from "../../../../components/Button";
+import Footer from "../../../../components/Footer";
+import Modal from "../../../../components/Modal";
 
 export default function Listas() {
-  const [rooms, setRooms] = useState<Classroom[]>([]);
+  const [subjects, setSubjects] = useState<Subjects[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   // const navigate = useNavigate();
@@ -21,17 +20,17 @@ export default function Listas() {
     console.log(selectId);
     try {
       if (selectId != null) {
-        // await apiClient.deleteRoom(selectId.toString());
+        // await apiClient.deletesubject(selectId.toString());
         console.log("Deletion successful");
         setShowModal(false);
         setSelectId(null);
         handleList();
 
-        setRooms((prevRooms) =>
-          prevRooms.filter((room) => room.room_id !== selectId)
+        setSubjects((prevsubjects) =>
+          prevsubjects.filter((subject) => subject.id !== selectId)
         );
       } else {
-        console.error("Classroom ID is missing!");
+        console.error("Subjects ID is missing!");
       }
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -40,18 +39,18 @@ export default function Listas() {
 
   const handleList = async () => {
     try {
-      // const response = await apiClient.getClassrooms();
-      // setRooms(response.data);
-      setRooms(mockRooms);
+      // const response = await apiClient.getSubjectss();
+      // setSubjects(response.data);
+      setSubjects([]);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
     }
   };
 
-  const getClassroomLabel = (item: Classroom): string => item.identificacao;
+  const getSubjectsLabel = (item: Subjects): string => `${item.period} - ${item.professor}`;
   const getMappedItemId = (
-    item: Classroom & { id: number | null }
+    item: Subjects & { id: number | null }
   ): number | null => item.id;
 
   useEffect(() => {
@@ -97,15 +96,15 @@ export default function Listas() {
             <div className="mx-4 mb-4">
               <ul ref={listRef}>
                 <List
-                  listOf={rooms.map((room) => ({
-                    ...room,
-                    id: room.room_id,
+                  listOf={subjects.map((subject) => ({
+                    ...subject,
+                    id: subject.id,
                   }))}
                   onSelected={(id: number | null) => {
                     setSelectId(id);
                   }}
                   selectedId={selectId}
-                  getItemLabel={getClassroomLabel}
+                  getItemLabel={getSubjectsLabel}
                   getItemId={getMappedItemId}
                 />
               </ul>

@@ -1,5 +1,5 @@
 export interface Classroom {
-  room_id: number | null;
+  id: number | null;
   bloco: string;
   identificacao: string;
   tamanho: string;
@@ -7,13 +7,13 @@ export interface Classroom {
 }
 
 export interface Block {
-  block_id: number | null;
+  id: number | null;
   identificacao: string;
   planta: File | null;
 }
 
 export interface Subjects {
-  subject_id: number | null;
+  id: number | null;
   period: string;
   professor: string;
   time: string;
