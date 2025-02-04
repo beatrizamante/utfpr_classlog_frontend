@@ -31,7 +31,7 @@ export default function AtualizaSala() {
           const response = await subjectsApi.getSubjectById(subjectId.toString());
           if (response.data) {
             setFormData({
-              period: response.data.periodo,
+              period: response.data.semester,
               professor: response.data.professor,
               time: response.data.time,
             });

@@ -11,8 +11,6 @@ import { classroomsApi } from "../../../../services/apiClassroom";
 type FormDataInput = {
   bloco: string;
   identificacao: string;
-  tamanho: string;
-  tipo: string;
 };
 
 export default function AtualizaSala() {
@@ -22,8 +20,6 @@ export default function AtualizaSala() {
   const [formData, setFormData] = useState<FormDataInput>({
     bloco: "",
     identificacao: "",
-    tamanho: "",
-    tipo: "",
   });
 
   useEffect(() => {
@@ -33,10 +29,8 @@ export default function AtualizaSala() {
           const response = await classroomsApi.getClassroomById(roomId.toString());
           if (response.data) {
             setFormData({
-              bloco: response.data.bloco,
-              identificacao: response.data.identificacao,
-              tamanho: response.data.tamanho,
-              tipo: response.data.tipo,
+              bloco: response.data.block,
+              identificacao: response.data.identification,
             });
           }
         }
@@ -61,7 +55,7 @@ export default function AtualizaSala() {
       if (roomId && formData) {
         await classroomsApi.updateClassroom(roomId.toString(), formData);
         console.log("Room successfully updated.");
-        navigate("/ListaItems");
+        navigate(-1);
       } else {
         console.error("Room ID or form data is missing.");
       }
@@ -87,8 +81,7 @@ export default function AtualizaSala() {
               {[
                 { label: "Bloco", name: "bloco" },
                 { label: "Identificação", name: "identificacao" },
-                { label: "Tamanho da Sala", name: "tamanho" },
-                { label: "Tipo de Laboratório", name: "tipo" },
+                { label: "Semestre", name: "semestre" },
               ].map((input) => (
                 <Input
                   key={input.name}

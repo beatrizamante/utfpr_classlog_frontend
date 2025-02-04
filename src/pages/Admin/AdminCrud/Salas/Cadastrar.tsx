@@ -12,16 +12,12 @@ import { classroomsApi } from "../../../../services/apiClassroom";
 type formDataInput = {
   bloco: string;
   identificacao: string;
-  tamanho: string;
-  tipo: string;
 };
 
 export default function NovaSala() {
   const [formData, setFormData] = useState<formDataInput>({
     bloco: "",
     identificacao: "",
-    tamanho: "",
-    tipo: "",
   });
 
   const inputConfig = [
@@ -34,16 +30,6 @@ export default function NovaSala() {
       label: "Identificação",
       name: "identificacao",
       value: formData.identificacao,
-    },
-    {
-      label: "Tamanho da Sala",
-      name: "tamanho",
-      value: formData.tamanho,
-    },
-    {
-      label: "Tipo de Laboratório",
-      name: "tipo",
-      value: formData.tipo,
     },
   ];
 
@@ -59,18 +45,11 @@ export default function NovaSala() {
 
   const handleSave = async () => {
     try {
-      if (
-        formData.bloco &&
-        formData.identificacao &&
-        formData.tamanho &&
-        formData.tipo
-      ) {
+      if (formData.bloco && formData.identificacao) {
         const newClassroom: Classroom = {
           id: null,
           bloco: formData.bloco,
           identificacao: formData.identificacao,
-          tamanho: formData.tamanho,
-          tipo: formData.tipo,
         };
 
         await classroomsApi.createClassroom(newClassroom);
@@ -78,8 +57,6 @@ export default function NovaSala() {
         setFormData({
           bloco: "",
           identificacao: "",
-          tamanho: "",
-          tipo: "",
         });
       } else {
         console.error("All fields must be filled.");
@@ -93,8 +70,6 @@ export default function NovaSala() {
     setFormData({
       bloco: "",
       identificacao: "",
-      tamanho: "",
-      tipo: "",
     });
     navigate(-1);
   };
