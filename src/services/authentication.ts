@@ -1,25 +1,48 @@
-export const handLogin = async (university_registry: string, password: string): Promise<boolean> => {
-  const API_URL = `${process.env.REACT_APP_API_URL}:3000`;;
+import axios from "axios";
 
-  try {
-    const response = await fetch(`${API_URL}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ university_registry, password }), 
-    });
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3000";
 
-    const result = await response.text(); 
+export const authApi = {
+  async login(university_registry: string, password?: string) {
+    try {
+      const response = await axios.post(`${API_URL}/login`, {
+        university_registry,
+        password,
+      });
 
-    if (response.ok && result.includes("user logged in successfully")) {
-      console.log("Login bem-sucedido!"); 
-      return true; 
-    } else {
-      console.error("Erro no login:", result); 
-      return false;
+      if (response.status === 200) {
+        const { token, role } = response.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
+        return { success: true, role };
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          "Erro ao fazer login:",
+          error.response?.data || error.message
+        );
+        return {
+          success: false,
+          message: error.response?.data?.message || "Erro desconhecido",
+        };
+      } else {
+        console.error("Erro inesperado:", error);
+        return { success: false, message: "Erro inesperado" };
+      }
     }
+  },
 
-  } catch (err) {
-    console.error("Erro na conexão com a API:", err);
-    return false;  
-  }
+  logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+  },
+
+  isAuthenticated() {
+    return !!localStorage.getItem("token");
+  },
+
+  getRole() {
+    return localStorage.getItem("role");
+  },
 };

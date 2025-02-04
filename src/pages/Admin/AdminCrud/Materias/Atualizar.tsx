@@ -6,7 +6,7 @@ import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../../../../services/api";
+import { subjectsApi } from "../../../../services/apiSubject";
 
 type FormDataInput = {
   period: string;
@@ -28,7 +28,7 @@ export default function AtualizaSala() {
     const fetchSubject = async () => {
       try {
         if (subjectId) {
-          const response = await api.getItemById(subjectId.toString());
+          const response = await subjectsApi.getSubjectById(subjectId.toString());
           if (response.data) {
             setFormData({
               period: response.data.periodo,
@@ -56,7 +56,7 @@ export default function AtualizaSala() {
   const handleUpdate = async () => {
     try {
       if (subjectId && formData) {
-        await api.updateItem(subjectId.toString(), formData);
+        await subjectsApi.updateSubject(subjectId.toString(), formData);
         console.log("Room successfully updated.");
         navigate(-1);
       } else {

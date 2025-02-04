@@ -6,7 +6,7 @@ import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../../../../services/api";
+import { classroomsApi } from "../../../../services/apiClassroom";
 
 type FormDataInput = {
   bloco: string;
@@ -30,7 +30,7 @@ export default function AtualizaSala() {
     const fetchRoom = async () => {
       try {
         if (roomId) {
-          const response = await api.getItemById(roomId.toString());
+          const response = await classroomsApi.getClassroomById(roomId.toString());
           if (response.data) {
             setFormData({
               bloco: response.data.bloco,
@@ -59,7 +59,7 @@ export default function AtualizaSala() {
   const handleUpdate = async () => {
     try {
       if (roomId && formData) {
-        await api.updateItem(roomId.toString(), formData);
+        await classroomsApi.updateClassroom(roomId.toString(), formData);
         console.log("Room successfully updated.");
         navigate("/ListaItems");
       } else {

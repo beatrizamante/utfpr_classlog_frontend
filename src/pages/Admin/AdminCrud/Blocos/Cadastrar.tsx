@@ -6,9 +6,9 @@ import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import LoadInput from "../../../../components/Forms/Item/LoadInput";
-import api from "../../../../services/api";
 import { Block } from "../../../../interfaces/AdmInterfaces";
 import { useNavigate } from "react-router";
+import { blocksApi } from "../../../../services/apiBlock";
 
 type formDataInput = {
   identificacao: string;
@@ -52,7 +52,7 @@ export default function NovoBloco() {
       if (formData.identificacao && formData.planta) {
         const formDataToUpload = convertBlockToFormData(formData);
 
-        await api.createItem(formDataToUpload);
+        await blocksApi.createBlock(formDataToUpload);
         console.log("Block successfully created.");
         setFormData({
           identificacao: "",

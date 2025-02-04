@@ -6,8 +6,8 @@ import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { Subjects } from "../../../../interfaces/AdmInterfaces"; 
-import api from "../../../../services/api";
 import { useNavigate } from "react-router";
+import { subjectsApi } from "../../../../services/apiSubject";
 
 type formDataInput = {
   identificacao: string;
@@ -68,7 +68,7 @@ export default function NovaSala() {
           time: formData.horario,
         };
 
-        await api.createItem(newSubject);
+        await subjectsApi.createSubject(newSubject);
         console.log("Subject successfully created.");
         setFormData({
           identificacao: "",

@@ -8,7 +8,7 @@ import List from "../../../../components/List/List";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
-import api from "../../../../services/api";
+import { blocksApi } from "../../../../services/apiBlock";
 
 export default function Listas() {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -21,7 +21,7 @@ export default function Listas() {
     console.log(selectId);
     try {
       if (selectId != null) {
-        await api.deleteItem(selectId.toString());
+        await blocksApi.deleteBlock(selectId.toString());
         console.log("Deletion successful");
         setShowModal(false);
         setSelectId(null);
@@ -40,7 +40,7 @@ export default function Listas() {
 
   const handleList = async () => {
     try {
-      const response = await api.getItems();
+      const response = await blocksApi.getBlocks();
       setBlocks(response.data);
       console.log("Success! List formed!");
     } catch (err) {

@@ -6,7 +6,7 @@ import { ReactComponent as Logo } from "../../assets/icons/utfpr logo.svg";
 import { DropdownMenu } from "../../components/DropDown";
 import { useNavigate } from "react-router";
 import background from "../../assets/images/background.png";
-import { handLogin } from "../../services/authentication";
+import { authApi } from "../../services/authentication";
 
 type formDataInput = {
   university_registry: string;
@@ -58,7 +58,7 @@ export default function LoginScreen() {
       if (role === "Estudante") {
         navigate("/estudante");
       } else if (role === "Professor") {
-        const loginSuccess = await handLogin(
+        const loginSuccess = await authApi.login(
           formData.university_registry,
           formData.password,
         );

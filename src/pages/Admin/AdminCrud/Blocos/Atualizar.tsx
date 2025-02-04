@@ -7,7 +7,7 @@ import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../../../../services/api";
+import { blocksApi } from "../../../../services/apiBlock";
 
 type FormDataInput = {
   identificacao: string;
@@ -27,7 +27,7 @@ export default function AtualizaBloco() {
     const fetchBlock = async () => {
       try {
         if (blockId) {
-          const response = await api.getItemById(blockId.toString());
+          const response = await blocksApi.getBlockById(blockId.toString());
           if (response.data) {
             setFormData({
               identificacao: response.data.identificacao,
@@ -67,7 +67,7 @@ export default function AtualizaBloco() {
           formDataToUpload.append("planta", formData.planta);
         }
 
-        await api.updateItem(blockId.toString(), formDataToUpload);
+        await blocksApi.updateBlock(blockId.toString(), formDataToUpload);
         console.log("Room successfully updated.");
         navigate(-1); 
       } else {

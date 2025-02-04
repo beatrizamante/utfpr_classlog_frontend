@@ -7,7 +7,7 @@ import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { Classroom } from "../../../../interfaces/AdmInterfaces";
 import { useNavigate } from "react-router";
-import api from "../../../../services/api";
+import { classroomsApi } from "../../../../services/apiClassroom";
 
 type formDataInput = {
   bloco: string;
@@ -73,7 +73,7 @@ export default function NovaSala() {
           tipo: formData.tipo,
         };
 
-        await api.createItem(newClassroom);
+        await classroomsApi.createClassroom(newClassroom);
         console.log("Room successfully created.");
         setFormData({
           bloco: "",

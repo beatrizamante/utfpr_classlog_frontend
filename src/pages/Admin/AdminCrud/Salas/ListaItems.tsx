@@ -8,7 +8,7 @@ import List from "../../../../components/List/List";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
-import api from '../../../../services/api'
+import { classroomsApi } from "../../../../services/apiClassroom";
 
 export default function Listas() {
   const [rooms, setRooms] = useState<Classroom[]>([]);
@@ -21,7 +21,7 @@ export default function Listas() {
      console.log(selectId);
      try {
        if (selectId != null) {
-         await api.deleteItem(selectId.toString());
+         await classroomsApi.deleteClassroom(selectId.toString());
          console.log("Deletion successful");
          setShowModal(false);
          setSelectId(null);
@@ -40,7 +40,7 @@ export default function Listas() {
 
    const handleList = async () => {
      try {
-       const response = await api.getItems();
+       const response = await classroomsApi.getClassrooms();
        setRooms(response.data);
        console.log("Success! List formed!");
      } catch (err) {
