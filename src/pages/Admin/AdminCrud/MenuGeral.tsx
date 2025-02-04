@@ -24,7 +24,7 @@ export default function MenuGeral() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
-          <Card title={action?.toUpperCase()} size="2xl">
+          <Card title="MENU" size="2xl">
             <Button onClick={() => navigate(`/admin/salas${action ? `/${action}` : ""}`)} height={"80px"}>
               SALA
             </Button>
