@@ -10,6 +10,7 @@ import api from "../../../../services/api";
 import { useNavigate } from "react-router";
 
 type formDataInput = {
+  identificacao: string;
   professor: string;
   periodo: string;
   horario: string;
@@ -17,12 +18,18 @@ type formDataInput = {
 
 export default function NovaSala() {
   const [formData, setFormData] = useState<formDataInput>({
+    identificacao: "",
     professor: "",
     periodo: "",
     horario: "",
   });
 
   const inputConfig = [
+    {
+      label: "Identificação",
+      name: "identificacao",
+      value: formData.identificacao,
+    },
     {
       label: "Período",
       name: "periodo",
@@ -55,6 +62,7 @@ export default function NovaSala() {
       if (formData.periodo && formData.professor && formData.horario) {
         const newSubject: Subjects = {
           id: null,
+          identificaction: formData.identificacao,
           period: formData.periodo,
           professor: formData.professor,
           time: formData.horario,
@@ -63,6 +71,7 @@ export default function NovaSala() {
         await api.createItem(newSubject);
         console.log("Subject successfully created.");
         setFormData({
+          identificacao: "",
           periodo: "",
           professor: "",
           horario: "",
@@ -77,6 +86,7 @@ export default function NovaSala() {
 
   const onCancel = () => {
     setFormData({
+      identificacao: "",
       periodo: "",
       professor: "",
       horario: "",

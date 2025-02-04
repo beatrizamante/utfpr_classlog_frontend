@@ -14,6 +14,7 @@ export interface Block {
 
 export interface Subjects {
   id: number | null;
+  identificaction: string;
   period: string;
   professor: string;
   time: string;
