@@ -5,7 +5,9 @@ import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
-import { Subjects } from "../../../../interfaces/AdmInterfaces";  // Assuming your interface is like this
+import { Subjects } from "../../../../interfaces/AdmInterfaces"; 
+import api from "../../../../services/api";
+import { useNavigate } from "react-router";
 
 type formDataInput = {
   professor: string;
@@ -38,6 +40,8 @@ export default function NovaSala() {
     },
   ];
 
+  const navigate = useNavigate();
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -48,19 +52,15 @@ export default function NovaSala() {
 
   const handleSave = async () => {
     try {
-      if (
-        formData.periodo &&
-        formData.professor &&
-        formData.horario
-      ) {
+      if (formData.periodo && formData.professor && formData.horario) {
         const newSubject: Subjects = {
-          subject_id: null,
+          id: null,
           period: formData.periodo,
           professor: formData.professor,
           time: formData.horario,
         };
 
-        // await apiClient.postRoom(newSubject); 
+        await api.createItem(newSubject);
         console.log("Subject successfully created.");
         setFormData({
           periodo: "",
@@ -81,7 +81,7 @@ export default function NovaSala() {
       professor: "",
       horario: "",
     });
-    // navigate(-1);
+    navigate(-1);
   };
 
   return (

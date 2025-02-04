@@ -7,8 +7,7 @@ import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
-import { Block } from "../../../../interfaces/AdmInterfaces";
-// import apiClient from "../../../utils/apiClient"; // Assuming you have a client for API requests
+import api from "../../../../services/api";
 
 type FormDataInput = {
   identificacao: string;
@@ -18,27 +17,23 @@ type FormDataInput = {
 export default function AtualizaBloco() {
   const { id } = useParams<{ id: string }>();
   const blockId = Number(id);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormDataInput>({
     identificacao: "",
     planta: null,
   });
 
-  // Fetch room data on mount
   useEffect(() => {
     const fetchBlock = async () => {
       try {
         if (blockId) {
-          // const response = await apiClient.getClassroomById(blockId.toString());
-          // if (response.data) {
-          //   setFormData({
-          //     bloco: response.data.bloco,
-          //     identificacao: response.data.identificacao,
-          //     tamanho: response.data.tamanho,
-          //     tipo: response.data.tipo,
-          //     planta: null, // File is not preloaded from backend
-          //   });
-          // }
+          const response = await api.getItemById(blockId.toString());
+          if (response.data) {
+            setFormData({
+              identificacao: response.data.identificacao,
+              planta: null, 
+            });
+          }
         }
       } catch (err) {
         console.error("An error occurred while fetching the block data:", err);
@@ -72,9 +67,9 @@ export default function AtualizaBloco() {
           formDataToUpload.append("planta", formData.planta);
         }
 
-        // await apiClient.updateRoom(blockId.toString(), formDataToUpload);
+        await api.updateItem(blockId.toString(), formDataToUpload);
         console.log("Room successfully updated.");
-        // navigate("/ListaItems"); // Redirect after successful update
+        navigate(-1); 
       } else {
         console.error("Room ID or form data is missing.");
       }
@@ -118,7 +113,7 @@ export default function AtualizaBloco() {
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">
               <Button onClick={handleUpdate}>ATUALIZAR</Button>
-              <Button onClick={() => {}} color="utfpr_red">EXCLUIR</Button>
+              <Button onClick={() => navigate(-1)} color="utfpr_red">CANCELAR</Button>
             </div>
           </Card>
         </div>

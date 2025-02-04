@@ -8,26 +8,27 @@ import List from "../../../../components/List/List";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
+import api from "../../../../services/api";
 
 export default function Listas() {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const listRef = useRef<HTMLUListElement>(null);
 
   const handleDelete = async () => {
     console.log(selectId);
     try {
       if (selectId != null) {
-        // await apiClient.deleteblock(selectId.toString());
+        await api.deleteItem(selectId.toString());
         console.log("Deletion successful");
         setShowModal(false);
         setSelectId(null);
         handleList();
 
         setBlocks((prevblocks) =>
-          prevblocks.filter((block) => block.block_id !== selectId)
+          prevblocks.filter((block) => block.id !== selectId)
         );
       } else {
         console.error("Classblock ID is missing!");
@@ -39,9 +40,8 @@ export default function Listas() {
 
   const handleList = async () => {
     try {
-      // const response = await apiClient.getClassblocks();
-      // setBlocks(response.data);
-      setBlocks([]);
+      const response = await api.getItems();
+      setBlocks(response.data);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -98,7 +98,7 @@ export default function Listas() {
                 <List
                   listOf={blocks.map((block) => ({
                     ...block,
-                    id: block.block_id,
+                    id: block.id,
                   }))}
                   onSelected={(id: number | null) => {
                     setSelectId(id);
@@ -113,6 +113,7 @@ export default function Listas() {
               <Button
                 onClick={() => {
                   if (selectId) {
+                    navigate(`/admin/blocos/atualizar/${selectId}`)
                     console.log(`Navegar para atualizar o ID: ${selectId}`);
                   }
                 }}

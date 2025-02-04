@@ -3,11 +3,10 @@ import Input from "../../../../components/Forms/Item/Input";
 import Card from "../../../../components/Forms/Card";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
-import background from "../../../assets/images/background.png";
+import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
-import { Classroom } from "../../../../interfaces/AdmInterfaces";
-// import apiClient from "../../../utils/apiClient"; // Assuming you have a client for API requests
+import api from "../../../../services/api";
 
 type FormDataInput = {
   bloco: string;
@@ -27,20 +26,19 @@ export default function AtualizaSala() {
     tipo: "",
   });
 
-  // Fetch room data on mount
   useEffect(() => {
     const fetchRoom = async () => {
       try {
         if (roomId) {
-          // const response = await apiClient.getClassroomById(roomId.toString());
-          // if (response.data) {
-          //   setFormData({
-          //     bloco: response.data.bloco,
-          //     identificacao: response.data.identificacao,
-          //     tamanho: response.data.tamanho,
-          //     tipo: response.data.tipo,
-          //   });
-          // }
+          const response = await api.getItemById(roomId.toString());
+          if (response.data) {
+            setFormData({
+              bloco: response.data.bloco,
+              identificacao: response.data.identificacao,
+              tamanho: response.data.tamanho,
+              tipo: response.data.tipo,
+            });
+          }
         }
       } catch (err) {
         console.error("An error occurred while fetching the room data:", err);
@@ -61,7 +59,7 @@ export default function AtualizaSala() {
   const handleUpdate = async () => {
     try {
       if (roomId && formData) {
-        // await apiClient.updateRoom(roomId.toString(), formData);
+        await api.updateItem(roomId.toString(), formData);
         console.log("Room successfully updated.");
         navigate("/ListaItems");
       } else {
@@ -103,8 +101,8 @@ export default function AtualizaSala() {
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">
               <Button onClick={handleUpdate}>ATUALIZAR</Button>
-              <Button onClick={() => {}} color="utfpr_red">
-                EXCLUIR
+              <Button onClick={() => navigate(-1)} color="utfpr_red">
+                CANCELAR
               </Button>
             </div>
           </Card>

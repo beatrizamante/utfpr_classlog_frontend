@@ -5,12 +5,22 @@ import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
-import axios from "axios";
 import LoadInput from "../../../../components/Forms/Item/LoadInput";
+import api from "../../../../services/api";
+import { Block } from "../../../../interfaces/AdmInterfaces";
 
 type formDataInput = {
   identificacao: string;
   planta: File | null;
+};
+
+const convertBlockToFormData = (block: Omit<Block, "id">): FormData => {
+  const formData = new FormData();
+  formData.append("identificacao", block.identificacao);
+  if (block.planta) {
+    formData.append("planta", block.planta);
+  }
+  return formData;
 };
 
 export default function NovoBloco() {
@@ -37,23 +47,10 @@ export default function NovoBloco() {
   const handleSave = async () => {
     try {
       if (formData.identificacao && formData.planta) {
-        const formDataToUpload = new FormData();
-        formDataToUpload.append("identificacao", formData.identificacao);
-        formDataToUpload.append("planta", formData.planta);
+        const formDataToUpload = convertBlockToFormData(formData);
 
-        const response = await axios.post(
-          "https://your-backend-endpoint/upload", // Replace with actual URL
-          formDataToUpload,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        console.log("Room successfully created:", response.data);
-        alert("Room successfully created!");
-
+        await api.createItem(formDataToUpload);
+        console.log("Block successfully created.");
         setFormData({
           identificacao: "",
           planta: null,

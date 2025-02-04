@@ -3,9 +3,11 @@ import Input from "../../../../components/Forms/Item/Input";
 import Card from "../../../../components/Forms/Card";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
-import background from "../../../assets/images/background.png";
+import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
-import { Classroom } from "../../../../interfaces/AdmInterfaces";  // Assuming your interface is like this
+import { Classroom } from "../../../../interfaces/AdmInterfaces";
+import { useNavigate } from "react-router";
+import api from "../../../../services/api";
 
 type formDataInput = {
   bloco: string;
@@ -45,7 +47,8 @@ export default function NovaSala() {
     },
   ];
 
-  // Handle input change
+  const navigate = useNavigate();
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -63,14 +66,14 @@ export default function NovaSala() {
         formData.tipo
       ) {
         const newClassroom: Classroom = {
-          room_id: null,
+          id: null,
           bloco: formData.bloco,
           identificacao: formData.identificacao,
           tamanho: formData.tamanho,
           tipo: formData.tipo,
         };
 
-        // await apiClient.postRoom(newClassroom); 
+        await api.createItem(newClassroom);
         console.log("Room successfully created.");
         setFormData({
           bloco: "",
@@ -93,7 +96,7 @@ export default function NovaSala() {
       tamanho: "",
       tipo: "",
     });
-    // navigate(-1);
+    navigate(-1);
   };
 
   return (

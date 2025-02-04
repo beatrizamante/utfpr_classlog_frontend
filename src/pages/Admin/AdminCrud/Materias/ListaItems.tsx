@@ -8,19 +8,20 @@ import List from "../../../../components/List/List";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
+import api from "../../../../services/api";
 
 export default function Listas() {
   const [subjects, setSubjects] = useState<Subjects[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const listRef = useRef<HTMLUListElement>(null);
 
   const handleDelete = async () => {
     console.log(selectId);
     try {
       if (selectId != null) {
-        // await apiClient.deletesubject(selectId.toString());
+        await api.deleteItem(selectId.toString());
         console.log("Deletion successful");
         setShowModal(false);
         setSelectId(null);
@@ -39,16 +40,16 @@ export default function Listas() {
 
   const handleList = async () => {
     try {
-      // const response = await apiClient.getSubjectss();
-      // setSubjects(response.data);
-      setSubjects([]);
+      const response = await api.getItems();
+      setSubjects(response.data);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
     }
   };
 
-  const getSubjectsLabel = (item: Subjects): string => `${item.period} - ${item.professor}`;
+  const getSubjectsLabel = (item: Subjects): string =>
+    `${item.period} - ${item.professor}`;
   const getMappedItemId = (
     item: Subjects & { id: number | null }
   ): number | null => item.id;
@@ -113,6 +114,7 @@ export default function Listas() {
               <Button
                 onClick={() => {
                   if (selectId) {
+                    navigate(`/admin/materias/atualizar/${selectId}`)
                     console.log(`Navegar para atualizar o ID: ${selectId}`);
                   }
                 }}

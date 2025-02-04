@@ -3,14 +3,13 @@ import Input from "../../../../components/Forms/Item/Input";
 import Card from "../../../../components/Forms/Card";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
-import background from "../../../assets/images/background.png";
+import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
-import { Subjects } from "../../../../interfaces/AdmInterfaces";
-// import apiClient from "../../../utils/apiClient"; // Assuming you have a client for API requests
+import api from "../../../../services/api";
 
 type FormDataInput = {
-  periodo: string;
+  period: string;
   professor: string;
   time: string;
 };
@@ -20,25 +19,23 @@ export default function AtualizaSala() {
   const subjectId = Number(id);
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormDataInput>({
-    periodo: "",
+    period: "",
     professor: "",
     time: "",
   });
 
-  // Fetch room data on mount
   useEffect(() => {
     const fetchSubject = async () => {
       try {
         if (subjectId) {
-          // const response = await apiClient.getClassroomById(subjectId.toString());
-          // if (response.data) {
-          //   setFormData({
-          //     periodo: response.data.periodo,
-          //     professor: response.data.professor,
-          //     time: response.data.time,
-          //     tipo: response.data.tipo,
-          //   });
-          // }
+          const response = await api.getItemById(subjectId.toString());
+          if (response.data) {
+            setFormData({
+              period: response.data.periodo,
+              professor: response.data.professor,
+              time: response.data.time,
+            });
+          }
         }
       } catch (err) {
         console.error("An error occurred while fetching the room data:", err);
@@ -59,9 +56,9 @@ export default function AtualizaSala() {
   const handleUpdate = async () => {
     try {
       if (subjectId && formData) {
-        // await apiClient.updateRoom(subjectId.toString(), formData);
+        await api.updateItem(subjectId.toString(), formData);
         console.log("Room successfully updated.");
-        navigate("/ListaItems");
+        navigate(-1);
       } else {
         console.error("Room ID or form data is missing.");
       }
@@ -100,8 +97,8 @@ export default function AtualizaSala() {
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">
               <Button onClick={handleUpdate}>ATUALIZAR</Button>
-              <Button onClick={() => {}} color="utfpr_red">
-                EXCLUIR
+              <Button onClick={() => navigate(-1)} color="utfpr_red">
+                CANCELAR
               </Button>
             </div>
           </Card>
