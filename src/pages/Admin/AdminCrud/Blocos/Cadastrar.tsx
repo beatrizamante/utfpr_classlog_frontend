@@ -8,6 +8,7 @@ import Header from "../../../../components/Header";
 import LoadInput from "../../../../components/Forms/Item/LoadInput";
 import api from "../../../../services/api";
 import { Block } from "../../../../interfaces/AdmInterfaces";
+import { useNavigate } from "react-router";
 
 type formDataInput = {
   identificacao: string;
@@ -36,6 +37,8 @@ export default function NovoBloco() {
       [name]: value,
     }));
   };
+
+  const navigate = useNavigate();
 
   const handleFileChange = (file: File | null) => {
     setFormData((prevData) => ({
@@ -69,6 +72,7 @@ export default function NovoBloco() {
       identificacao: "",
       planta: null,
     });
+    navigate(-1)
   };
 
   return (

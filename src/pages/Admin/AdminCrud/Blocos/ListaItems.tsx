@@ -92,7 +92,7 @@ export default function Listas() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
-          <Card title="SALAS DE AULA" size="2xl">
+          <Card title="BLOCOS" size="2xl">
             <div className="mx-4 mb-4">
               <ul ref={listRef}>
                 <List
