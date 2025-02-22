@@ -5,12 +5,12 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../../api/authentication";
-import { Course } from "../../interfaces/ProfessrInterfaces";
+import { Semester } from "../../interfaces/ProfessrInterfaces";
 import List from "../../components/List/List";
 
-export default function ProfessorPage() {
+export default function ProfessorSemesterPage() {
   const navigate = useNavigate();
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [semester, setSemester] = useState<Semester[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [clickCount, setClickCount] = useState(0);
   const listRef = useRef<HTMLUListElement>(null);
@@ -18,8 +18,8 @@ export default function ProfessorPage() {
 
   const handleList = async () => {
     try {
-      const response = await authApi.getCourseByProfessor();
-      setCourses(response.data);
+      const response = await authApi.getSemesterByProfessor();
+      setSemester(response.data);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -27,7 +27,7 @@ export default function ProfessorPage() {
   };
 
   const getMappedItemId = (
-    item: Course & { id: number }
+    item: Semester & { id: number }
   ): number => item.id;
 
   const handleItemClick = (id: number) => {
@@ -35,7 +35,7 @@ export default function ProfessorPage() {
       setClickCount(clickCount + 1);
 
       if (clickCount + 1 === 2) {
-        navigate(`/professor?curso=${id}`);
+        navigate(`/professor/course?semester=${id}`);
       }
     } else {
       setSelectId(id);
@@ -85,15 +85,15 @@ export default function ProfessorPage() {
         <div className="flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
           <Card title={"Visão de Professor"} color="utfpr_white" size="2xl">
             <List
-              listOf={courses.map((course) => ({
-                ...course,
-                id: course.id,
+              listOf={semester.map((semester) => ({
+                ...semester,
+                id: semester.id,
               }))}
               onSelected={(id: number | null) => {
                 if (id !== null) handleItemClick(id);
               }}
               selectedId={selectId}
-              getItemLabel={(course) => `${course.nome}`}
+              getItemLabel={(semester) => `${semester.identificacao}`}
               getItemId={getMappedItemId}
             />
           </Card>
