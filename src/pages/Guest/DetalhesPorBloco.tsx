@@ -52,7 +52,7 @@ export default function SelecionarHorario() {
     <div className="min-h-screen flex flex-col bg-cover bg-center">
       <Header />
       <div className="flex justify-center pb-8 flex-grow pt-12">
-        <Card title="Escolha um Horário (2 cliques)" size="2xl">
+        <Card title="Escolha um Horário" size="2xl">
           <List
             listOf={classrooms}
             onSelected={(id) => id !== null && handleItemClick(id)}
