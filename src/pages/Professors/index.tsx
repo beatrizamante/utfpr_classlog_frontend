@@ -18,6 +18,7 @@ export default function ProfessorPage() {
 
   const handleList = async () => {
     try {
+      //Will only have TSI
       const response = await authApi.getCourseByProfessor();
       setCourses(response.data);
       console.log("Success! List formed!");
@@ -35,7 +36,7 @@ export default function ProfessorPage() {
       setClickCount(clickCount + 1);
 
       if (clickCount + 1 === 2) {
-        navigate(`/professor?curso=${selectId}`);
+        navigate(`/professor/course/`);
       }
     } else {
       setSelectId(id);

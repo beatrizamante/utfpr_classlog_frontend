@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import background from "../../../../assets/images/background.png";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Header from "../../components/Header";
 import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
@@ -8,7 +8,8 @@ import { Subjects } from "../../interfaces/ProfessorInterfaces";
 import Footer from "../../components/Footer";
 import ModalProfessor from "../../components/ModalProfessors";
 
-export default function ProfessorAulas() {
+export default function ListarSalas() {
+  const { semesterId } = useParams();
   const [subjects, setSubjects] = useState<Subjects[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -38,14 +39,14 @@ export default function ProfessorAulas() {
 
   const handleItemClick = (id: number) => {
     if (selectId === id) {
-      setClickCount((prev) => prev + 1);
+      setClickCount(clickCount + 1);
 
       if (clickCount + 1 === 2) {
         setShowModal(true);
       }
     } else {
       setSelectId(id);
-      setClickCount(1);
+      setClickCount(1); 
     }
   };
 
@@ -112,7 +113,7 @@ export default function ProfessorAulas() {
       <Footer />
       <ModalProfessor
         isVisible={showModal} 
-        onChangeClassrom={() => navigate(`professor/troca/${selectId}`)} 
+        onChangeClassrom={() => navigate(`/professor/curso/semestre/${semesterId}/materia/${selectId}/sala`)} 
         onCancelClass={selectId !== null ? cancelClass(selectId) : setShowModal(false)}      />
     </div>
   );

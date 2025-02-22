@@ -8,7 +8,7 @@ import { authApi } from "../../api/authentication";
 import { Semester } from "../../interfaces/ProfessorInterfaces";
 import List from "../../components/List/List";
 
-export default function ProfessorSemesterPage() {
+export default function ListarSemestres() {
   const navigate = useNavigate();
   const [semester, setSemester] = useState<Semester[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
@@ -35,7 +35,7 @@ export default function ProfessorSemesterPage() {
       setClickCount(clickCount + 1);
 
       if (clickCount + 1 === 2) {
-        navigate(`/professor/course?semester=${selectId}`);
+        navigate(`/professor/curso/semestre/${selectId}/materia/`);
       }
     } else {
       setSelectId(id);

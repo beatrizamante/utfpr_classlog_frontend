@@ -14,7 +14,7 @@ import {
 } from "../../interfaces/ProfessorInterfaces";
 
 export default function ProfessorTroca() {
-  const { id: subjectId } = useParams();
+  const { subjectId } = useParams();
   const navigate = useNavigate();
   const professorId = authApi.getUserId();
 
