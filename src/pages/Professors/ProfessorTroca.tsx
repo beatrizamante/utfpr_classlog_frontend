@@ -6,7 +6,7 @@ import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
 import { Subjects } from "../../interfaces/ProfessrInterfaces";
 import Footer from "../../components/Footer";
-import ModalProfessor from "../../components/Forms/ModalProfessors";
+import ModalProfessor from "../../components/ModalProfessors";
 
 export default function ProfessorTroca() {
   const { id } = useParams();

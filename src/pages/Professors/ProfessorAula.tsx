@@ -6,9 +6,9 @@ import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
 import { Subjects } from "../../interfaces/ProfessrInterfaces";
 import Footer from "../../components/Footer";
-import ModalProfessor from "../../components/Forms/ModalProfessors";
+import ModalProfessor from "../../components/ModalProfessors";
 
-export default function ProfessorTroca() {
+export default function ProfessorAulas() {
   const [subjects, setSubjects] = useState<Subjects[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -32,7 +32,7 @@ export default function ProfessorTroca() {
     item: Subjects & { id: number }
   ): number => item.id;
 
-  const onCancelClass = (item_id : number) => {
+  const cancelClass = (item_id : number) => {
 
   }
 
@@ -98,7 +98,7 @@ export default function ProfessorTroca() {
                     id: subject.id,
                   }))}
                   onSelected={(id: number | null) => {
-                    setSelectId(id);
+                    if (id !== null) handleItemClick(id);
                   }}
                   selectedId={selectId}
                   getItemLabel={getSubjectsLabel}
@@ -112,8 +112,8 @@ export default function ProfessorTroca() {
       <Footer />
       <ModalProfessor
         isVisible={showModal} 
-        onChangeClassrom={() => navigate(`professor/horario/${selectId}`)} 
-        onCancelClass={() => setShowModal(false)}      />
+        onChangeClassrom={() => navigate(`professor/troca/${selectId}`)} 
+        onCancelClass={selectId !== null ? cancelClass(selectId) : setShowModal(false)}      />
     </div>
   );
 }
