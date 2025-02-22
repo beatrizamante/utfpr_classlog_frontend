@@ -8,7 +8,7 @@ import List from "../../../../components/List/List";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
-import { blocksApi } from "../../../../services/apiBlock";
+import { blocksApi } from "../../../../api/apiBlock";
 
 export default function Listas() {
   const [blocks, setBlocks] = useState<Block[]>([]);

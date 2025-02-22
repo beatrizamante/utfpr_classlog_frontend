@@ -7,7 +7,7 @@ import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { Subjects } from "../../../../interfaces/AdmInterfaces"; 
 import { useNavigate } from "react-router";
-import { subjectsApi } from "../../../../services/apiSubject";
+import { subjectsApi } from "../../../../api/apiSubject";
 
 type formDataInput = {
   identificacao: string;

@@ -8,7 +8,7 @@ import List from "../../../../components/List/List";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
-import { classroomsApi } from "../../../../services/apiClassroom";
+import { classroomsApi } from "../../../../api/apiClassroom";
 
 export default function Listas() {
   const [rooms, setRooms] = useState<Classroom[]>([]);

@@ -6,7 +6,7 @@ import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
-import { subjectsApi } from "../../../../services/apiSubject";
+import { subjectsApi } from "../../../../api/apiSubject";
 
 type FormDataInput = {
   period: string;

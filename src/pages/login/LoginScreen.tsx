@@ -6,7 +6,7 @@ import { ReactComponent as Logo } from "../../assets/icons/utfpr logo.svg";
 import { DropdownMenu } from "../../components/DropDown";
 import { useNavigate } from "react-router";
 import background from "../../assets/images/background.png";
-import { authApi } from "../../services/authentication";
+import { authApi } from "../../api/authentication";
 
 type formDataInput = {
   university_registry: string;

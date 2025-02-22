@@ -8,7 +8,7 @@ import List from "../../../../components/List/List";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
-import { subjectsApi } from "../../../../services/apiSubject";
+import { subjectsApi } from "../../../../api/apiSubject";
 
 export default function Listas() {
   const [subjects, setSubjects] = useState<Subjects[]>([]);

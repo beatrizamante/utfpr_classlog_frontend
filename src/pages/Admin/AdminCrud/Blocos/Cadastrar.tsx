@@ -8,7 +8,7 @@ import Header from "../../../../components/Header";
 import LoadInput from "../../../../components/Forms/Item/LoadInput";
 import { Block } from "../../../../interfaces/AdmInterfaces";
 import { useNavigate } from "react-router";
-import { blocksApi } from "../../../../services/apiBlock";
+import { blocksApi } from "../../../../api/apiBlock";
 
 type formDataInput = {
   identificacao: string;
