@@ -1,57 +1,54 @@
 import React, { useEffect, useRef, useState } from "react";
 import background from "../../../../assets/images/background.png";
 import { useNavigate } from "react-router";
-import Header from "../../components/Header";
+import { Professor } from "../../interfaces/ProfessorInterfaces";
+import Footer from "../../components/Footer";
 import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
-import { Subjects } from "../../interfaces/ProfessorInterfaces";
-import Footer from "../../components/Footer";
-import ModalProfessor from "../../components/ModalProfessors";
+import Header from "../../components/Header";
 
-export default function ProfessorAulas() {
-  const [subjects, setSubjects] = useState<Subjects[]>([]);
-  const [selectId, setSelectId] = useState<number | null>(null);
-  const [showModal, setShowModal] = useState(false);
+export default function ListarProfessores() {
+  const [professors, setProfessors] = useState<Professor[]>([]);
+  const [selectedProfessorId, setSelectedProfessorId] = useState<number | null>(
+    null
+  );
   const [clickCount, setClickCount] = useState(0);
   const navigate = useNavigate();
   const listRef = useRef<HTMLUListElement>(null);
 
   const handleList = async () => {
     try {
-      const response = await subjectsApi.getSubjectsByProfessor();
-      setSubjects(response.data);
+      const response = await professorsApi.getProfessors();
+      setProfessors(response.data);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
     }
   };
 
-  const getSubjectsLabel = (item: Subjects): string =>
-    `${item.identificaction}`;
-  const getMappedItemId = (
-    item: Subjects & { id: number }
-  ): number => item.id;
-
-  const cancelClass = (item_id : number) => {
-
-  }
+  const getSubjectsLabel = (item: Professor): string => `${item.nome}`;
+  const getMappedItemId = (item: Professor & { id: number }): number | null =>
+    item.id;
 
   const handleItemClick = (id: number) => {
-    if (selectId === id) {
+    if (selectedProfessorId === id) {
       setClickCount((prev) => prev + 1);
 
       if (clickCount + 1 === 2) {
-        setShowModal(true);
+        navigate(`/guest/horarios?professorId=${id}`);
       }
     } else {
-      setSelectId(id);
+      setSelectedProfessorId(id);
       setClickCount(1);
     }
   };
 
   useEffect(() => {
-    console.log("Item clicked with id after state update:", selectId);
-  }, [selectId]);
+    console.log(
+      "Item clicked with id after state update:",
+      selectedProfessorId
+    );
+  }, [selectedProfessorId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -60,8 +57,8 @@ export default function ProfessorAulas() {
         listRef.current && listRef.current.contains(target);
       const clickedOnButton = (event.target as HTMLElement).closest("button");
 
-      if (!showModal && !clickedInsideList && !clickedOnButton) {
-        setSelectId(null);
+      if (!clickedInsideList && !clickedOnButton) {
+        setSelectedProfessorId(null);
         setClickCount(0);
       }
     };
@@ -71,7 +68,7 @@ export default function ProfessorAulas() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showModal, selectId]);
+  }, [selectedProfessorId]);
 
   useEffect(() => {
     handleList();
@@ -93,27 +90,19 @@ export default function ProfessorAulas() {
             <div className="mx-4 mb-4">
               <ul ref={listRef}>
                 <List
-                  listOf={subjects.map((subject) => ({
-                    ...subject,
-                    id: subject.id,
-                  }))}
-                  onSelected={(id: number | null) => {
-                    if (id !== null) handleItemClick(id);
-                  }}
-                  selectedId={selectId}
-                  getItemLabel={getSubjectsLabel}
-                  getItemId={getMappedItemId}
+                  listOf={professors}
+                  onSelected={(id) => id !== null && handleItemClick(id)}
+                  selectedId={selectedProfessorId}
+                  getItemLabel={(professor) => professor.nome}
+                  getItemId={(professor) => professor.id}
                 />
               </ul>
             </div>
+            <div className="flex flex-col items-center gap-4 w-full pt-10"></div>
           </Card>
         </div>
       </div>
       <Footer />
-      <ModalProfessor
-        isVisible={showModal} 
-        onChangeClassrom={() => navigate(`professor/troca/${selectId}`)} 
-        onCancelClass={selectId !== null ? cancelClass(selectId) : setShowModal(false)}      />
     </div>
   );
 }

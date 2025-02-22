@@ -11,7 +11,7 @@ import {
   Block,
   Classroom,
   Schedule,
-} from "../../interfaces/ProfessrInterfaces";
+} from "../../interfaces/ProfessorInterfaces";
 
 export default function ProfessorTroca() {
   const { id: subjectId } = useParams();

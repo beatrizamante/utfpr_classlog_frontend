@@ -5,7 +5,7 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../../api/authentication";
-import { Semester } from "../../interfaces/ProfessrInterfaces";
+import { Semester } from "../../interfaces/ProfessorInterfaces";
 import List from "../../components/List/List";
 
 export default function ProfessorSemesterPage() {
@@ -84,7 +84,7 @@ export default function ProfessorSemesterPage() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
-          <Card title={"Visão de Professor"} color="utfpr_white" size="2xl">
+          <Card title={action} color="utfpr_white" size="2xl">
             <List
               listOf={semester.map((semester) => ({
                 ...semester,
