@@ -45,4 +45,8 @@ export const authApi = {
   getRole() {
     return localStorage.getItem("role");
   },
+  
+  getUserId() {
+    return localStorage.getItem("university_registry"); 
+  }
 };

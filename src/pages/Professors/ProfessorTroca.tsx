@@ -1,71 +1,100 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import background from "../../../../assets/images/background.png";
 import { useNavigate, useParams } from "react-router";
 import Header from "../../components/Header";
 import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
-import { Subjects } from "../../interfaces/ProfessrInterfaces";
 import Footer from "../../components/Footer";
-import ModalProfessor from "../../components/ModalProfessors";
+import { authApi } from "../../api/authentication";
+import Modal from "../../components/Modal";
+import { Block, Classroom, Schedule } from "../../interfaces/ProfessrInterfaces";
 
 export default function ProfessorTroca() {
-  const { id } = useParams();
-  const [step, setStep] = useState(1);
-  const [schedule, setSchedule] = useState("");
-  const [block, setBlock] = useState("");
-  const [classroom, setClassroom] = useState("");
-  const [subjects, setSubjects] = useState<Subjects[]>([]);
-  const [selectId, setSelectId] = useState<number | null>(null);
-  const [showModal, setShowModal] = useState(false);
+  const { id: subjectId } = useParams(); 
   const navigate = useNavigate();
-  const listRef = useRef<HTMLUListElement>(null);
+  const professorId = authApi.getUserId();
 
-  const handleList = async () => {
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
+  const [selectedBlockId, setSelectedBlockId] = useState<number | null>(null);
+  const [selectedClassroomId, setSelectedClassroomId] = useState<number | null>(null);
+  const [selectedClassroom, setSelectedClassroom] = useState<Classroom | null>(null);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [blocks, setBlocks] = useState<Block[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    async function fetchSchedules() {
+      try {
+        const response = await authApi.getSchedules();
+        setSchedules(response.data);
+      } catch (err) {
+        console.error("Erro ao buscar horários:", err);
+      }
+    }
+    fetchSchedules();
+  }, []);
+
+  async function fetchBlocks() {
     try {
-      const response = await subjectsApi.getSubjectsByProfessor();
-      setSubjects(response.data);
-      console.log("Success! List formed!");
+      const response = await authApi.getBlocks();
+      setBlocks(response.data);
     } catch (err) {
-      console.error("An error occurred: ", err);
+      console.error("Erro ao buscar blocos:", err);
+    }
+  }
+
+  async function fetchClassrooms(blockId: number) {
+    try {
+      const response = await authApi.getClassroomsByBlock(blockId);
+      setClassrooms(response.data);
+    } catch (err) {
+      console.error("Erro ao buscar salas:", err);
+    }
+  }
+
+  const handleItemClick = (id: number) => {
+    if (step === 1) {
+      setSelectedScheduleId(id);
+      fetchBlocks(); 
+      setStep(2);
+    } else if (step === 2 && selectedBlockId !== null) {
+      setSelectedBlockId(id);
+      fetchClassrooms(selectedBlockId); 
+      setStep(3);
+    } else if (step === 3) {
+      setSelectedClassroomId(id);
+      const selected = classrooms.find((room) => room.id === id);
+      setSelectedClassroom(selected || null);
+      setStep(4);
+      setShowModal(true);
     }
   };
 
-  const getSubjectsLabel = (item: Subjects): string =>
-    `${item.identificaction}`;
-  const getMappedItemId = (
-    item: Subjects & { id: number }
-  ): number => item.id;
+  const handleConfirmChange = async () => {
+    if (!subjectId || !selectedScheduleId || !selectedBlockId || !selectedClassroomId || !professorId) {
+      console.error("Dados incompletos para a troca de sala.");
+      return;
+    }
 
-  const onCancelClass = (item_id : number) => {
-
-  }
-
-  useEffect(() => {
-    console.log("Item clicked with id after state update:", selectId);
-  }, [selectId]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      const clickedInsideList =
-        listRef.current && listRef.current.contains(target);
-      const clickedOnButton = (event.target as HTMLElement).closest("button");
-
-      if (!showModal && !clickedInsideList && !clickedOnButton) {
-        setSelectId(null);
-      }
+    const requestData = {
+      subject_id: subjectId,
+      schedule_id: selectedScheduleId,
+      block_id: selectedBlockId,
+      classroom_id: selectedClassroomId,
+      professor_id: professorId,
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showModal, selectId]);
-
-  useEffect(() => {
-    handleList();
-  }, []);
+    try {
+      const response = await authApi.requestClassroomChange(requestData);
+      console.log("Troca confirmada:", response.data);
+      setShowModal(false);
+      navigate("/professor");
+    } catch (err) {
+      console.error("Erro ao solicitar troca:", err);
+    }
+  };
 
   return (
     <div
@@ -79,33 +108,50 @@ export default function ProfessorTroca() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
-          <Card title="MATÉRIAS" size="2xl">
+          <Card title={subjectId} size="2xl">
             <div className="mx-4 mb-4">
-              <ul ref={listRef}>
-                <List
-                  listOf={subjects.map((subject) => ({
-                    ...subject,
-                    id: subject.id,
-                  }))}
-                  onSelected={(id: number | null) => {
-                    setSelectId(id);
-                  }}
-                  selectedId={selectId}
-                  getItemLabel={getSubjectsLabel}
-                  getItemId={getMappedItemId}
-                />
+              <ul>
+              {step === 1 &&
+                  <List
+                    listOf={schedules}
+                    onSelected={(id) => id !== null && handleItemClick(id)}
+                    selectedId={selectedScheduleId}
+                    getItemLabel={(schedule) => `Horário: ${schedule.period}`}
+                    getItemId={(schedule) => schedule.id}
+                  />}
+                
+                {step === 2 &&
+                  <List
+                    listOf={blocks}
+                    onSelected={(id) => id !== null && handleItemClick(id)}
+                    selectedId={selectedBlockId}
+                    getItemLabel={(block) => `Bloco: ${block.identification}`}
+                    getItemId={(block) => block.id}
+                  />}
+
+                {step === 3 &&
+                  <List
+                    listOf={classrooms}
+                    onSelected={(id) => id !== null && handleItemClick(id)}
+                    selectedId={selectedClassroomId}
+                    getItemLabel={(room) => `Sala: ${room.identification} ${room.occupied ? "(Ocupada)" : "(Livre)"}`}
+                    getItemId={(room) => room.id}
+                  />}
               </ul>
             </div>
           </Card>
         </div>
       </div>
       <Footer />
-      <ModalProfessor
-        isVisible={showModal} 
-        onChangeClassrom={() => navigate(`professor/horario/${selectId}`)} 
-        onCancelClass={function (): void {
-          throw new Error("Function not implemented.");
-        } }      />
+
+      {selectedClassroom && (
+        <Modal
+          message={selectedClassroom.occupied ? "Essa sala está ocupada, deseja solicitar troca?" : "Confirmar mudança para essa sala?"}
+          isVisible={showModal}
+          onCancel={() => setShowModal(false)}
+          onConfirm={handleConfirmChange}
+        />
+      )}
     </div>
   );
 }
