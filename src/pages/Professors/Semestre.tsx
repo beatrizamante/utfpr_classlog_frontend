@@ -35,7 +35,7 @@ export default function ProfessorSemesterPage() {
       setClickCount(clickCount + 1);
 
       if (clickCount + 1 === 2) {
-        navigate(`/professor/course?semester=${id}`);
+        navigate(`/professor/course?semester=${selectId}`);
       }
     } else {
       setSelectId(id);
@@ -56,6 +56,7 @@ export default function ProfessorSemesterPage() {
 
       if (!clickedInsideList && !clickedOnButton) {
         setSelectId(null);
+        setClickCount(0);
       }
     };
 

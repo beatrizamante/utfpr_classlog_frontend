@@ -14,3 +14,11 @@ export interface Semester {
     identificacao: string;
     professor: string;
 }
+
+export interface Subjects {
+    id: number;
+    identificaction: string;
+    period: string;
+    professor: string;
+    time: string;
+  }
