@@ -34,3 +34,13 @@ export interface Block {
     id: number; 
     identification: string;
 }
+
+export interface Item {
+    id: number;
+    classroom: string;
+    block: string;
+    subject: string;
+    professor: string;
+    schedule: string;
+}
+

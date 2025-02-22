@@ -1,68 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router";
 import Card from "../../components/Forms/Card";
-import List from "../../components/List/List";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { scheduleApi } from "../../api/scheduleApi";
-import { Classroom } from "../../interfaces/GuestInterface";
-import Button from "../../components/Button";
+import { useParams } from "react-router";
+import ViewList from "../../components/ViewList/ViewList";
+import { Item } from "../../interfaces/GuestInterface";
 
-export default function SelecionarHorario() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const blockId = params.get("blockId");
-
-  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
-  const [selectedClassroomId, setSelectedClassroomId] = useState<number | null>(null);
-  const [clickCount, setClickCount] = useState(0);
-
-  const handleSeeBlock = (blockId: number) => {
-    
-  }
+export default function DetalhesPorBloco() {
+  const { blockId, classroomId } = useParams();
+  const [items, setItems ] = useState<Item[]>([]);
+  const [identification, setIdentification] = useState<string>("");
 
   useEffect(() => {
-    async function fetchClassrooms() {
-      if (!blockId) return;
+    async function fetchItem() {
+      if (!blockId && !classroomId) return;
       try {
-        const response = await scheduleApi.getClassroomByBlock(blockId);
-        setClassrooms(response.data);
+        const response = await scheduleApi.getClassroomScheduleByBlock(blockId, classroomId);
+        setIdentification(response.data.classroom);
+        setItems(response.data);
       } catch (err) {
         console.error("Erro ao buscar horários:", err);
       }
     }
-    fetchClassrooms();
-  }, [blockId]);
-
-  const handleItemClick = (id: number) => {
-    if (selectedClassroomId === id) {
-      setClickCount((prev) => prev + 1);
-
-      if (clickCount + 1 === 2) {
-        navigate(`/guest/sala?blockId=${blockId}&classroomId=${id}`);
-      }
-    } else {
-      setSelectedClassroomId(id);
-      setClickCount(1);
-    }
-  };
+    fetchItem();
+  }, [blockId, classroomId]);
 
   return (
     <div className="min-h-screen flex flex-col bg-cover bg-center">
       <Header />
       <div className="flex justify-center pb-8 flex-grow pt-12">
-        <Card title="Escolha um Horário" size="2xl">
-          <List
-            listOf={classrooms}
-            onSelected={(id) => id !== null && handleItemClick(id)}
-            selectedId={selectedClassroomId}
-            getItemLabel={(classroom) => classroom.identification}
-            getItemId={(classroom) => classroom.id}
-          />
-          <Button onClick={() => handleSeeBlock}>
-            PLANTA BAIXA
-          </Button>
+        <Card title={identification} size="2xl">
+          <ViewList
+            listOf={items}
+            getItemName={(item) => `${item.block} ${item.subject} ${item.professor} ${item.schedule}`} 
+            getItemId={(item) => item.id}          />
         </Card>
       </div>
       <Footer />

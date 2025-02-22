@@ -1,54 +1,50 @@
 import React, { useEffect, useRef, useState } from "react";
 import background from "../../../../assets/images/background.png";
 import { useNavigate } from "react-router";
-import { Professor } from "../../interfaces/ProfessorInterfaces";
 import Footer from "../../components/Footer";
 import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
 import Header from "../../components/Header";
+import { Block } from "../../interfaces/GuestInterface";
+import Button from "../../components/Button";
 
 export default function ListarProfessores() {
-  const [professors, setProfessors] = useState<Professor[]>([]);
-  const [selectedProfessorId, setSelectedProfessorId] = useState<number | null>(
-    null
-  );
+  const [blocks, setBlocks] = useState<Block[]>([]);
+  const [selectedBlockId, setSelectedBlockId] = useState<number | null>(null);
   const [clickCount, setClickCount] = useState(0);
   const navigate = useNavigate();
   const listRef = useRef<HTMLUListElement>(null);
 
+  const handleSeeBlock = (blockId: number) => {
+    
+  }
+
   const handleList = async () => {
     try {
-      const response = await professorsApi.getProfessors();
-      setProfessors(response.data);
+      const response = await blockApi.getProfessors();
+      setBlocks(response.data);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
     }
   };
 
-  const getSubjectsLabel = (item: Professor): string => `${item.nome}`;
-  const getMappedItemId = (item: Professor & { id: number }): number | null =>
-    item.id;
-
   const handleItemClick = (id: number) => {
-    if (selectedProfessorId === id) {
+    if (selectedBlockId === id) {
       setClickCount((prev) => prev + 1);
 
       if (clickCount + 1 === 2) {
-        navigate(`/guest/horarios?professorId=${id}`);
+        navigate(`/guest/blocks?blockId=${id}`);
       }
     } else {
-      setSelectedProfessorId(id);
+      setSelectedBlockId(id);
       setClickCount(1);
     }
   };
 
   useEffect(() => {
-    console.log(
-      "Item clicked with id after state update:",
-      selectedProfessorId
-    );
-  }, [selectedProfessorId]);
+    console.log("Item clicked with id after state update:", selectedBlockId);
+  }, [selectedBlockId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,7 +54,7 @@ export default function ListarProfessores() {
       const clickedOnButton = (event.target as HTMLElement).closest("button");
 
       if (!clickedInsideList && !clickedOnButton) {
-        setSelectedProfessorId(null);
+        setSelectedBlockId(null);
         setClickCount(0);
       }
     };
@@ -68,7 +64,7 @@ export default function ListarProfessores() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [selectedProfessorId]);
+  }, [selectedBlockId]);
 
   useEffect(() => {
     handleList();
@@ -90,14 +86,15 @@ export default function ListarProfessores() {
             <div className="mx-4 mb-4">
               <ul ref={listRef}>
                 <List
-                  listOf={professors}
+                  listOf={blocks}
                   onSelected={(id) => id !== null && handleItemClick(id)}
-                  selectedId={selectedProfessorId}
-                  getItemLabel={(professor) => professor.nome}
-                  getItemId={(professor) => professor.id}
+                  selectedId={selectedBlockId}
+                  getItemLabel={(block) => block.identification}
+                  getItemId={(block) => block.id}
                 />
               </ul>
             </div>
+            <Button onClick={() => handleSeeBlock}>PLANTA BAIXA</Button>
             <div className="flex flex-col items-center gap-4 w-full pt-10"></div>
           </Card>
         </div>

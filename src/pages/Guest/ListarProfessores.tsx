@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import background from "../../../../assets/images/background.png";
 import { useNavigate } from "react-router";
-import { Semester } from "../../interfaces/GuestInterface";
+import { Professor } from "../../interfaces/ProfessorInterfaces";
 import Footer from "../../components/Footer";
 import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
 import Header from "../../components/Header";
 
 export default function ListarProfessores() {
-  const [semesters, setSemesters] = useState<Semester[]>([]);
-  const [selectedSemesterId, setSelectedSemesterId] = useState<number | null>(
+  const [professors, setProfessors] = useState<Professor[]>([]);
+  const [selectedProfessorId, setSelectedProfessorId] = useState<number | null>(
     null
   );
   const [clickCount, setClickCount] = useState(0);
@@ -18,8 +18,8 @@ export default function ListarProfessores() {
 
   const handleList = async () => {
     try {
-      const response = await semesterApi.getProfessors();
-      setSemesters(response.data);
+      const response = await professorsApi.getProfessors();
+      setProfessors(response.data);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -27,14 +27,14 @@ export default function ListarProfessores() {
   };
 
   const handleItemClick = (id: number) => {
-    if (selectedSemesterId === id) {
+    if (selectedProfessorId === id) {
       setClickCount((prev) => prev + 1);
 
       if (clickCount + 1 === 2) {
-        navigate(`/guest/horarios?professorId=${id}`);
+        navigate(`/guest/professor/${selectedProfessorId}/horario/`);
       }
     } else {
-      setSelectedSemesterId(id);
+      setSelectedProfessorId(id);
       setClickCount(1);
     }
   };
@@ -42,9 +42,9 @@ export default function ListarProfessores() {
   useEffect(() => {
     console.log(
       "Item clicked with id after state update:",
-      selectedSemesterId
+      selectedProfessorId
     );
-  }, [selectedSemesterId]);
+  }, [selectedProfessorId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -54,7 +54,7 @@ export default function ListarProfessores() {
       const clickedOnButton = (event.target as HTMLElement).closest("button");
 
       if (!clickedInsideList && !clickedOnButton) {
-        setSelectedSemesterId(null);
+        setSelectedProfessorId(null);
         setClickCount(0);
       }
     };
@@ -64,7 +64,7 @@ export default function ListarProfessores() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [selectedSemesterId]);
+  }, [selectedProfessorId]);
 
   useEffect(() => {
     handleList();
@@ -86,11 +86,11 @@ export default function ListarProfessores() {
             <div className="mx-4 mb-4">
               <ul ref={listRef}>
                 <List
-                  listOf={semesters}
+                  listOf={professors}
                   onSelected={(id) => id !== null && handleItemClick(id)}
-                  selectedId={selectedSemesterId}
-                  getItemLabel={(semester) => semester.identificacao}
-                  getItemId={(semester) => semester.id}
+                  selectedId={selectedProfessorId}
+                  getItemLabel={(professor) => professor.nome}
+                  getItemId={(professor) => professor.id}
                 />
               </ul>
             </div>

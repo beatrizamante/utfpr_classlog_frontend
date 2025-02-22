@@ -36,7 +36,7 @@ export default function ProfessorPage() {
       setClickCount(clickCount + 1);
 
       if (clickCount + 1 === 2) {
-        navigate(`/professor/course/`);
+        navigate(`/professor/curso/semestre`);
       }
     } else {
       setSelectId(id);

@@ -18,7 +18,7 @@ export default function ListarSemestres() {
 
   const handleList = async () => {
     try {
-      const response = await authApi.getSemesterByProfessor();
+      const response = await authApi.getSemesterByProfessor(professorId);
       setSemester(response.data);
       console.log("Success! List formed!");
     } catch (err) {

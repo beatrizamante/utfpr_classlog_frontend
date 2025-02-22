@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import background from "../../../../assets/images/background.png";
 import { useNavigate } from "react-router";
+import { Semester } from "../../interfaces/GuestInterface";
 import Footer from "../../components/Footer";
 import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
 import Header from "../../components/Header";
-import { Block } from "../../interfaces/GuestInterface";
 
-export default function ListarProfessores() {
-  const [blocks, setBlocks] = useState<Block[]>([]);
-  const [selectedBlockId, setSelectedBlockId] = useState<number | null>(
+export default function ListarSemestres() {
+  const [semesters, setSemesters] = useState<Semester[]>([]);
+  const [selectedSemesterId, setSelectedSemesterId] = useState<number | null>(
     null
   );
   const [clickCount, setClickCount] = useState(0);
@@ -18,8 +18,8 @@ export default function ListarProfessores() {
 
   const handleList = async () => {
     try {
-      const response = await blockApi.getProfessors();
-      setBlocks(response.data);
+      const response = await semesterApi.getProfessors();
+      setSemesters(response.data);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -27,24 +27,21 @@ export default function ListarProfessores() {
   };
 
   const handleItemClick = (id: number) => {
-    if (selectedBlockId === id) {
+    if (selectedSemesterId === id) {
       setClickCount((prev) => prev + 1);
 
       if (clickCount + 1 === 2) {
-        navigate(`/guest/blocks?blockId=${id}`);
+        navigate(`/guest/semestre/${selectedSemesterId}/materia`);
       }
     } else {
-      setSelectedBlockId(id);
+      setSelectedSemesterId(id);
       setClickCount(1);
     }
   };
 
   useEffect(() => {
-    console.log(
-      "Item clicked with id after state update:",
-      selectedBlockId
-    );
-  }, [selectedBlockId]);
+    console.log("Item clicked with id after state update:", selectedSemesterId);
+  }, [selectedSemesterId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -54,7 +51,7 @@ export default function ListarProfessores() {
       const clickedOnButton = (event.target as HTMLElement).closest("button");
 
       if (!clickedInsideList && !clickedOnButton) {
-        setSelectedBlockId(null);
+        setSelectedSemesterId(null);
         setClickCount(0);
       }
     };
@@ -64,7 +61,7 @@ export default function ListarProfessores() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [selectedBlockId]);
+  }, [selectedSemesterId]);
 
   useEffect(() => {
     handleList();
@@ -86,11 +83,11 @@ export default function ListarProfessores() {
             <div className="mx-4 mb-4">
               <ul ref={listRef}>
                 <List
-                  listOf={blocks}
+                  listOf={semesters}
                   onSelected={(id) => id !== null && handleItemClick(id)}
-                  selectedId={selectedBlockId}
-                  getItemLabel={(block) => block.identification}
-                  getItemId={(block) => block.id}
+                  selectedId={selectedSemesterId}
+                  getItemLabel={(semester) => semester.identificacao}
+                  getItemId={(semester) => semester.id}
                 />
               </ul>
             </div>

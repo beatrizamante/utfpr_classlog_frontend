@@ -19,7 +19,7 @@ export default function ListarSalas() {
 
   const handleList = async () => {
     try {
-      const response = await subjectsApi.getSubjectsByProfessor();
+      const response = await subjectsApi.getSubjectsByProfessor(professorId, semesterId);
       setSubjects(response.data);
       console.log("Success! List formed!");
     } catch (err) {
