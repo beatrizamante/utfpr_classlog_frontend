@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import background from "../../../../assets/images/background.png";
+import background from "../../assets/images/background.png";
 import { useNavigate, useParams } from "react-router";
 import Header from "../../components/Header";
 import Card from "../../components/Forms/Card";
@@ -7,8 +7,10 @@ import List from "../../components/List/List";
 import { Subjects } from "../../interfaces/ProfessorInterfaces";
 import Footer from "../../components/Footer";
 import ModalProfessor from "../../components/ModalProfessors";
+import { authApi } from '../../api/authentication'
 
 export default function ListarSalas() {
+  const professorId = authApi.getUserId();
   const { semesterId } = useParams();
   const [subjects, setSubjects] = useState<Subjects[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
@@ -33,9 +35,22 @@ export default function ListarSalas() {
     item: Subjects & { id: number }
   ): number => item.id;
 
-  const cancelClass = (item_id : number) => {
-
-  }
+  const cancelClass = async (subjectId: number, date: string, time: string) => {
+    try {
+      const response = await subjectsApi.cancelClass(subjectId, date, time);
+  
+      if (response.status === 200) {
+        alert(`Aula de ${date} no horário ${time} cancelada com sucesso! A sala está agora livre.`);
+        setShowModal(false); 
+        handleList(); 
+      } else {
+        alert("Erro ao cancelar a aula. Tente novamente.");
+      }
+    } catch (err) {
+      console.error("Erro ao tentar cancelar a aula:", err);
+      alert("Erro ao tentar cancelar a aula.");
+    }
+  };
 
   const handleItemClick = (id: number) => {
     if (selectId === id) {
@@ -46,7 +61,7 @@ export default function ListarSalas() {
       }
     } else {
       setSelectId(id);
-      setClickCount(1); 
+      setClickCount(1);
     }
   };
 
@@ -114,7 +129,7 @@ export default function ListarSalas() {
       <ModalProfessor
         isVisible={showModal} 
         onChangeClassrom={() => navigate(`/professor/curso/semestre/${semesterId}/materia/${selectId}/sala`)} 
-        onCancelClass={selectId !== null ? cancelClass(selectId) : setShowModal(false)}      />
+        onCancelClass={() => cancelClass}      />
     </div>
   );
 }

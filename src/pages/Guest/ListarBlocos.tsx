@@ -7,6 +7,7 @@ import List from "../../components/List/List";
 import Header from "../../components/Header";
 import { Block } from "../../interfaces/GuestInterface";
 import Button from "../../components/Button";
+import ImageModal from "../../components/ImageModal";
 
 export default function ListarProfessores() {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -14,10 +15,19 @@ export default function ListarProfessores() {
   const [clickCount, setClickCount] = useState(0);
   const navigate = useNavigate();
   const listRef = useRef<HTMLUListElement>(null);
+  const [floorPlan, setFloorPlan] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleSeeBlock = (blockId: number) => {
-    
-  }
+  const handleSeeBlock = async () => {
+    try {
+      const response = await blockApi.getFloorPlan();
+      setFloorPlan(response.data.image);
+      setShowModal(true);
+    } catch (err) {
+      console.error("Erro ao buscar planta baixa:", err);
+      alert("Erro ao carregar a planta baixa.");
+    }
+  };
 
   const handleList = async () => {
     try {
@@ -94,12 +104,13 @@ export default function ListarProfessores() {
                 />
               </ul>
             </div>
-            <Button onClick={() => handleSeeBlock}>PLANTA BAIXA</Button>
+            <Button onClick={handleSeeBlock}>PLANTA BAIXA</Button>
             <div className="flex flex-col items-center gap-4 w-full pt-10"></div>
           </Card>
         </div>
       </div>
       <Footer />
+      {showModal && <ImageModal isVisible={showModal} image={floorPlan} onClose={() => setShowModal(false)} />}
     </div>
   );
 }

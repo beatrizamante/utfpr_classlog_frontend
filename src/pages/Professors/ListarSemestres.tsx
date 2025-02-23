@@ -9,6 +9,7 @@ import { Semester } from "../../interfaces/ProfessorInterfaces";
 import List from "../../components/List/List";
 
 export default function ListarSemestres() {
+  const professorId = authApi.getUserId();
   const navigate = useNavigate();
   const [semester, setSemester] = useState<Semester[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
