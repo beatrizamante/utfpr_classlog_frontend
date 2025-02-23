@@ -10,6 +10,9 @@ import AtualizarBloco from "../pages/Admin/AdminCrud/Blocos/Atualizar";
 import ListarMaterias from "../pages/Admin/AdminCrud/Materias/ListaItems";
 import NovaMateria from "../pages/Admin/AdminCrud/Materias/Cadastrar";
 import AtualizarMateria from "../pages/Admin/AdminCrud/Materias/Atualizar";
+import ListarHorarios from "../pages/Admin/AdminCrud/Horarios/ListaItems";
+import NovoHorario from "../pages/Admin/AdminCrud/Horarios/Cadastrar";
+import AtualizaHorario from "../pages/Admin/AdminCrud/Horarios/Atualizar";
 
 const AdminRoute: React.FC = () => (
   <Routes>
@@ -32,6 +35,12 @@ const AdminRoute: React.FC = () => (
       <Route index element={<ListarMaterias />} />
       <Route path="cadastrar" element={<NovaMateria />} />
       <Route path="atualizar/:id" element={<AtualizarMateria />} />
+    </Route>
+
+    <Route path="/horarios">
+      <Route index element={<ListarHorarios />} />
+      <Route path="cadastrar" element={<NovoHorario />} />
+      <Route path="atualizar/:id" element={<AtualizaHorario />} />
     </Route>
 
     <Route path="*" element={<Navigate to="/admin/menu" />} />

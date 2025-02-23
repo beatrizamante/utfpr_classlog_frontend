@@ -5,13 +5,12 @@ import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
-import { useNavigate, useParams } from "react-router-dom";
+import { data, useNavigate, useParams } from "react-router-dom";
 import { subjectsApi } from "../../../../api/admin/apiSubject";
 
 type FormDataInput = {
-  period: string;
-  professor: string;
-  time: string;
+  semestre: string;
+  descricao: string;
 };
 
 export default function AtualizaSala() {
@@ -19,9 +18,8 @@ export default function AtualizaSala() {
   const subjectId = Number(id);
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormDataInput>({
-    period: "",
-    professor: "",
-    time: "",
+    semestre: "",
+    descricao: "",
   });
 
   useEffect(() => {
@@ -31,9 +29,8 @@ export default function AtualizaSala() {
           const response = await subjectsApi.getSubjectById(subjectId.toString());
           if (response.data) {
             setFormData({
-              period: response.data.semester,
-              professor: response.data.professor,
-              time: response.data.time,
+              semestre: response.data.semester,
+              descricao: response.data.name,
             });
           }
         }
@@ -56,7 +53,11 @@ export default function AtualizaSala() {
   const handleUpdate = async () => {
     try {
       if (subjectId && formData) {
-        await subjectsApi.updateSubject(subjectId.toString(), formData);
+        const dataToUpdate = {
+          semester: formData.semestre,   
+          name: formData.descricao,  
+        };
+        await subjectsApi.updateSubject(subjectId.toString(), dataToUpdate);
         console.log("Room successfully updated.");
         navigate(-1);
       } else {

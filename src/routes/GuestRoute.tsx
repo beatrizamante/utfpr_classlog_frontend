@@ -10,7 +10,7 @@ import ListarBlocos from "../pages/Guest/ListarBlocos";
 import ListarSalas from "../pages/Professors/ListarMaterias";
 import DetalhesPorBloco from "../pages/Guest/DetalhesPorBloco";
 
-const ProfessorRoute: React.FC = () => (
+const GuestRoute: React.FC = () => (
   <Routes>
     <Route path="/" element={<GuestPage />} />
 
@@ -36,4 +36,4 @@ const ProfessorRoute: React.FC = () => (
   </Routes>
 );
 
-export default ProfessorRoute;
+export default GuestRoute;

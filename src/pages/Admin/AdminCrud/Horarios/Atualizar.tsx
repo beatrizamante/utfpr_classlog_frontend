@@ -18,7 +18,7 @@ type FormDataInput = {
   date: "";
 };
 
-export default function AtualizaSala() {
+export default function AtualizaHorario() {
   const { id } = useParams<{ id: string }>();
   const scheduleId = Number(id);
   const navigate = useNavigate();

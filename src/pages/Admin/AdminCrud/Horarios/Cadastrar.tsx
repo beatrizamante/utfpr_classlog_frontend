@@ -19,7 +19,7 @@ type FormDataInput = {
   date: "";
 };
 
-export default function NovaSala() {
+export default function NovoHorario() {
   const [formData, setFormData] = useState<FormDataInput>({
     start_time: "",
     end_time: "",

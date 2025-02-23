@@ -12,11 +12,8 @@ export const authApi = {
       });
 
       if (response.status === 200) {
-    console.log("register?")
 
         const data = response.data;
-        console.log("Role/", data.role)
-
         if (data.success) {
           return { success: true, role: data.role };
         } else {
@@ -41,10 +38,6 @@ export const authApi = {
   },
 
   async logout() {
-  },
-
-  async isAuthenticated() {
-    return !!localStorage.getItem("token");
   },
 
   async getRole() {
