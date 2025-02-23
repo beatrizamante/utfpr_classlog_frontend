@@ -54,25 +54,29 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const role = formData.role;
-      if (role === "Estudante") {
-        navigate("/estudante");
-      } else if (role === "Professor") {
-        const loginSuccess = await authApi.login(
-          formData.university_registry,
-          formData.password,
-        );
-        if (loginSuccess) {
+      const loginResponse = await authApi.login(
+        formData.university_registry,
+        formData.password
+      );
+  
+      if (loginResponse?.success) {
+        const role = loginResponse.role;
+  
+        if (role === "Estudante") {
+          navigate("/guest");
+        } else if (role === "Professor") {
           navigate("/professor");
+        } else if (role === "Administrador") {
+          navigate("/admin");
+        } else {
+          setError("Tipo de usuário desconhecido.");
         }
-      } else if (role === "Administrador") {
-        navigate("/admin");
       } else {
-        setError("Login failed. Please check your credentials.");
+        setError(loginResponse?.message || "Falha no login. Verifique suas credenciais.");
       }
     } catch (err) {
-      console.error("Login error: ", err);
-      setError("An error occurred during login. Please try again later.");
+      console.error("Erro no login:", err);
+      setError("Ocorreu um erro ao tentar logar. Tente novamente mais tarde.");
     }
   };
 

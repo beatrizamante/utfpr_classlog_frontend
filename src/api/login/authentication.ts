@@ -11,10 +11,15 @@ export const authApi = {
       });
 
       if (response.status === 200) {
-        const { token, role } = response.data;
-        localStorage.setItem("token", token);
-        localStorage.setItem("role", role);
-        return { success: true, role };
+        const data = response.data;
+
+        if (data.success && data.token) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("role", data.role || "user");
+          return { success: true, role: data.role };
+        } else {
+          return { success: false, message: "Erro no login: token não recebido" };
+        }
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -45,7 +50,7 @@ export const authApi = {
   getRole() {
     return localStorage.getItem("role");
   },
-  
+
   getUserId() {
     return localStorage.getItem("university_registry"); 
   }
