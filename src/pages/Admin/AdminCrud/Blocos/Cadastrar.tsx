@@ -6,22 +6,12 @@ import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import LoadInput from "../../../../components/Forms/Item/LoadInput";
-import { Block } from "../../../../interfaces/AdmInterfaces";
 import { useNavigate } from "react-router";
 import { blocksApi } from "../../../../api/admin/apiBlock";
 
 type formDataInput = {
   identificacao: string;
   planta: File | null;
-};
-
-const convertBlockToFormData = (block: Omit<Block, "id">): FormData => {
-  const formData = new FormData();
-  formData.append("identificacao", block.identificacao);
-  if (block.planta) {
-    formData.append("planta", block.planta);
-  }
-  return formData;
 };
 
 export default function NovoBloco() {
@@ -49,23 +39,38 @@ export default function NovoBloco() {
 
   const handleSave = async () => {
     try {
-      if (formData.identificacao && formData.planta) {
-        const formDataToUpload = convertBlockToFormData(formData);
-
-        await blocksApi.createBlock(formDataToUpload);
-        console.log("Block successfully created.");
+      if (!formData.identificacao) {
+        alert("A identificação deve ser preenchida!");
+        return;
+      }
+  
+      const blockData = { name: formData.identificacao };
+      const blockResponse = await blocksApi.createBlock(blockData);
+  
+      if (blockResponse.data && blockResponse.data.id) {
+        const blockId = blockResponse.data.id;
+  
+        if (formData.planta) {
+          const formDataToUpload = new FormData();
+          formDataToUpload.append("photo", formData.planta);
+  
+          await blocksApi.uploadBlockImage(blockId, formDataToUpload);
+        }
+  
+        console.log("Bloco criado com sucesso!");
         setFormData({
           identificacao: "",
           planta: null,
         });
       } else {
-        alert("All fields must be filled, including the file!");
+        alert("Erro ao criar o bloco.");
       }
     } catch (err) {
-      console.error("An error occurred: ", err);
-      alert("An error occurred while saving. Please try again.");
+      console.error("Erro ao salvar:", err);
+      alert("Ocorreu um erro ao salvar. Tente novamente.");
     }
   };
+  
 
   const onCancel = () => {
     setFormData({
