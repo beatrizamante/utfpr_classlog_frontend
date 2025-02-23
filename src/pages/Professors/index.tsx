@@ -4,7 +4,6 @@ import background from "../../assets/images/background.png";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
-import { authApi } from "../../api/login/authentication";
 import { Course } from "../../interfaces/ProfessorInterfaces";
 import List from "../../components/List/List";
 
@@ -14,13 +13,18 @@ export default function ProfessorPage() {
   const [selectId, setSelectId] = useState<number | null>(null);
   const [clickCount, setClickCount] = useState(0);
   const listRef = useRef<HTMLUListElement>(null);
-  
+
+  const mockCourses: Course[] = [
+    {
+      id: 1,
+      nome: "Tecn. Em Sistemas pra Internet",
+      professor: "Prof. João Silva"
+    }
+  ];
 
   const handleList = async () => {
     try {
-      //Will only have TSI
-      const response = await authApi.getCourseByProfessor();
-      setCourses(response.data);
+      setCourses(mockCourses);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);

@@ -4,9 +4,9 @@ import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { scheduleApi } from "../../api/scheduleApi";
 import { Classroom } from "../../interfaces/GuestInterface";
 import Button from "../../components/Button";
+import { schedulesApi } from "../../api/admin/apiSchedules";
 
 export default function ListarSalas() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function ListarSalas() {
     async function fetchClassrooms() {
       if (!blockId) return;
       try {
-        const response = await scheduleApi.getClassroomByBlock(blockId);
+        const response = await schedulesApi.getScheduleById(String(blockId));
         setClassrooms(response.data);
       } catch (err) {
         console.error("Erro ao buscar salas:", err);

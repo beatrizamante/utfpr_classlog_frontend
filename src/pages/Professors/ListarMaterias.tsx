@@ -8,6 +8,7 @@ import { Subjects } from "../../interfaces/ProfessorInterfaces";
 import Footer from "../../components/Footer";
 import ModalProfessor from "../../components/ModalProfessors";
 import { authApi } from '../../api/login/authentication'
+import { subjectsApi } from "../../api/admin/apiSubject";
 
 export default function ListarSalas() {
   const professorId = authApi.getUserId();
@@ -21,7 +22,7 @@ export default function ListarSalas() {
 
   const handleList = async () => {
     try {
-      const response = await subjectsApi.getSubjectsByProfessor(professorId, semesterId);
+      const response = await subjectsApi.getSubjectById(String(selectId));
       setSubjects(response.data);
       console.log("Success! List formed!");
     } catch (err) {
@@ -37,7 +38,8 @@ export default function ListarSalas() {
 
   const cancelClass = async (subjectId: number, date: string, time: string) => {
     try {
-      const response = await subjectsApi.cancelClass(subjectId, date, time);
+      // const response = await subjectsApi.cancelClass(subjectId, date, time);
+      const response: any = {} 
   
       if (response.status === 200) {
         alert(`Aula de ${date} no horário ${time} cancelada com sucesso! A sala está agora livre.`);

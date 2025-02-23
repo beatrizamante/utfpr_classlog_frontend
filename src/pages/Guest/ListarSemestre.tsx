@@ -18,8 +18,9 @@ export default function ListarSemestres() {
 
   const handleList = async () => {
     try {
-      const response = await semesterApi.getProfessors();
-      setSemesters(response.data);
+      // const response = await semesterApi.getProfessors();
+      // setSemesters(response.data);
+      setSemesters([])
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);

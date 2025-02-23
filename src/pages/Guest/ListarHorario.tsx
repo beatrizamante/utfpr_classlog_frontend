@@ -5,8 +5,8 @@ import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { scheduleApi } from "../../api/scheduleApi";
 import { useParams } from "react-router";
+import { schedulesApi } from "../../api/admin/apiSchedules";
 
 export default function ListarHorarios() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export default function ListarHorarios() {
     async function fetchSchedules() {
       if (!professorId) return;
       try {
-        const response = await scheduleApi.getSchedulesByProfessor(professorId);
+        const response = await schedulesApi.getScheduleById(String(professorId));
         setSchedules(response.data);
       } catch (err) {
         console.error("Erro ao buscar horários:", err);

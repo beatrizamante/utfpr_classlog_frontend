@@ -13,9 +13,7 @@ export const authApi = {
       if (response.status === 200) {
         const data = response.data;
 
-        if (data.success && data.token) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("role", data.role || "user");
+        if (data.success) {
           return { success: true, role: data.role };
         } else {
           return { success: false, message: "Erro no login: token não recebido" };
@@ -38,20 +36,18 @@ export const authApi = {
     }
   },
 
-  logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+  async logout() {
   },
 
-  isAuthenticated() {
+  async isAuthenticated() {
     return !!localStorage.getItem("token");
   },
 
-  getRole() {
+  async getRole() {
     return localStorage.getItem("role");
   },
 
-  getUserId() {
+  async getUserId() {
     return localStorage.getItem("university_registry"); 
   }
 };

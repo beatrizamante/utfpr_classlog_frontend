@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import Card from "../../components/Forms/Card";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { scheduleApi } from "../../api/scheduleApi";
 import { useParams } from "react-router";
 import ViewList from "../../components/ViewList/ViewList";
 import { Item } from "../../interfaces/GuestInterface";
+import { schedulesApi } from "../../api/admin/apiSchedules";
 
 export default function DetalhesPorBloco() {
   const { blockId, classroomId } = useParams();
@@ -16,7 +16,7 @@ export default function DetalhesPorBloco() {
     async function fetchItem() {
       if (!blockId && !classroomId) return;
       try {
-        const response = await scheduleApi.getClassroomScheduleByBlock(blockId, classroomId);
+        const response = await schedulesApi.getScheduleById(String(blockId));
         setIdentification(response.data.classroom);
         setItems(response.data);
       } catch (err) {

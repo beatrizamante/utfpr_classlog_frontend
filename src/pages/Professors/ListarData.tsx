@@ -8,6 +8,7 @@ import { authApi } from "../../api/login/authentication";
 import { Semester } from "../../interfaces/ProfessorInterfaces";
 import List from "../../components/List/List";
 import Button from "../../components/Button";
+import { schedulesApi } from "../../api/admin/apiSchedules";
 
 export default function ListarSemestres() {
   const subjectId = useParams();
@@ -19,7 +20,7 @@ export default function ListarSemestres() {
 
   const handleList = async () => {
     try {
-      const response = await authApi.getdateBySubject(subjectId);
+      const response = await schedulesApi.getScheduleById(String(subjectId));
       setDates(response.data);
       console.log("Success! List formed!");
     } catch (err) {
@@ -27,7 +28,7 @@ export default function ListarSemestres() {
     }
   };
 
-  const handleConfirm = (selectedId, subjectId) => {
+  const handleConfirm = () => {
     //Send to back
   }
 
@@ -87,7 +88,7 @@ export default function ListarSemestres() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
-          <Card title={action} color="utfpr_white" size="2xl">
+          <Card title={"Test"} color="utfpr_white" size="2xl">
             <List
               listOf={dates.map((date) => ({
                 ...date,

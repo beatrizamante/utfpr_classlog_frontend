@@ -12,6 +12,9 @@ import {
   Classroom,
   Schedule,
 } from "../../interfaces/ProfessorInterfaces";
+import { blocksApi } from "../../api/admin/apiBlock";
+import { classroomsApi } from "../../api/admin/apiClassroom";
+import { schedulesApi } from "../../api/admin/apiSchedules";
 
 export default function ProfessorTroca() {
   const { subjectId } = useParams();
@@ -19,114 +22,65 @@ export default function ProfessorTroca() {
   const professorId = authApi.getUserId();
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
-  const [clickCount, setClickCount] = useState(0);
-  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
-  const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(
-    null
-  );
   const [selectedBlockId, setSelectedBlockId] = useState<number | null>(null);
-  const [selectedClassroomId, setSelectedClassroomId] = useState<number | null>(
-    null
-  );
-  const [selectedClassroom, setSelectedClassroom] = useState<Classroom | null>(
-    null
-  );
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [selectedClassroomId, setSelectedClassroomId] = useState<number | null>(null);
+  const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(null);
+  const [selectedClassroom, setSelectedClassroom] = useState<Classroom | null>(null);
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    async function fetchCurrentClassroom() {
-      try {
-        const response = await authApi.getCurrentClassroom(
-          subjectId,
-          professorId
-        );
-        const { schedule_id, block_id, classroom_id } = response.data;
-
-        setSelectedScheduleId(schedule_id);
-        setSelectedBlockId(block_id);
-        setSelectedClassroomId(classroom_id);
-
-        fetchSchedules();
-        fetchBlocks();
-        fetchClassrooms(block_id);
-      } catch (err) {
-        console.error("Erro ao buscar a aula atual:", err);
-      }
-    }
-
-    async function fetchSchedules() {
-      try {
-        const response = await authApi.getSchedules();
-        setSchedules(response.data);
-      } catch (err) {
-        console.error("Erro ao buscar horários:", err);
-      }
-    }
-
     async function fetchBlocks() {
       try {
-        const response = await authApi.getBlocks();
+        const response = await blocksApi.getBlocks();
         setBlocks(response.data);
       } catch (err) {
         console.error("Erro ao buscar blocos:", err);
       }
     }
 
-    async function fetchClassrooms(blockId: number) {
-      try {
-        const response = await authApi.getClassroomsByBlock(blockId);
-        setClassrooms(response.data);
-      } catch (err) {
-        console.error("Erro ao buscar salas:", err);
-      }
-    }
+    fetchBlocks();
+  }, []);
 
-    fetchCurrentClassroom();
-  }, [subjectId, professorId]);
-
-  const handleItemClick = (id: number) => {
-    if (selectedItemId === id) {
-      setClickCount((prev) => prev + 1);
-
-      if (clickCount + 1 === 2) {
-        setClickCount(0);
-        advanceStep(id);
-      }
-    } else {
-      setSelectedItemId(id);
-      setClickCount(1);
+  const fetchClassrooms = async (blockId: number) => {
+    try {
+      const response = await classroomsApi.getClassroomById(String(blockId));
+      setClassrooms(response.data);
+    } catch (err) {
+      console.error("Erro ao buscar salas:", err);
     }
   };
 
-  const advanceStep = (id: number) => {
-    if (step === 1) {
-      setSelectedScheduleId(id);
-      fetchBlocks();
-      setStep(2);
-    } else if (step === 2 && selectedBlockId !== null) {
-      setSelectedBlockId(id);
-      fetchClassrooms(selectedBlockId);
-      setStep(3);
-    } else if (step === 3) {
-      setSelectedClassroomId(id);
-      const selected = classrooms.find((room) => room.id === id);
-      setSelectedClassroom(selected || null);
-      setStep(4);
-      setShowModal(true);
+  const fetchSchedules = async (classroomId: number) => {
+    try {
+      const response = await schedulesApi.getSchedules();
+      setSchedules(response.data);
+    } catch (err) {
+      console.error("Erro ao buscar horários:", err);
     }
+  };
+
+  const handleBlockSelection = async (id: number) => {
+    setSelectedBlockId(id);
+    await fetchClassrooms(id);
+    setStep(2);
+  };
+
+  const handleClassroomSelection = async (id: number) => {
+    setSelectedClassroomId(id);
+    await fetchSchedules(id);
+    setStep(3);
+  };
+
+  const handleScheduleSelection = (id: number) => {
+    setSelectedScheduleId(id);
+    setShowModal(true);
   };
 
   const handleConfirmChange = async () => {
-    if (
-      !subjectId ||
-      !selectedScheduleId ||
-      !selectedBlockId ||
-      !selectedClassroomId ||
-      !professorId
-    ) {
+    if (!subjectId || !selectedScheduleId || !selectedBlockId || !selectedClassroomId || !professorId) {
       console.error("Dados incompletos para a troca de sala.");
       return;
     }
@@ -140,7 +94,7 @@ export default function ProfessorTroca() {
     };
 
     try {
-      const response = await authApi.requestClassroomChange(requestData);
+      const response = await schedulesApi.changeSchedule();
       console.log("Troca confirmada:", response.data);
       setShowModal(false);
       navigate("/professor");
@@ -164,11 +118,11 @@ export default function ProfessorTroca() {
           <Card
             title={
               step === 1
-                ? "Escolha um horário"
-                : step === 2
                 ? "Escolha um bloco"
-                : step === 3
+                : step === 2
                 ? "Escolha uma sala"
+                : step === 3
+                ? "Escolha um horário"
                 : "Confirmar troca"
             }
             size="2xl"
@@ -177,37 +131,31 @@ export default function ProfessorTroca() {
               <ul>
                 {step === 1 && (
                   <List
-                    listOf={schedules}
-                    onSelected={(id) => id !== null && handleItemClick(id)}
-                    selectedId={selectedScheduleId}
-                    getItemLabel={(schedule) =>
-                      `Horário: ${schedule.identification} - ${schedule.period}`
-                    }
-                    getItemId={(schedule) => schedule.id}
-                  />
-                )}
-
-                {step === 2 && (
-                  <List
                     listOf={blocks}
-                    onSelected={(id) => id !== null && handleItemClick(id)}
+                    onSelected={(id) => id !== null && handleBlockSelection(id)}
                     selectedId={selectedBlockId}
                     getItemLabel={(block) => `Bloco: ${block.identification}`}
                     getItemId={(block) => block.id}
                   />
                 )}
 
-                {step === 3 && (
+                {step === 2 && (
                   <List
                     listOf={classrooms}
-                    onSelected={(id) => id !== null && handleItemClick(id)}
+                    onSelected={(id) => id !== null && handleClassroomSelection(id)}
                     selectedId={selectedClassroomId}
-                    getItemLabel={(room) =>
-                      `Sala: ${room.identification} ${
-                        room.occupied ? "(Ocupada)" : "(Livre)"
-                      }`
-                    }
+                    getItemLabel={(room) => `Sala: ${room.identification} ${room.occupied ? "(Ocupada)" : "(Livre)"}`}
                     getItemId={(room) => room.id}
+                  />
+                )}
+
+                {step === 3 && (
+                  <List
+                    listOf={schedules}
+                    onSelected={(id) => id !== null && handleScheduleSelection(id)}
+                    selectedId={selectedScheduleId}
+                    getItemLabel={(schedule) => `Horário: ${schedule.identification} - ${schedule.period}`}
+                    getItemId={(schedule) => schedule.id}
                   />
                 )}
               </ul>
@@ -219,11 +167,7 @@ export default function ProfessorTroca() {
 
       {selectedClassroom && (
         <Modal
-          message={
-            selectedClassroom.occupied
-              ? "Essa sala está ocupada, deseja solicitar troca?"
-              : "Confirmar mudança para essa sala?"
-          }
+          message={selectedClassroom.occupied ? "Essa sala está ocupada, deseja solicitar troca?" : "Confirmar mudança para essa sala?"}
           isVisible={showModal}
           onCancel={() => setShowModal(false)}
           onConfirm={handleConfirmChange}

@@ -19,8 +19,9 @@ export default function ListarSemestres() {
 
   const handleList = async () => {
     try {
-      const response = await authApi.getSemesterByProfessor(professorId);
-      setSemester(response.data);
+      // const response = await authApi.getSemesterByProfessor(professorId);
+      // setSemester(response.data);
+      setSemester([])
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -85,7 +86,7 @@ export default function ListarSemestres() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
-          <Card title={action} color="utfpr_white" size="2xl">
+          <Card title={"Teste"} color="utfpr_white" size="2xl">
             <List
               listOf={semester.map((semester) => ({
                 ...semester,
