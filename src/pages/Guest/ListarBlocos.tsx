@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import background from "../../../../assets/images/background.png";
+import background from "../../assets/images/background.png";
 import { useNavigate } from "react-router";
 import Footer from "../../components/Footer";
 import Card from "../../components/Forms/Card";

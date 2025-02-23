@@ -53,7 +53,11 @@ export default function AtualizaSala() {
   const handleUpdate = async () => {
     try {
       if (roomId && formData) {
-        await classroomsApi.updateClassroom(roomId.toString(), formData);
+        const dataToUpdate = {
+          name: formData.identificacao,  
+          block_id: formData.bloco,   
+        };
+        await classroomsApi.updateClassroom(roomId.toString(), dataToUpdate);
         console.log("Room successfully updated.");
         navigate(-1);
       } else {

@@ -5,7 +5,6 @@ import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
-import { Classroom } from "../../../../interfaces/AdmInterfaces";
 import { useNavigate } from "react-router";
 import { classroomsApi } from "../../../../api/admin/apiClassroom";
 
@@ -46,11 +45,11 @@ export default function NovaSala() {
   const handleSave = async () => {
     try {
       if (formData.bloco && formData.identificacao) {
-        const newClassroom: Classroom = {
-          id: null,
-          bloco: formData.bloco,
-          identificacao: formData.identificacao,
+        const newClassroom = {
+          name: formData.identificacao,
+          block_id: Number(formData.bloco),
         };
+        console.log("Create Room", newClassroom)
 
         await classroomsApi.createClassroom(newClassroom);
         console.log("Room successfully created.");

@@ -5,45 +5,30 @@ import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
-import { Subjects } from "../../../../interfaces/AdmInterfaces"; 
 import { useNavigate } from "react-router";
 import { subjectsApi } from "../../../../api/admin/apiSubject";
 
 type formDataInput = {
-  identificacao: string;
-  professor: string;
-  periodo: string;
-  horario: string;
+  semestre: string;
+  descricao: string;
 };
 
 export default function NovaSala() {
   const [formData, setFormData] = useState<formDataInput>({
-    identificacao: "",
-    professor: "",
-    periodo: "",
-    horario: "",
+    semestre: "",
+    descricao: "",
   });
 
   const inputConfig = [
     {
-      label: "Identificação",
-      name: "identificacao",
-      value: formData.identificacao,
+      label: "Semestre",
+      name: "semestre",
+      value: formData.semestre,
     },
     {
-      label: "Período",
-      name: "periodo",
-      value: formData.periodo,
-    },
-    {
-      label: "Professor",
-      name: "professor",
-      value: formData.professor,
-    },
-    {
-      label: "Horário da Aula",
-      name: "horario",
-      value: formData.horario,
+      label: "Descrição",
+      name: "descricao",
+      value: formData.descricao,
     },
   ];
 
@@ -59,22 +44,17 @@ export default function NovaSala() {
 
   const handleSave = async () => {
     try {
-      if (formData.periodo && formData.professor && formData.horario) {
-        const newSubject: Subjects = {
-          id: null,
-          identificaction: formData.identificacao,
-          period: formData.periodo,
-          professor: formData.professor,
-          time: formData.horario,
+      if (formData.semestre && formData.descricao) {
+        const newSubject = {
+          semester: Number(formData.semestre),
+          name: formData.descricao,
         };
 
         await subjectsApi.createSubject(newSubject);
         console.log("Subject successfully created.");
         setFormData({
-          identificacao: "",
-          periodo: "",
-          professor: "",
-          horario: "",
+          semestre: "",
+          descricao: "",
         });
       } else {
         console.error("All fields must be filled.");
@@ -86,10 +66,8 @@ export default function NovaSala() {
 
   const onCancel = () => {
     setFormData({
-      identificacao: "",
-      periodo: "",
-      professor: "",
-      horario: "",
+      semestre: "",
+      descricao: "",
     });
     navigate(-1);
   };

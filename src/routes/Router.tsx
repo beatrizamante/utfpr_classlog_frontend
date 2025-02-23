@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginScreen from "../pages/login/LoginScreen";
 import AdminRoute from "./AdminRoute";
 import ProfessorRoute from "./ProfessorRoute";
-import GuestPage from "../pages/Guest/index";
+import GuestRoute from "./GuestRoute";
 
 const authenticathedAs = () => {
   return true;
@@ -14,7 +14,7 @@ const Router: React.FC = () => (
       <Route path="/" element={<LoginScreen />} />
       <Route
         path="/guest/*"
-        element={ <GuestPage />}
+        element={ <GuestRoute />}
       />
       <Route
         path="/professor/*"
