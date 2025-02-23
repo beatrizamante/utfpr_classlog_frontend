@@ -10,7 +10,7 @@ import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
 import { subjectsApi } from "../../../../api/admin/apiSubject";
 
-export default function Listas() {
+export default function ListarHorarios() {
   const [schedules, setSchedules] = useState<Schedules[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -114,7 +114,7 @@ export default function Listas() {
               <Button
                 onClick={() => {
                   if (selectId) {
-                    navigate(`/admin/materias/atualizar/${selectId}`)
+                    navigate(`/admin/horarios/atualizar/${selectId}`)
                     console.log(`Navegar para atualizar o ID: ${selectId}`);
                   }
                 }}

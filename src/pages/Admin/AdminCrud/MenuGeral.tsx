@@ -36,6 +36,9 @@ export default function MenuGeral() {
             <Button onClick={() => navigate(`/admin/blocos${action ? `/${action}` : ""}`)} height={"80px"}>
               BLOCO
             </Button>
+            <Button onClick={() => navigate(`/admin/horarios${action ? `/${action}` : ""}`)} height={"80px"}>
+              HORPARIOS
+            </Button>
           </Card>
         </div>
         <Footer />
