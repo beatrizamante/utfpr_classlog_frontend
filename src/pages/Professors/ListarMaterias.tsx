@@ -129,7 +129,7 @@ export default function ListarSalas() {
       <ModalProfessor
         isVisible={showModal} 
         onChangeClassrom={() => navigate(`/professor/curso/semestre/${semesterId}/materia/${selectId}/sala`)} 
-        onCancelClass={() => cancelClass}      />
+        onCancelClass={() => navigate(`/professor/materia/${selectId}/data`)}      />
     </div>
   );
 }
