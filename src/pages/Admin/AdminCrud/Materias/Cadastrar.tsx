@@ -1,51 +1,54 @@
 import React, { useState } from "react";
-import Input from "../../../components/Forms/Item/Input";
-import Card from "../../../components/Forms/Card";
-import Button from "../../../components/Button";
-import Footer from "../../../components/Footer";
-import background from "../../../assets/images/background.png";
-import Header from "../../../components/Header";
-import { Classroom } from "../../../interfaces/Classroom";  // Assuming your interface is like this
+import Input from "../../../../components/Forms/Item/Input";
+import Card from "../../../../components/Forms/Card";
+import Button from "../../../../components/Button";
+import Footer from "../../../../components/Footer";
+import background from "../../../../assets/images/background.png";
+import Header from "../../../../components/Header";
+import { Subjects } from "../../../../interfaces/AdmInterfaces"; 
+import { useNavigate } from "react-router";
+import { subjectsApi } from "../../../../api/admin/apiSubject";
 
 type formDataInput = {
-  bloco: string;
   identificacao: string;
-  tamanho: string;
-  tipo: string;
+  professor: string;
+  periodo: string;
+  horario: string;
 };
 
 export default function NovaSala() {
   const [formData, setFormData] = useState<formDataInput>({
-    bloco: "",
     identificacao: "",
-    tamanho: "",
-    tipo: "",
+    professor: "",
+    periodo: "",
+    horario: "",
   });
 
   const inputConfig = [
-    {
-      label: "Bloco",
-      name: "bloco",
-      value: formData.bloco,
-    },
     {
       label: "Identificação",
       name: "identificacao",
       value: formData.identificacao,
     },
     {
-      label: "Tamanho da Sala",
-      name: "tamanho",
-      value: formData.tamanho,
+      label: "Período",
+      name: "periodo",
+      value: formData.periodo,
     },
     {
-      label: "Tipo de Laboratório",
-      name: "tipo",
-      value: formData.tipo,
+      label: "Professor",
+      name: "professor",
+      value: formData.professor,
+    },
+    {
+      label: "Horário da Aula",
+      name: "horario",
+      value: formData.horario,
     },
   ];
 
-  // Handle input change
+  const navigate = useNavigate();
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -56,27 +59,22 @@ export default function NovaSala() {
 
   const handleSave = async () => {
     try {
-      if (
-        formData.bloco &&
-        formData.identificacao &&
-        formData.tamanho &&
-        formData.tipo
-      ) {
-        const newClassroom: Classroom = {
-          room_id: null,
-          bloco: formData.bloco,
-          identificacao: formData.identificacao,
-          tamanho: formData.tamanho,
-          tipo: formData.tipo,
+      if (formData.periodo && formData.professor && formData.horario) {
+        const newSubject: Subjects = {
+          id: null,
+          identificaction: formData.identificacao,
+          period: formData.periodo,
+          professor: formData.professor,
+          time: formData.horario,
         };
 
-        // await apiClient.postRoom(newClassroom); 
-        console.log("Room successfully created.");
+        await subjectsApi.createSubject(newSubject);
+        console.log("Subject successfully created.");
         setFormData({
-          bloco: "",
           identificacao: "",
-          tamanho: "",
-          tipo: "",
+          periodo: "",
+          professor: "",
+          horario: "",
         });
       } else {
         console.error("All fields must be filled.");
@@ -88,12 +86,12 @@ export default function NovaSala() {
 
   const onCancel = () => {
     setFormData({
-      bloco: "",
       identificacao: "",
-      tamanho: "",
-      tipo: "",
+      periodo: "",
+      professor: "",
+      horario: "",
     });
-    // navigate(-1);
+    navigate(-1);
   };
 
   return (
@@ -108,7 +106,7 @@ export default function NovaSala() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
-          <Card title="NOVA SALA" size="2xl">
+          <Card title="NOVA MATÉRIA" size="2xl">
             <div className="flex flex-col space-y-6">
               {inputConfig.map((input) => (
                 <Input

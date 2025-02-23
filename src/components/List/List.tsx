@@ -1,30 +1,30 @@
 import React from "react";
-import Item from "./Item/ItemClassroom";
-import { Classroom } from "../../interfaces/Classroom";
+import Item from "./Item/Item";
 
-interface ListProps {
-  listOfClassrooms: Classroom[];
-  onSelectedRoom: (id: number | null) => void;
-  selectedRoomId?: number | null;
+interface ListProps<T> {
+  listOf: T[];
+  onSelected: (id: number | null) => void;
+  selectedId?: number | null;
+  getItemLabel: (item: T) => string; 
+  getItemId: (item: T) => number | null;  
 }
 
-export default function List({
-  listOfClassrooms,
-  onSelectedRoom,
-  selectedRoomId,
-}: ListProps) {
+export default function List<T>({
+  listOf,
+  onSelected,
+  selectedId,
+  getItemLabel,
+  getItemId,
+}: ListProps<T>) {
   return (
-    <div className="flex justify-center pb-8 relative mx-8 py-4 -z-0 bg-transparent max-h-[500px] overflow-y-auto overflow-x-hidden">
-      <ul>
-        {listOfClassrooms.map((room) => (
-          <Item 
-            key={room.room_id}
-            bloco={room.bloco}
-            identificacao={room.identificacao}
-            tamanho={room.tamanho}
-            tipo={room.tipo}
-            onClick={() => onSelectedRoom(room.room_id)}
-            isSelected={room.room_id === selectedRoomId}
+    <div className="flex justify-center pb-8 relative mx-8 py-4 -z-0 bg-transparent max-h-[30vh] overflow-y-auto overflow-x-hidden">
+      <ul className="space-y-8">
+        {listOf.map((item) => (
+          <Item
+            key={getItemId(item)} 
+            label={getItemLabel(item)} 
+            onClick={() => onSelected(getItemId(item))}
+            isSelected={getItemId(item) === selectedId}
           />
         ))}
       </ul>

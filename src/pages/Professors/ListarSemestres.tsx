@@ -5,12 +5,13 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../../api/login/authentication";
-import { Course } from "../../interfaces/ProfessorInterfaces";
+import { Semester } from "../../interfaces/ProfessorInterfaces";
 import List from "../../components/List/List";
 
-export default function ProfessorPage() {
+export default function ListarSemestres() {
+  const professorId = authApi.getUserId();
   const navigate = useNavigate();
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [semester, setSemester] = useState<Semester[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [clickCount, setClickCount] = useState(0);
   const listRef = useRef<HTMLUListElement>(null);
@@ -18,9 +19,8 @@ export default function ProfessorPage() {
 
   const handleList = async () => {
     try {
-      //Will only have TSI
-      const response = await authApi.getCourseByProfessor();
-      setCourses(response.data);
+      const response = await authApi.getSemesterByProfessor(professorId);
+      setSemester(response.data);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -28,7 +28,7 @@ export default function ProfessorPage() {
   };
 
   const getMappedItemId = (
-    item: Course & { id: number }
+    item: Semester & { id: number }
   ): number => item.id;
 
   const handleItemClick = (id: number) => {
@@ -36,7 +36,7 @@ export default function ProfessorPage() {
       setClickCount(clickCount + 1);
 
       if (clickCount + 1 === 2) {
-        navigate(`/professor/curso/semestre`);
+        navigate(`/professor/curso/semestre/${selectId}/materia/`);
       }
     } else {
       setSelectId(id);
@@ -85,17 +85,17 @@ export default function ProfessorPage() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
-          <Card title={"Visão do Professor"} color="utfpr_white" size="2xl">
+          <Card title={action} color="utfpr_white" size="2xl">
             <List
-              listOf={courses.map((course) => ({
-                ...course,
-                id: course.id,
+              listOf={semester.map((semester) => ({
+                ...semester,
+                id: semester.id,
               }))}
               onSelected={(id: number | null) => {
                 if (id !== null) handleItemClick(id);
               }}
               selectedId={selectId}
-              getItemLabel={(course) => `${course.nome}`}
+              getItemLabel={(semester) => `${semester.identificacao}`}
               getItemId={getMappedItemId}
             />
           </Card>

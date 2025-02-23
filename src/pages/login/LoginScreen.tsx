@@ -6,10 +6,10 @@ import { ReactComponent as Logo } from "../../assets/icons/utfpr logo.svg";
 import { DropdownMenu } from "../../components/DropDown";
 import { useNavigate } from "react-router";
 import background from "../../assets/images/background.png";
-import { handLogin } from "../../services/authentication";
+import { authApi } from "../../api/login/authentication";
 
 type formDataInput = {
-  login: string;
+  university_registry: string;
   password: string;
   role: string;
 };
@@ -23,7 +23,7 @@ const items = [
 export default function LoginScreen() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<formDataInput>({
-    login: "",
+    university_registry: "",
     password: "",
     role: "Estudante",
   });
@@ -32,8 +32,8 @@ export default function LoginScreen() {
   const inputConfig = [
     {
       label: "RA + Matricula",
-      name: "login",
-      value: formData.login,
+      name: "university_registry",
+      value: formData.university_registry,
       type: "text",
     },
     {
@@ -54,25 +54,29 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const role = formData.role;
-      if (role === "Estudante") {
-        navigate("/estudante");
-      } else if (role === "Professor") {
-        const loginSuccess = await handLogin(
-          formData.login,
-          formData.password,
-        );
-        if (loginSuccess) {
+      const loginResponse = await authApi.login(
+        formData.university_registry,
+        formData.password
+      );
+  
+      if (loginResponse?.success) {
+        const role = loginResponse.role;
+  
+        if (role === "Estudante") {
+          navigate("/guest");
+        } else if (role === "Professor") {
           navigate("/professor");
+        } else if (role === "Administrador") {
+          navigate("/admin");
+        } else {
+          setError("Tipo de usuário desconhecido.");
         }
-      } else if (role === "Administrador") {
-        navigate("/admin");
       } else {
-        setError("Login failed. Please check your credentials.");
+        setError(loginResponse?.message || "Falha no login. Verifique suas credenciais.");
       }
     } catch (err) {
-      console.error("Login error: ", err);
-      setError("An error occurred during login. Please try again later.");
+      console.error("Erro no login:", err);
+      setError("Ocorreu um erro ao tentar logar. Tente novamente mais tarde.");
     }
   };
 

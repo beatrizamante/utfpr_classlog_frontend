@@ -1,54 +1,49 @@
 import React, { useEffect, useState } from "react";
-import Input from "../../../components/Forms/Item/Input";
-import Card from "../../../components/Forms/Card";
-import Button from "../../../components/Button";
-import Footer from "../../../components/Footer";
-import background from "../../../assets/images/background.png";
-import Header from "../../../components/Header";
+import Input from "../../../../components/Forms/Item/Input";
+import Card from "../../../../components/Forms/Card";
+import Button from "../../../../components/Button";
+import Footer from "../../../../components/Footer";
+import background from "../../../../assets/images/background.png";
+import Header from "../../../../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
-import { Classroom } from "../../../interfaces/Classroom";
-// import apiClient from "../../../utils/apiClient"; // Assuming you have a client for API requests
+import { subjectsApi } from "../../../../api/admin/apiSubject";
 
 type FormDataInput = {
-  bloco: string;
-  identificacao: string;
-  tamanho: string;
-  tipo: string;
+  period: string;
+  professor: string;
+  time: string;
 };
 
 export default function AtualizaSala() {
   const { id } = useParams<{ id: string }>();
-  const roomId = Number(id);
+  const subjectId = Number(id);
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormDataInput>({
-    bloco: "",
-    identificacao: "",
-    tamanho: "",
-    tipo: "",
+    period: "",
+    professor: "",
+    time: "",
   });
 
-  // Fetch room data on mount
   useEffect(() => {
-    const fetchRoom = async () => {
+    const fetchSubject = async () => {
       try {
-        if (roomId) {
-          // const response = await apiClient.getClassroomById(roomId.toString()); 
-          // if (response.data) {
-          //   setFormData({
-          //     bloco: response.data.bloco,
-          //     identificacao: response.data.identificacao,
-          //     tamanho: response.data.tamanho,
-          //     tipo: response.data.tipo,
-          //   });
-          // }
+        if (subjectId) {
+          const response = await subjectsApi.getSubjectById(subjectId.toString());
+          if (response.data) {
+            setFormData({
+              period: response.data.semester,
+              professor: response.data.professor,
+              time: response.data.time,
+            });
+          }
         }
       } catch (err) {
         console.error("An error occurred while fetching the room data:", err);
       }
     };
 
-    fetchRoom();
-  }, [roomId]);
+    fetchSubject();
+  }, [subjectId]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -60,10 +55,10 @@ export default function AtualizaSala() {
 
   const handleUpdate = async () => {
     try {
-      if (roomId && formData) {
-        // await apiClient.updateRoom(roomId.toString(), formData);
+      if (subjectId && formData) {
+        await subjectsApi.updateSubject(subjectId.toString(), formData);
         console.log("Room successfully updated.");
-        navigate("/ListaItems"); 
+        navigate(-1);
       } else {
         console.error("Room ID or form data is missing.");
       }
@@ -87,10 +82,9 @@ export default function AtualizaSala() {
           <Card title="ATUALIZAR" size="2xl">
             <div className="flex flex-col space-y-6">
               {[
-                { label: "Bloco", name: "bloco" },
-                { label: "Identificação", name: "identificacao" },
-                { label: "Tamanho da Sala", name: "tamanho" },
-                { label: "Tipo de Laboratório", name: "tipo" },
+                { label: "Período", name: "periodo" },
+                { label: "Professor", name: "professor" },
+                { label: "Horário", name: "time" },
               ].map((input) => (
                 <Input
                   key={input.name}
@@ -103,6 +97,9 @@ export default function AtualizaSala() {
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">
               <Button onClick={handleUpdate}>ATUALIZAR</Button>
+              <Button onClick={() => navigate(-1)} color="utfpr_red">
+                CANCELAR
+              </Button>
             </div>
           </Card>
         </div>

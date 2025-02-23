@@ -1,39 +1,52 @@
-import React from "react";
-
-interface InputProps {
+import React, { ChangeEvent } from "react";
+interface LoadInputProps {
   label: string;
   name: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  type?: string;
+  onChange: (file: File | null) => void;
+  acceptedTypes?: string;
 }
 
-export default function Input({
+export default function LoadInput({
   label,
   name,
-  value,
   onChange,
-  type,
-}: InputProps) {
+  acceptedTypes = "image/*",
+}: LoadInputProps) {
+  
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    const file = event.target.files?.[0] || null;
+    onChange(file);
+    console.log("File selected:", file?.name);
+  };
+
   return (
-    <div className="relative flex flex-col justify-center">
-      <div className="">
-        <input
-          className="h-[25px] block px-2.5 w-[320px] text-sm bg-transparent bg-opacity-80 appearance-none focus:outline-none disabled:bg-disabled-100 disabled:cursor-not-allowed disabled:text-disabled-100 peer text-utfpr_white"
-          type={type}
-          placeholder=""
-          name={name}
-          value={value}
-          onChange={onChange}
-        />
+    <div className="flex flex-col items-center">
+      <div className="relative flex items-center">
         <label
-          className={`absolute cursor-text text-sm duration-300 px-1.5 bg-background left-1 top-1/2 -translate-y-1/2 z-[5] origin-[0]`}
           htmlFor={name}
+          className="flex items-center justify-between text-sm bg-transparent text-utfpr_white px-4 cursor-pointer w-[320px]"
         >
           {label}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-6 h-6"
+          >
+            <path d="M5 20h14v-2H5v2zm7-14l-5 5h3v4h4v-4h3l-5-5z" />
+          </svg>
         </label>
-        <div className={`w-full h-[1px] mt-1 bg-utfpr_white`}></div>
+
+        <input
+          id={name}
+          name={name}
+          type="file"
+          className="hidden"
+          accept={acceptedTypes}
+          onChange={handleFileChange}
+        />
       </div>
+      <div className="w-full h-[1px] mt-1 bg-utfpr_white"></div>
     </div>
   );
 }

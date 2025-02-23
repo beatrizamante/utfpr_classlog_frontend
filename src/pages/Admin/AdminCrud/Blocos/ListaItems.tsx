@@ -1,31 +1,37 @@
 import React, { useEffect, useRef, useState } from "react";
-import Card from "../../../components/Forms/Card";
-import Button from "../../../components/Button";
-import Footer from "../../../components/Footer";
-import background from "../../../assets/images/background.png";
-import Header from "../../../components/Header";
-import { Classroom } from "../../../interfaces/Classroom";
-import List from "../../../components/List/List";
+import background from "../../../../assets/images/background.png";
 import { useNavigate } from "react-router";
-import DeleteModal from "../../../components/deleteModal";
+import { Block } from "../../../../interfaces/AdmInterfaces";
+import Header from "../../../../components/Header";
+import Card from "../../../../components/Forms/Card";
+import List from "../../../../components/List/List";
+import Button from "../../../../components/Button";
+import Footer from "../../../../components/Footer";
+import Modal from "../../../../components/Modal";
+import { blocksApi } from "../../../../api/admin/apiBlock";
 
 export default function Listas() {
-  const [rooms, setRooms] = useState<Classroom[]>([]);
+  const [blocks, setBlocks] = useState<Block[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const listRef = useRef<HTMLUListElement>(null);
 
   const handleDelete = async () => {
+    console.log(selectId);
     try {
       if (selectId != null) {
-        // await apiClient.deleteRoom(selectId.toString());
+        await blocksApi.deleteBlock(selectId.toString());
         console.log("Deletion successful");
         setShowModal(false);
         setSelectId(null);
         handleList();
+
+        setBlocks((prevblocks) =>
+          prevblocks.filter((block) => block.id !== selectId)
+        );
       } else {
-        console.error("Classroom ID is missing!");
+        console.error("Classblock ID is missing!");
       }
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -34,24 +40,32 @@ export default function Listas() {
 
   const handleList = async () => {
     try {
-      // const response = await apiClient.getClassrooms();
-      // setRooms(response.data);
+      const response = await blocksApi.getBlocks();
+      setBlocks(response.data);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
     }
   };
 
+  const getClassblockLabel = (item: Block): string => item.identificacao;
+  const getMappedItemId = (
+    item: Block & { id: number | null }
+  ): number | null => item.id;
+
+  useEffect(() => {
+    console.log("Item clicked with id after state update:", selectId);
+  }, [selectId]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      if (
-        listRef.current &&
-        !listRef.current.contains(target)
-      ) {
-        if (!showModal) {
-          setSelectId(null);
-        }
+      const clickedInsideList =
+        listRef.current && listRef.current.contains(target);
+      const clickedOnButton = (event.target as HTMLElement).closest("button");
+
+      if (!showModal && !clickedInsideList && !clickedOnButton) {
+        setSelectId(null);
       }
     };
 
@@ -60,7 +74,7 @@ export default function Listas() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showModal]);
+  }, [showModal, selectId]);
 
   useEffect(() => {
     handleList();
@@ -78,16 +92,20 @@ export default function Listas() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
-          <Card title="SALAS DE AULA" size="2xl">
+          <Card title="BLOCOS" size="2xl">
             <div className="mx-4 mb-4">
               <ul ref={listRef}>
                 <List
-                  listOfClassrooms={rooms.map((room) => ({
-                    ...room,
-                    id: room.room_id,
+                  listOf={blocks.map((block) => ({
+                    ...block,
+                    id: block.id,
                   }))}
-                  onSelectedRoom={(id: number | null) => setSelectId(id)}
-                  selectedRoomId={selectId}
+                  onSelected={(id: number | null) => {
+                    setSelectId(id);
+                  }}
+                  selectedId={selectId}
+                  getItemLabel={getClassblockLabel}
+                  getItemId={getMappedItemId}
                 />
               </ul>
             </div>
@@ -95,14 +113,20 @@ export default function Listas() {
               <Button
                 onClick={() => {
                   if (selectId) {
-                    // navigate(`/atualizar/${selectId}`);
+                    navigate(`/admin/blocos/atualizar/${selectId}`)
+                    console.log(`Navegar para atualizar o ID: ${selectId}`);
                   }
                 }}
+                disabled={!selectId}
               >
                 ATUALIZAR
               </Button>
               <Button
-                onClick={() => setShowModal(true)}
+                onClick={() => {
+                  if (selectId) {
+                    setShowModal(true);
+                  }
+                }}
                 color="utfpr_red"
                 disabled={!selectId}
               >
@@ -113,7 +137,8 @@ export default function Listas() {
         </div>
       </div>
       <Footer />
-      <DeleteModal
+      <Modal
+        message="Tem certeza que deseja deletar essas informações?"
         isVisible={showModal}
         onCancel={() => setShowModal(false)}
         onConfirm={handleDelete}
