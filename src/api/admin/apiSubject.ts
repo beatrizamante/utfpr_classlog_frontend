@@ -12,7 +12,7 @@ export const subjectsApi = {
   },
 
   createSubject(data: Object) {
-    return axios.post(`${API_URL}/subjects"`, data);
+    return axios.post(`${API_URL}/subjects`, data);
   },
 
   updateSubject(subjectId: string, data: Object) {

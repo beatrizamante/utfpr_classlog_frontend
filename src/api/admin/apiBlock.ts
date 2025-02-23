@@ -4,6 +4,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 export const blocksApi = {
   async getBlocks() {
+
     return axios.get(`${API_URL}/blocks`);
   },
 

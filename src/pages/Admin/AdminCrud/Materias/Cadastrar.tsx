@@ -9,26 +9,26 @@ import { useNavigate } from "react-router";
 import { subjectsApi } from "../../../../api/admin/apiSubject";
 
 type formDataInput = {
-  semestre: string;
-  descricao: string;
+  semester: string;
+  name: string;
 };
 
 export default function NovaSala() {
   const [formData, setFormData] = useState<formDataInput>({
-    semestre: "",
-    descricao: "",
+    semester: "",
+    name: "",
   });
 
   const inputConfig = [
     {
       label: "Semestre",
-      name: "semestre",
-      value: formData.semestre,
+      name: "semester",
+      value: formData.semester,
     },
     {
       label: "Descrição",
-      name: "descricao",
-      value: formData.descricao,
+      name: "name",
+      value: formData.name,
     },
   ];
 
@@ -44,17 +44,19 @@ export default function NovaSala() {
 
   const handleSave = async () => {
     try {
-      if (formData.semestre && formData.descricao) {
+      if (formData.semester && formData.name) {
         const newSubject = {
-          semester: Number(formData.semestre),
-          name: formData.descricao,
+          semester: Number(formData.semester),
+          name: formData.name,
         };
+        console.log(newSubject)
 
         await subjectsApi.createSubject(newSubject);
+
         console.log("Subject successfully created.");
         setFormData({
-          semestre: "",
-          descricao: "",
+          semester: "",
+          name: "",
         });
       } else {
         console.error("All fields must be filled.");
@@ -66,8 +68,8 @@ export default function NovaSala() {
 
   const onCancel = () => {
     setFormData({
-      semestre: "",
-      descricao: "",
+      semester: "",
+      name: "",
     });
     navigate(-1);
   };
