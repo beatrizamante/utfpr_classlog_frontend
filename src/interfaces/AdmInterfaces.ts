@@ -17,3 +17,14 @@ export interface Subjects {
   professor: string;
   time: string;
 }
+
+export interface Schedules {
+  id: number | null;
+  start_time: string,
+  end_time: string,
+	day_of_week: string,
+	default_day: string,
+	user_subject_id: string,
+	classroom_id: string,
+	date: Date,
+}
