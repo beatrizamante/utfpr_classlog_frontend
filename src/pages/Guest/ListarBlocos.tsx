@@ -8,6 +8,7 @@ import Header from "../../components/Header";
 import { Block } from "../../interfaces/GuestInterface";
 import Button from "../../components/Button";
 import ImageModal from "../../components/ImageModal";
+import { blocksApi } from "../../api/admin/apiBlock";
 
 export default function ListarProfessores() {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -20,7 +21,7 @@ export default function ListarProfessores() {
 
   const handleSeeBlock = async () => {
     try {
-      const response = await blockApi.getFloorPlan();
+      const response = await blocksApi.getBlockById(String(selectedBlockId));
       setFloorPlan(response.data.image);
       setShowModal(true);
     } catch (err) {
@@ -31,7 +32,7 @@ export default function ListarProfessores() {
 
   const handleList = async () => {
     try {
-      const response = await blockApi.getProfessors();
+      const response = await blocksApi.getBlocks();
       setBlocks(response.data);
       console.log("Success! List formed!");
     } catch (err) {

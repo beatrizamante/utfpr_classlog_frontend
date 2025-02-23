@@ -60,24 +60,28 @@ export default function AtualizaBloco() {
 
   const handleUpdate = async () => {
     try {
-      if (blockId && formData) {
-        const formDataToUpload = new FormData();
-        formDataToUpload.append("identificacao", formData.identificacao);
-        if (formData.planta) {
-          formDataToUpload.append("planta", formData.planta);
-        }
-
-        await blocksApi.updateBlock(blockId.toString(), formDataToUpload);
-        console.log("Room successfully updated.");
-        navigate(-1); 
-      } else {
-        console.error("Room ID or form data is missing.");
+      if (!blockId || !formData) {
+        console.error("Block ID or form data is missing.");
+        return;
       }
+  
+      await blocksApi.updateBlock(blockId.toString(), { name: formData.identificacao });
+      console.log("Block information successfully updated.");
+  
+      if (formData.planta) {
+        const formDataToUpload = new FormData();
+        formDataToUpload.append("photo", formData.planta); 
+  
+        await blocksApi.uploadBlockImage(blockId.toString(), formDataToUpload);
+        console.log("Block image successfully updated.");
+      }
+  
+      navigate(-1);
     } catch (err) {
-      console.error("An error occurred while updating the room:", err);
+      console.error("An error occurred while updating the block:", err);
     }
   };
-
+  
   return (
     <div
       className="min-h-screen flex flex-col bg-cover bg-center"

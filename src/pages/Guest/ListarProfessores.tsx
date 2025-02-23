@@ -18,8 +18,9 @@ export default function ListarProfessores() {
 
   const handleList = async () => {
     try {
-      const response = await professorsApi.getProfessors();
-      setProfessors(response.data);
+      // const response = await professorsApi.getProfessors();
+      // setProfessors(response.data);
+      setProfessors([]);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
