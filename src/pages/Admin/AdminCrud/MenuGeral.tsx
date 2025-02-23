@@ -25,19 +25,41 @@ export default function MenuGeral() {
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
           <Card title="MENU" size="2xl">
-            <Button onClick={() => navigate(`/admin/salas${action ? `/${action}` : ""}`)} height={"80px"}>
+            <Button
+              onClick={() =>
+                navigate(`/admin/salas${action ? `/${action}` : ""}`)
+              }
+              height={"80px"}
+            >
               SALA
             </Button>
             <Line />
-            <Button onClick={() => navigate(`/admin/materias${action ? `/${action}` : ""}`)} height={"80px"}>
+            <Button
+              onClick={() =>
+                navigate(`/admin/materias${action ? `/${action}` : ""}`)
+              }
+              height={"80px"}
+            >
               MATÉRIA
             </Button>
             <Line />
-            <Button onClick={() => navigate(`/admin/blocos${action ? `/${action}` : ""}`)} height={"80px"}>
+            <Button
+              onClick={() =>
+                navigate(`/admin/blocos${action ? `/${action}` : ""}`)
+              }
+              height={"80px"}
+            >
               BLOCO
             </Button>
-            <Button onClick={() => navigate(`/admin/horarios${action ? `/${action}` : ""}`)} height={"80px"}>
-              HORPARIOS
+            <Line />
+
+            <Button
+              onClick={() =>
+                navigate(`/admin/horarios${action ? `/${action}` : ""}`)
+              }
+              height={"80px"}
+            >
+              HORÁRIOS
             </Button>
           </Card>
         </div>

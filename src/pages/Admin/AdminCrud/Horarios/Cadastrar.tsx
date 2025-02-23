@@ -16,7 +16,6 @@ type FormDataInput = {
   default_day: "";
   professor: "";
   classroom: "";
-  date: "";
 };
 
 export default function NovoHorario() {
@@ -27,7 +26,6 @@ export default function NovoHorario() {
     default_day: "",
     professor: "",
     classroom: "",
-    date: "",
   });
 
   const inputConfig = [
@@ -61,11 +59,6 @@ export default function NovoHorario() {
       name: "classroom",
       value: formData.classroom,
     },
-    {
-      label: "Data",
-      name: "date",
-      value: formData.date,
-    },
   ];
 
   const navigate = useNavigate();
@@ -84,10 +77,9 @@ export default function NovoHorario() {
         formData.start_time &&
         formData.end_time &&
         formData.professor &&
-        formData.classroom &&
-        formData.date
+        formData.classroom 
       ) {
-        const newSchedule: Schedules = {
+        const newSchedule = {
           id: null,
           start_time: formData.start_time,
           end_time: formData.end_time,
@@ -95,7 +87,6 @@ export default function NovoHorario() {
           default_day: formData.default_day,
           user_subject_id: formData.professor,
           classroom_id: formData.classroom,
-          date: formData.date,
         };
 
         await schedulesApi.createSchedule(newSchedule);
@@ -107,7 +98,6 @@ export default function NovoHorario() {
           default_day: "",
           professor: "",
           classroom: "",
-          date: "",
         });
       } else {
         console.error("All fields must be filled.");
@@ -125,7 +115,6 @@ export default function NovoHorario() {
       default_day: "",
       professor: "",
       classroom: "",
-      date: "",
     });
     navigate(-1);
   };

@@ -114,17 +114,6 @@ export default function ListarHorarios() {
               <Button
                 onClick={() => {
                   if (selectId) {
-                    navigate(`/admin/horarios/atualizar/${selectId}`)
-                    console.log(`Navegar para atualizar o ID: ${selectId}`);
-                  }
-                }}
-                disabled={!selectId}
-              >
-                ATUALIZAR
-              </Button>
-              <Button
-                onClick={() => {
-                  if (selectId) {
                     setShowModal(true);
                   }
                 }}
