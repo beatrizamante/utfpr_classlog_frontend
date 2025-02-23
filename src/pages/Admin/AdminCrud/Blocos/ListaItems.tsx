@@ -9,6 +9,7 @@ import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
 import { blocksApi } from "../../../../api/admin/apiBlock";
+import axios from "axios";
 
 export default function Listas() {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -39,8 +40,10 @@ export default function Listas() {
   };
 
   const handleList = async () => {
+
     try {
       const response = await blocksApi.getBlocks();
+      console.log(response.data)
       setBlocks(response.data);
       console.log("Success! List formed!");
     } catch (err) {
@@ -48,7 +51,7 @@ export default function Listas() {
     }
   };
 
-  const getClassblockLabel = (item: Block): string => item.identificacao;
+  const getClassblockLabel = (item: Block): string => item.name;
   const getMappedItemId = (
     item: Block & { id: number | null }
   ): number | null => item.id;
@@ -78,6 +81,8 @@ export default function Listas() {
 
   useEffect(() => {
     handleList();
+
+
   }, []);
 
   return (

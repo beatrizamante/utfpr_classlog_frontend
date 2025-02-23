@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Input from "../../../../components/Forms/Item/Input";
 import Card from "../../../../components/Forms/Card";
 import Button from "../../../../components/Button";
@@ -7,28 +7,27 @@ import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate } from "react-router";
 import { classroomsApi } from "../../../../api/admin/apiClassroom";
+import {blocksApi} from "../../../../api/admin/apiBlock";
+import {Block} from "../../../../interfaces/AdmInterfaces";
 
 type formDataInput = {
-  bloco: string;
-  identificacao: string;
+  block_id: number;
+  name: string;
 };
 
 export default function NovaSala() {
   const [formData, setFormData] = useState<formDataInput>({
-    bloco: "",
-    identificacao: "",
+    block_id: 0,
+    name: "",
   });
+  const [blocks, setBlocks] = useState<Block[]>([]);
+
 
   const inputConfig = [
     {
-      label: "Bloco",
-      name: "bloco",
-      value: formData.bloco,
-    },
-    {
       label: "Identificação",
-      name: "identificacao",
-      value: formData.identificacao,
+      name: "name",
+      value: formData.name,
     },
   ];
 
@@ -36,26 +35,43 @@ export default function NovaSala() {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: name === "block_id" ? Number(value) : value,
     }));
   };
 
+  const handleListBlocks = async () => {
+
+    try {
+      const response = await blocksApi.getBlocks();
+      console.log(response.data)
+      setBlocks(response.data);
+      console.log("Success! List formed!");
+    } catch (err) {
+      console.error("An error occurred: ", err);
+    }
+  };
+
+  useEffect(() => {
+    handleListBlocks();
+  }, []);
+
   const handleSave = async () => {
     try {
-      if (formData.bloco && formData.identificacao) {
+      if (formData.block_id && formData.name) {
         const newClassroom = {
-          name: formData.identificacao,
-          block_id: Number(formData.bloco),
+          name: formData.name,
+          block_id: Number(formData.block_id),
         };
         console.log("Create Room", newClassroom)
 
         await classroomsApi.createClassroom(newClassroom);
         console.log("Room successfully created.");
         setFormData({
-          bloco: "",
-          identificacao: "",
+          block_id: 0,
+          name: "",
         });
       } else {
         console.error("All fields must be filled.");
@@ -65,10 +81,17 @@ export default function NovaSala() {
     }
   };
 
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      block_id: Number(event.target.value),
+    }));
+  };
+
   const onCancel = () => {
     setFormData({
-      bloco: "",
-      identificacao: "",
+      block_id: 0,
+      name: "",
     });
     navigate(-1);
   };
@@ -88,15 +111,32 @@ export default function NovaSala() {
           <Card title="NOVA SALA" size="2xl">
             <div className="flex flex-col space-y-6">
               {inputConfig.map((input) => (
-                <Input
-                  key={input.name}
-                  label={input.label}
-                  name={input.name}
-                  value={input.value}
-                  onChange={handleInputChange}
-                />
+                  <Input
+                      key={input.name}
+                      label={input.label}
+                      name={input.name}
+                      value={String(input.value)}
+                      onChange={handleInputChange}
+                  />
               ))}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Bloco</label>
+                <select
+                    name="block_id"
+                    value={formData.block_id}
+                    onChange={handleSelectChange}
+                    className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value={0}>Selecione o bloco</option>
+                  {blocks.map((block) => (
+                      <option key={block.id} value={String(block.id)}>
+                        {block.name}
+                      </option>
+                  ))}
+                </select>
+              </div>
             </div>
+
             <div className="flex flex-col items-center gap-4 w-full pt-10">
               <Button onClick={handleSave}>SALVAR</Button>
               <Button onClick={onCancel} color="utfpr_red">
@@ -106,7 +146,7 @@ export default function NovaSala() {
           </Card>
         </div>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 }

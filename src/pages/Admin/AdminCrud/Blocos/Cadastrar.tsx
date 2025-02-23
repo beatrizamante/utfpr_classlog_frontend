@@ -10,14 +10,14 @@ import { useNavigate } from "react-router";
 import { blocksApi } from "../../../../api/admin/apiBlock";
 
 type formDataInput = {
-  identificacao: string;
-  planta: File | null;
+  name: string;
+  photo: File | null;
 };
 
 export default function NovoBloco() {
   const [formData, setFormData] = useState<formDataInput>({
-    identificacao: "",
-    planta: null,
+    name: "",
+    photo: null,
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,34 +33,35 @@ export default function NovoBloco() {
   const handleFileChange = (file: File | null) => {
     setFormData((prevData) => ({
       ...prevData,
-      planta: file,
+      photo: file,
     }));
   };
 
   const handleSave = async () => {
     try {
-      if (!formData.identificacao) {
+      if (!formData.name) {
         alert("A identificação deve ser preenchida!");
         return;
       }
   
-      const blockData = { name: formData.identificacao };
+      const blockData = { name: formData.name };
       const blockResponse = await blocksApi.createBlock(blockData);
+
+    console.log(blockResponse.data.data.id)
+      if (blockResponse.data && blockResponse.data.data.id) {
+        const blockId = blockResponse.data.data.id;
   
-      if (blockResponse.data && blockResponse.data.id) {
-        const blockId = blockResponse.data.id;
-  
-        if (formData.planta) {
+        if (formData.photo) {
           const formDataToUpload = new FormData();
-          formDataToUpload.append("photo", formData.planta);
+          formDataToUpload.append("photo", formData.photo);
   
           await blocksApi.uploadBlockImage(blockId, formDataToUpload);
         }
   
         console.log("Bloco criado com sucesso!");
         setFormData({
-          identificacao: "",
-          planta: null,
+          name: "",
+          photo: null,
         });
       } else {
         alert("Erro ao criar o bloco.");
@@ -74,8 +75,8 @@ export default function NovoBloco() {
 
   const onCancel = () => {
     setFormData({
-      identificacao: "",
-      planta: null,
+      name: "",
+      photo: null,
     });
     navigate(-1)
   };
@@ -96,13 +97,13 @@ export default function NovoBloco() {
             <div className="flex flex-col space-y-6">
               <Input
                 label="Identificação"
-                name="identificacao"
-                value={formData.identificacao}
+                name="name"
+                value={formData.name}
                 onChange={handleInputChange}
               />
               <LoadInput
                 label="Carregar Planta"
-                name="planta"
+                name="photo"
                 onChange={handleFileChange}
               />
             </div>
