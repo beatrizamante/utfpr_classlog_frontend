@@ -4,6 +4,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 export const authApi = {
   async login(university_registry: string, password?: string) {
+    console.log(university_registry, password)
     try {
       const response = await axios.post(`${API_URL}/login`, {
         university_registry,
@@ -11,7 +12,10 @@ export const authApi = {
       });
 
       if (response.status === 200) {
+    console.log("register?")
+
         const data = response.data;
+        console.log("Role/", data.role)
 
         if (data.success) {
           return { success: true, role: data.role };

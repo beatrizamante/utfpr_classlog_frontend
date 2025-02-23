@@ -53,38 +53,36 @@ export default function LoginScreen() {
   };
 
   const handleLogin = async () => {
-    try {
-      console.log(
-        "Sends login info",
-        formData.university_registry,
-        formData.password
-      );
-      const loginResponse = await authApi.login(
-        formData.university_registry,
-        formData.password
-      );
+    if (formData.role === "Estudante") {
+      navigate("/guest/");
+    } else {
+      try {
+        const loginResponse = await authApi.login(
+          formData.university_registry,
+          formData.password
+        );
+        if (loginResponse?.success) {
 
-      if (formData.role === "Estudante") {
-        navigate("/guest");
-      } else if (loginResponse?.success) {
-        const role = loginResponse.role;
-
-        if (role === "Professor") {
-          navigate("/professor");
-        } else if (role === "Administrador") {
-          navigate("/admin");
+          const role = loginResponse.role;
+          if (role === "professor") {
+            navigate("/professor");
+          } else if (role === "admin") {
+            navigate("/admin");
+          } else {
+            setError("Tipo de usuário desconhecido.");
+          }
         } else {
-          setError("Tipo de usuário desconhecido.");
+          setError(
+            loginResponse?.message ||
+              "Falha no login. Verifique suas credenciais."
+          );
         }
-      } else {
+      } catch (err) {
+        console.error("Erro no login:", err);
         setError(
-          loginResponse?.message ||
-            "Falha no login. Verifique suas credenciais."
+          "Ocorreu um erro ao tentar logar. Tente novamente mais tarde."
         );
       }
-    } catch (err) {
-      console.error("Erro no login:", err);
-      setError("Ocorreu um erro ao tentar logar. Tente novamente mais tarde.");
     }
   };
 

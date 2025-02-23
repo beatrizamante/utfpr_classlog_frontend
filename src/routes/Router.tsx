@@ -14,7 +14,7 @@ const Router: React.FC = () => (
       <Route path="/" element={<LoginScreen />} />
       <Route
         path="/guest/*"
-        element={!authenticathedAs() ? <GuestPage /> : <Navigate to="/" />}
+        element={ <GuestPage />}
       />
       <Route
         path="/professor/*"
