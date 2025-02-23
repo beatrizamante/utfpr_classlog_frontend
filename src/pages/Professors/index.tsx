@@ -4,7 +4,7 @@ import background from "../../assets/images/background.png";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
-import { authApi } from "../../api/authentication";
+import { authApi } from "../../api/login/authentication";
 import { Course } from "../../interfaces/ProfessorInterfaces";
 import List from "../../components/List/List";
 

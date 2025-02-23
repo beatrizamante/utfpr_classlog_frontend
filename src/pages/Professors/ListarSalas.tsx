@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
 import Footer from "../../components/Footer";
-import { authApi } from "../../api/authentication";
+import { authApi } from "../../api/login/authentication";
 import Modal from "../../components/Modal";
 import {
   Block,

@@ -7,7 +7,7 @@ import List from "../../components/List/List";
 import { Subjects } from "../../interfaces/ProfessorInterfaces";
 import Footer from "../../components/Footer";
 import ModalProfessor from "../../components/ModalProfessors";
-import { authApi } from '../../api/authentication'
+import { authApi } from '../../api/login/authentication'
 
 export default function ListarSalas() {
   const professorId = authApi.getUserId();

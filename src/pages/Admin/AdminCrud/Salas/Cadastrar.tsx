@@ -7,7 +7,7 @@ import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { Classroom } from "../../../../interfaces/AdmInterfaces";
 import { useNavigate } from "react-router";
-import { classroomsApi } from "../../../../api/apiClassroom";
+import { classroomsApi } from "../../../../api/admin/apiClassroom";
 
 type formDataInput = {
   bloco: string;

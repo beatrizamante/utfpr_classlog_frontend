@@ -6,7 +6,7 @@ import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
-import { classroomsApi } from "../../../../api/apiClassroom";
+import { classroomsApi } from "../../../../api/admin/apiClassroom";
 
 type FormDataInput = {
   bloco: string;
