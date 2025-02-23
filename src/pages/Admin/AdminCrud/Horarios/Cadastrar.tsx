@@ -34,6 +34,7 @@ export default function NovoHorario() {
     date: "",
   });
 
+
   const professors = [
     { id: 1, name: "Professor A" },
     { id: 2, name: "Professor B" },
