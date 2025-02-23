@@ -54,17 +54,22 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
+      console.log(
+        "Sends login info",
+        formData.university_registry,
+        formData.password
+      );
       const loginResponse = await authApi.login(
         formData.university_registry,
         formData.password
       );
-  
-      if (loginResponse?.success) {
+
+      if (formData.role === "Estudante") {
+        navigate("/guest");
+      } else if (loginResponse?.success) {
         const role = loginResponse.role;
-  
-        if (role === "Estudante") {
-          navigate("/guest");
-        } else if (role === "Professor") {
+
+        if (role === "Professor") {
           navigate("/professor");
         } else if (role === "Administrador") {
           navigate("/admin");
@@ -72,7 +77,10 @@ export default function LoginScreen() {
           setError("Tipo de usuário desconhecido.");
         }
       } else {
-        setError(loginResponse?.message || "Falha no login. Verifique suas credenciais.");
+        setError(
+          loginResponse?.message ||
+            "Falha no login. Verifique suas credenciais."
+        );
       }
     } catch (err) {
       console.error("Erro no login:", err);
