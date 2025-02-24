@@ -11,15 +11,14 @@ export default function ProfessorPage() {
   const navigate = useNavigate();
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
-  const [clickCount, setClickCount] = useState(0);
   const listRef = useRef<HTMLUListElement>(null);
 
   const mockCourses: Course[] = [
     {
       id: 1,
       nome: "Tecn. Em Sistemas pra Internet",
-      professor: "Prof. João Silva"
-    }
+      professor: "Prof. João Silva",
+    },
   ];
 
   const handleList = async () => {
@@ -31,22 +30,7 @@ export default function ProfessorPage() {
     }
   };
 
-  const getMappedItemId = (
-    item: Course & { id: number }
-  ): number => item.id;
-
-  const handleItemClick = (id: number) => {
-    if (selectId === id) {
-      setClickCount(clickCount + 1);
-
-      if (clickCount + 1 === 2) {
-        navigate(`/professor/curso/semestre`);
-      }
-    } else {
-      setSelectId(id);
-      setClickCount(1); 
-    }
-  };
+  const getMappedItemId = (item: Course & { id: number }): number => item.id;
 
   useEffect(() => {
     console.log("Item clicked with id after state update:", selectId);
@@ -61,7 +45,6 @@ export default function ProfessorPage() {
 
       if (!clickedInsideList && !clickedOnButton) {
         setSelectId(null);
-        setClickCount(0);
       }
     };
 
@@ -96,7 +79,10 @@ export default function ProfessorPage() {
                 id: course.id,
               }))}
               onSelected={(id: number | null) => {
-                if (id !== null) handleItemClick(id);
+                setSelectId(id);
+                if (id !== null) {
+                  navigate("/professor/curso/semestre");
+                }
               }}
               selectedId={selectId}
               getItemLabel={(course) => `${course.nome}`}
