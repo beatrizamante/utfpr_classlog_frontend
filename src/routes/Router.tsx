@@ -21,7 +21,7 @@ const Router: React.FC = () => (
       />
       <Route
         path="/professor/*"
-        element={authenticathedAs() ? <ProfessorRoute /> : <Navigate to="/" />}
+        element={ <ProfessorRoute />}
       />
       <Route
         path="/admin/*"

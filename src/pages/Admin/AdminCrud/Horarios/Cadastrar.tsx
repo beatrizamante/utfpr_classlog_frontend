@@ -50,7 +50,6 @@ export default function NovoHorario() {
     default_day: false,
     user_subject_id: 0,
     classroom: "",
-    date: "",
   });
 
 
@@ -159,7 +158,7 @@ export default function NovoHorario() {
           formData.user_subject_id &&
           formData.classroom
       ) {
-        const newSchedule: Schedules = {
+        const newSchedule = {
           id: null,
           name: null,
           semester:  null,
@@ -182,7 +181,6 @@ export default function NovoHorario() {
           default_day: false,
           user_subject_id: 0,
           classroom: "",
-          date: "",
         });
       } else {
         console.error("All fields must be filled.");
@@ -200,7 +198,6 @@ export default function NovoHorario() {
       default_day: false,
       user_subject_id: 0,
       classroom: "",
-      date: "",
     });
     navigate(-1);
   };

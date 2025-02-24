@@ -7,12 +7,11 @@ import List from "../../components/List/List";
 import { Subjects } from "../../interfaces/ProfessorInterfaces";
 import Footer from "../../components/Footer";
 import ModalProfessor from "../../components/ModalProfessors";
-import { authApi } from '../../api/login/authentication'
 import { subjectsApi } from "../../api/admin/apiSubject";
+import { professorApi } from "../../api/professors/apiProfessor";
 
-export default function ListarSalas() {
-  const professorId = authApi.getUserId();
-  const { semesterId } = useParams();
+export default function ListarMaterias() {
+  const professorId = localStorage.getItem("professor_register");
   const [subjects, setSubjects] = useState<Subjects[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -22,8 +21,8 @@ export default function ListarSalas() {
 
   const handleList = async () => {
     try {
-      const response = await subjectsApi.getSubjectById(String(selectId));
-      setSubjects(response.data);
+      // const response = await professorApi.getSubjectByProfessor(professorId);
+      // setSubjects(response.data);
       console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -130,8 +129,8 @@ export default function ListarSalas() {
       <Footer />
       <ModalProfessor
         isVisible={showModal} 
-        onChangeClassrom={() => navigate(`/professor/curso/semestre/${semesterId}/materia/${selectId}/sala`)} 
-        onCancelClass={() => navigate(`/professor/materia/${selectId}/data`)}      />
+        onChangeClassrom={() => navigate(`/professor/curso/materia/${selectId}/sala`)} 
+        onCancelClass={() => navigate(``)}      />
     </div>
   );
 }

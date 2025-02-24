@@ -55,6 +55,9 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     if (formData.role === "Estudante") {
       navigate("/guest/");
+    } else if (formData.role === "Professor") {
+      localStorage.setItem("professor_register", formData.university_registry);
+      navigate("/professor");
     } else {
       try {
         const loginResponse = await authApi.login(
@@ -62,11 +65,11 @@ export default function LoginScreen() {
           formData.password
         );
         if (loginResponse?.success) {
-
           const role = loginResponse.role;
-          if (role === "professor") {
-            navigate("/professor");
-          } else if (role === "admin") {
+          // if (role === "professor") {
+
+          // } else
+          if (role === "admin") {
             navigate("/admin");
           } else {
             setError("Tipo de usuário desconhecido.");

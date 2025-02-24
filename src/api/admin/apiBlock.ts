@@ -27,7 +27,6 @@ export const blocksApi = {
   async uploadBlockImage(blockId: string, fileData: FormData) {
     return axios.post(`${API_URL}/blocks/image-update/${blockId}`, fileData, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "multipart/form-data",
       },
     });

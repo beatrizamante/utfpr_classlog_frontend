@@ -12,7 +12,6 @@ import NovaMateria from "../pages/Admin/AdminCrud/Materias/Cadastrar";
 import AtualizarMateria from "../pages/Admin/AdminCrud/Materias/Atualizar";
 import ListarHorarios from "../pages/Admin/AdminCrud/Horarios/ListaItems";
 import NovoHorario from "../pages/Admin/AdminCrud/Horarios/Cadastrar";
-import AtualizaHorario from "../pages/Admin/AdminCrud/Horarios/Atualizar";
 
 const AdminRoute: React.FC = () => (
   <Routes>
@@ -40,7 +39,6 @@ const AdminRoute: React.FC = () => (
     <Route path="/horarios">
       <Route index element={<ListarHorarios />} />
       <Route path="cadastrar" element={<NovoHorario />} />
-      <Route path="atualizar/:id" element={<AtualizaHorario />} />
     </Route>
 
     <Route path="*" element={<Navigate to="/admin/menu" />} />
