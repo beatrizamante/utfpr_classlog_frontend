@@ -1,7 +1,7 @@
 export interface Classroom {
   id: number | null;
-  bloco: string;
-  identificacao: string;
+  block_id: string;
+  name: string;
 }
 
 export interface Block {
@@ -18,6 +18,8 @@ export interface Subjects {
 
 export interface Schedules {
     id: number | null;
+    name: number | null;
+    semester: number | null;
     start_time: string;
     end_time: string;
     day_of_week: string; // Valores entre "1" e "5" (Segunda a Sexta)

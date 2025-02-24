@@ -51,7 +51,7 @@ export default function Listas() {
      }
    };
 
-   const getClassroomLabel = (item: Classroom): string => item.identificacao;
+   const getClassroomLabel = (item: Classroom): string => item.name;
    const getMappedItemId = (
      item: Classroom & { id: number | null }
    ): number | null => item.id;
