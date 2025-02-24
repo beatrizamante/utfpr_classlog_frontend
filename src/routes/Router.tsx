@@ -4,6 +4,7 @@ import AdminRoute from "./AdminRoute";
 import ProfessorRoute from "./ProfessorRoute";
 import GuestRoute from "./GuestRoute";
 import HomeSchedules from "../pages";
+import SchedulesByBlock from "../pages/SchedulesByBlock";
 
 const authenticathedAs = () => {
   return true;
@@ -14,6 +15,7 @@ const Router: React.FC = () => (
     <Routes>
 
       <Route path="/" element={<HomeSchedules />} />
+      <Route path="/schedules/block/:id" element={<SchedulesByBlock />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route
         path="/guest/*"

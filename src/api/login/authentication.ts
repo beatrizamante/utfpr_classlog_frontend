@@ -14,7 +14,14 @@ export const authApi = {
       if (response.status === 200) {
 
         const data = response.data;
+            console.log(data);
         if (data.success) {
+          if (data.token) {
+            localStorage.setItem("authToken", data.token);
+            console.log("Login bem-sucedido!");
+          } else {
+            console.error("Erro ao fazer login");
+          }
           return { success: true, role: data.role };
         } else {
           return { success: false, message: "Erro no login: token não recebido" };

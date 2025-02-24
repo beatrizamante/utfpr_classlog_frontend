@@ -122,6 +122,17 @@ export default function ListarHorarios() {
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">
               <Button
+                  onClick={() => {
+                    if (selectId) {
+                      navigate(`/admin/horarios/atualizar/${selectId}`)
+                      console.log(`Navegar para atualizar o ID: ${selectId}`);
+                    }
+                  }}
+                  disabled={!selectId}
+              >
+                ATUALIZAR
+              </Button>
+              <Button
                 onClick={() => {
                   if (selectId) {
                     setShowModal(true);
