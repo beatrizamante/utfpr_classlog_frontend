@@ -9,8 +9,8 @@ import { data, useNavigate, useParams } from "react-router-dom";
 import { subjectsApi } from "../../../../api/admin/apiSubject";
 
 type FormDataInput = {
-  semestre: string;
-  descricao: string;
+  semester: string;
+  name: string;
 };
 
 export default function AtualizaSala() {
@@ -18,8 +18,8 @@ export default function AtualizaSala() {
   const subjectId = Number(id);
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormDataInput>({
-    semestre: "",
-    descricao: "",
+    semester: "",
+    name: "",
   });
 
   useEffect(() => {
@@ -27,10 +27,11 @@ export default function AtualizaSala() {
       try {
         if (subjectId) {
           const response = await subjectsApi.getSubjectById(subjectId.toString());
+
           if (response.data) {
             setFormData({
-              semestre: response.data.semester,
-              descricao: response.data.name,
+              semester: response.data.data.semester,
+              name: response.data.data.name,
             });
           }
         }
@@ -54,8 +55,8 @@ export default function AtualizaSala() {
     try {
       if (subjectId && formData) {
         const dataToUpdate = {
-          semester: formData.semestre,   
-          name: formData.descricao,  
+          semester: formData.semester,
+          name: formData.name,
         };
         await subjectsApi.updateSubject(subjectId.toString(), dataToUpdate);
         console.log("Room successfully updated.");
@@ -83,9 +84,8 @@ export default function AtualizaSala() {
           <Card title="ATUALIZAR" size="2xl">
             <div className="flex flex-col space-y-6">
               {[
-                { label: "Período", name: "periodo" },
-                { label: "Professor", name: "professor" },
-                { label: "Horário", name: "time" },
+                { label: "Período", name: "semester" },
+                { label: "Descrição", name: "name" },
               ].map((input) => (
                 <Input
                   key={input.name}

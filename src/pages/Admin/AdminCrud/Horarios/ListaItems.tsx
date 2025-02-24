@@ -41,15 +41,25 @@ export default function ListarHorarios() {
   const handleList = async () => {
     try {
       const response = await subjectsApi.getSubjects();
-      setSchedules(response.data);
-      console.log("Success! List formed!");
+
+      // console.log(response.data)
+      // console.log("Schedules antes do set:", response.data);
+      setSchedules(Array.isArray(response.data) ? response.data : []);
+      // console.log("Schedules no estado após o set:", schedules);
+      // setSchedules(response.data);
+      // console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
     }
   };
 
+  useEffect(() => {
+    console.log("Schedules atualizado no estado:", schedules);
+  }, [schedules]);
+
+
   const getScheduleLabel = (item: Schedules): string =>
-    `${item.date} - ${item.start_time} - ${item.user_subject_id}`;
+      `${item.id} - ${item.name} - Semestre: ${item.semester}`;
   const getMappedItemId = (
     item: Schedules & { id: number | null }
   ): number | null => item.id;
@@ -93,7 +103,7 @@ export default function ListarHorarios() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
-          <Card title="MATÉRIAS" size="2xl">
+          <Card title="HORÁRIOS" size="2xl">
             <div className="mx-4 mb-4">
               <ul ref={listRef}>
                 <List

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import background from "../../../../assets/images/background.png";
 import { useNavigate } from "react-router";
-import { Classroom } from "../../../../interfaces/AdmInterfaces";
+import {Block, Classroom} from "../../../../interfaces/AdmInterfaces";
 import Header from "../../../../components/Header";
 import Card from "../../../../components/Forms/Card";
 import List from "../../../../components/List/List";
@@ -9,6 +9,7 @@ import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
 import { classroomsApi } from "../../../../api/admin/apiClassroom";
+import {blocksApi} from "../../../../api/admin/apiBlock";
 
 export default function Listas() {
   const [rooms, setRooms] = useState<Classroom[]>([]);
@@ -38,6 +39,8 @@ export default function Listas() {
      }
    };
 
+
+
    const handleList = async () => {
      try {
        const response = await classroomsApi.getClassrooms();
@@ -48,7 +51,7 @@ export default function Listas() {
      }
    };
 
-   const getClassroomLabel = (item: Classroom): string => item.identificacao;
+   const getClassroomLabel = (item: Classroom): string => item.name;
    const getMappedItemId = (
      item: Classroom & { id: number | null }
    ): number | null => item.id;
@@ -78,6 +81,7 @@ export default function Listas() {
 
   useEffect(() => {
     handleList();
+
   }, []);
 
    return (

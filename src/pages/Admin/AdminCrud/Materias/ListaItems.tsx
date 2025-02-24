@@ -49,7 +49,7 @@ export default function Listas() {
   };
 
   const getSubjectsLabel = (item: Subjects): string =>
-    `${item.semestre} - ${item.descricao}`;
+    `${item.semester} - ${item.name}`;
   const getMappedItemId = (
     item: Subjects & { id: number | null }
   ): number | null => item.id;

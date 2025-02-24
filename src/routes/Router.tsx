@@ -3,6 +3,7 @@ import LoginScreen from "../pages/login/LoginScreen";
 import AdminRoute from "./AdminRoute";
 import ProfessorRoute from "./ProfessorRoute";
 import GuestRoute from "./GuestRoute";
+import HomeSchedules from "../pages";
 
 const authenticathedAs = () => {
   return true;
@@ -11,7 +12,9 @@ const authenticathedAs = () => {
 const Router: React.FC = () => (
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<LoginScreen />} />
+
+      <Route path="/" element={<HomeSchedules />} />
+      <Route path="/login" element={<LoginScreen />} />
       <Route
         path="/guest/*"
         element={ <GuestRoute />}
