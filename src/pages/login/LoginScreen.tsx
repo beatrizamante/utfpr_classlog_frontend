@@ -14,11 +14,6 @@ type formDataInput = {
   role: string;
 };
 
-const items = [
-  { title: "Estudante", action: () => {} },
-  { title: "Professor", action: () => {} },
-  { title: "Administrador", action: () => {} },
-];
 
 export default function LoginScreen() {
   const navigate = useNavigate();
@@ -53,12 +48,6 @@ export default function LoginScreen() {
   };
 
   const handleLogin = async () => {
-    if (formData.role === "Estudante") {
-      navigate("/guest/");
-    } else if (formData.role === "Professor") {
-      localStorage.setItem("professor_register", formData.university_registry);
-      navigate("/professor");
-    } else {
       try {
         const loginResponse = await authApi.login(
           formData.university_registry,
@@ -66,9 +55,9 @@ export default function LoginScreen() {
         );
         if (loginResponse?.success) {
           const role = loginResponse.role;
-          // if (role === "professor") {
-
-          // } else
+          if (role === "professor") {
+            navigate("/professor");
+          } else
           if (role === "admin") {
             navigate("/admin");
           } else {
@@ -86,17 +75,9 @@ export default function LoginScreen() {
           "Ocorreu um erro ao tentar logar. Tente novamente mais tarde."
         );
       }
-    }
+
   };
 
-  const updatedItems = items.map((item) => ({
-    ...item,
-    action: () =>
-      setFormData((prevData) => ({
-        ...prevData,
-        role: item.title,
-      })),
-  }));
 
   return (
     <div
@@ -122,7 +103,6 @@ export default function LoginScreen() {
               onChange={handleInputChange}
             />
           ))}
-          <DropdownMenu buttonLabel={formData.role} items={updatedItems} />
 
           <div className="flex flex-col items-center gap-4 w-full">
             <Button onClick={handleLogin} color="utfpr_yellow">

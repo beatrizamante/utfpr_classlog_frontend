@@ -11,15 +11,15 @@ import {Classroom, Schedules} from "../../../../interfaces/AdmInterfaces";
 import {classroomsApi} from "../../../../api/admin/apiClassroom";
 import axios from "axios";
 
-
+const API_URL = process.env.REACT_APP_API_URL;
 type FormDataInput = {
-  start_time: string;
-  end_time: string;
-  day_of_week: string;
-  default_day: boolean;
-  user_subject_id: number;
-  classroom: string;
-  date: string;
+start_time: string;
+end_time: string;
+day_of_week: string;
+default_day: boolean;
+user_subject_id: number;
+classroom: string;
+date: string;
 };
 
 type User = {
@@ -50,6 +50,7 @@ export default function NovoHorario() {
     default_day: false,
     user_subject_id: 0,
     classroom: "",
+    date: "",
   });
 
 
@@ -65,7 +66,7 @@ export default function NovoHorario() {
 
   const handleProfessorsList = async () => {
     try {
-      const response = await axios.get("http://localhost/user-subjects");
+      const response = await axios.get(`${API_URL}/user-subjects`);
       setUserSubjects(response.data.data);
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -181,6 +182,7 @@ export default function NovoHorario() {
           default_day: false,
           user_subject_id: 0,
           classroom: "",
+          date: "",
         });
       } else {
         console.error("All fields must be filled.");
@@ -198,6 +200,7 @@ export default function NovoHorario() {
       default_day: false,
       user_subject_id: 0,
       classroom: "",
+      date: "",
     });
     navigate(-1);
   };

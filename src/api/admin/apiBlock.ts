@@ -13,7 +13,7 @@ export const blocksApi = {
   },
 
   async createBlock(data: Object) {
-    return axios.post(`${API_URL}/blocks`, data);
+    return await axios.post(`${API_URL}/blocks`, data);
   },
 
   async updateBlock(blockId: string, data: Object) {
