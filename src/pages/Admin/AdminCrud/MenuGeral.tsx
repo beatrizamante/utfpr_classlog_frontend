@@ -37,7 +37,7 @@ export default function MenuGeral() {
               BLOCO
             </Button>
             <Button onClick={() => navigate(`/admin/horarios${action ? `/${action}` : ""}`)} height={"80px"}>
-              HORPARIOS
+              HORÁRIOS
             </Button>
           </Card>
         </div>

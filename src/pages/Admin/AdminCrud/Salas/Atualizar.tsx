@@ -9,8 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { classroomsApi } from "../../../../api/admin/apiClassroom";
 
 type FormDataInput = {
-  bloco: string;
-  identificacao: string;
+  name: string;
 };
 
 export default function AtualizaSala() {
@@ -18,8 +17,7 @@ export default function AtualizaSala() {
   const roomId = Number(id);
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormDataInput>({
-    bloco: "",
-    identificacao: "",
+    name: "",
   });
 
   useEffect(() => {
@@ -29,8 +27,7 @@ export default function AtualizaSala() {
           const response = await classroomsApi.getClassroomById(roomId.toString());
           if (response.data) {
             setFormData({
-              bloco: response.data.block,
-              identificacao: response.data.identification,
+              name: response.data.data.name,
             });
           }
         }
@@ -54,8 +51,7 @@ export default function AtualizaSala() {
     try {
       if (roomId && formData) {
         const dataToUpdate = {
-          name: formData.identificacao,  
-          block_id: formData.bloco,   
+          name: formData.name,
         };
         await classroomsApi.updateClassroom(roomId.toString(), dataToUpdate);
         console.log("Room successfully updated.");
@@ -83,9 +79,7 @@ export default function AtualizaSala() {
           <Card title="ATUALIZAR" size="2xl">
             <div className="flex flex-col space-y-6">
               {[
-                { label: "Bloco", name: "bloco" },
-                { label: "Identificação", name: "identificacao" },
-                { label: "Semestre", name: "semestre" },
+                { label: "Nome", name: "name" },
               ].map((input) => (
                 <Input
                   key={input.name}

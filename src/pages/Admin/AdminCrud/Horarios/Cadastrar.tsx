@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Input from "../../../../components/Forms/Item/Input";
 import Card from "../../../../components/Forms/Card";
 import Button from "../../../../components/Button";
@@ -7,8 +7,9 @@ import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate } from "react-router";
 import { schedulesApi } from "../../../../api/admin/apiSchedules";
-import { Schedules } from "../../../../interfaces/AdmInterfaces";
-import { useEffect } from "react";
+import {Classroom, Schedules} from "../../../../interfaces/AdmInterfaces";
+import {classroomsApi} from "../../../../api/admin/apiClassroom";
+import axios from "axios";
 
 
 type FormDataInput = {
@@ -21,8 +22,26 @@ type FormDataInput = {
   date: string;
 };
 
+type User = {
+  user_id: number;
+  user_name: string;
+};
+
+type Subject = {
+  subject_id: number;
+  subject_name: string;
+  subject_semester: string;
+};
+
+type UserSubject = {
+  id: number;
+  user: User;
+  subject: Subject;
+};
 
 export default function NovoHorario() {
+  const [rooms, setRooms] = useState<Classroom[]>([]);
+  const [userSubjects, setUserSubjects] = useState<UserSubject[]>([]);
 
   const [formData, setFormData] = useState<FormDataInput>({
     start_time: "",
@@ -35,18 +54,31 @@ export default function NovoHorario() {
   });
 
 
-  const professors = [
-    { id: 1, name: "Professor A" },
-    { id: 2, name: "Professor B" },
-    { id: 3, name: "Professor C" },
-  ];
+  const handleClassroomList = async () => {
+    try {
+      const response = await classroomsApi.getClassrooms();
+      setRooms(response.data);
+      console.log(userSubjects)
+    } catch (err) {
+      console.error("An error occurred: ", err);
+    }
+  };
+
+  const handleProfessorsList = async () => {
+    try {
+      const response = await axios.get("http://localhost/user-subjects");
+      setUserSubjects(response.data.data);
+    } catch (err) {
+      console.error("An error occurred: ", err);
+    }
+  };
+
+  useEffect(() => {
+    handleClassroomList()
+    handleProfessorsList()
+  }, []);
 
 
-  const classrooms = [
-    { id: 1, name: "Sala 101" },
-    { id: 2, name: "Sala 102" },
-    { id: 3, name: "Sala 103" },
-  ];
 
   const daysOfWeek = [
     { label: "Segunda", value: "1" },
@@ -83,18 +115,20 @@ export default function NovoHorario() {
       type: "checkbox",
     },
     {
-      label: "Professor",
+      label: "Matérias",
       name: "user_subject_id",
       value: formData.user_subject_id,
       type: "select",
-      options: professors,
-    },
+      options: userSubjects.map((userSubject) => ({
+        label: `${userSubject.user.user_name} - ${userSubject.subject.subject_name}`,
+        value: userSubject.id, // O valor será o 'id' do userSubject
+      })),    },
     {
       label: "Sala de Aula",
       name: "classroom",
       value: formData.classroom,
       type: "select",
-      options: classrooms,
+      options: rooms,
     },
     {
       label: "Data",
@@ -127,6 +161,8 @@ export default function NovoHorario() {
       ) {
         const newSchedule: Schedules = {
           id: null,
+          name: null,
+          semester:  null,
           start_time: formData.start_time,
           end_time: formData.end_time,
           day_of_week: formData.day_of_week,
@@ -184,30 +220,48 @@ export default function NovoHorario() {
             <Card title="NOVA SCHEDULE" size="2xl">
               <div className="flex flex-col space-y-6">
                 {inputConfig.map((input) => {
+                  const inputStyle = {
+                    padding: "10px",
+                    borderRadius: "8px",
+                    border: "1px solid #ccc",
+                    backgroundColor: "#333",
+                    color: "white",
+                    fontSize: "16px",
+                    outline: "none",
+                  };
+
                   if (input.type === "select") {
                     return (
                         <div key={input.name}>
                           <label>{input.label}</label>
                           <select
                               name={input.name}
-                              value={input.value as string | number}  // Forçando o tipo correto
+                              value={input.value as string | number}
                               onChange={handleInputChange}
+                              style={inputStyle}  // Inline style aplicado aqui
                           >
-                            <option value="" style={{ backgroundColor: "#000", color: "white" }}>Selecione</option>
+                            <option value="" style={{ backgroundColor: "#000", color: "white" }}>
+                              Selecione
+                            </option>
                             {input.options?.map((option) => {
-                              if ('id' in option && 'name' in option) {
+                              if ("id" in option && "name" in option) {
+                                // Ensure option.id is not null
+                                const value = option.id !== null ? option.id : 'default'; // Fallback value for null
                                 return (
-                                    <option key={option.id} value={option.id}>
+                                    <option key={value} value={value}>
                                       {option.name}
                                     </option>
                                 );
                               }
+                              // Handle the second case where 'value' and 'label' are present
+                              const value = option.value !== null ? option.value : 'default'; // Fallback for null
                               return (
-                                  <option key={option.value} value={option.value}>
+                                  <option key={value} value={value}>
                                     {option.label}
                                   </option>
                               );
                             })}
+
                           </select>
                         </div>
                     );
@@ -224,6 +278,7 @@ export default function NovoHorario() {
                               onChange={(e) =>
                                   setFormData({ ...formData, default_day: e.target.checked })
                               }
+                              style={{ marginTop: "10px" }}  // Deixa o checkbox um pouco mais espaçado
                           />
                         </div>
                     );
@@ -241,16 +296,17 @@ export default function NovoHorario() {
                   );
                 })}
               </div>
-                  <div className="flex flex-col items-center gap-4 w-full pt-10">
-                    <Button onClick={handleSave}>SALVAR</Button>
-                    <Button onClick={onCancel} color="utfpr_red">
-                      CANCELAR
-                    </Button>
-                  </div>
+              <div className="flex flex-col items-center gap-4 w-full pt-10">
+                <Button onClick={handleSave}>SALVAR</Button>
+                <Button onClick={onCancel} color="utfpr_red">
+                  CANCELAR
+                </Button>
+              </div>
             </Card>
           </div>
         </div>
         <Footer />
       </div>
   );
+
 }

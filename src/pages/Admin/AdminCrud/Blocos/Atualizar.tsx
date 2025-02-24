@@ -10,8 +10,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { blocksApi } from "../../../../api/admin/apiBlock";
 
 type FormDataInput = {
-  identificacao: string;
-  planta: File | null;
+  name: string;
+  photo: File | null;
 };
 
 export default function AtualizaBloco() {
@@ -19,8 +19,8 @@ export default function AtualizaBloco() {
   const blockId = Number(id);
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormDataInput>({
-    identificacao: "",
-    planta: null,
+    name: "",
+    photo: null,
   });
 
   useEffect(() => {
@@ -30,8 +30,8 @@ export default function AtualizaBloco() {
           const response = await blocksApi.getBlockById(blockId.toString());
           if (response.data) {
             setFormData({
-              identificacao: response.data.identificacao,
-              planta: null, 
+              name: response.data.data.name,
+              photo: null,
             });
           }
         }
@@ -54,7 +54,7 @@ export default function AtualizaBloco() {
   const handleFileChange = (file: File | null) => {
     setFormData((prevData) => ({
       ...prevData,
-      planta: file,
+      photo: file,
     }));
   };
 
@@ -65,12 +65,12 @@ export default function AtualizaBloco() {
         return;
       }
   
-      await blocksApi.updateBlock(blockId.toString(), { name: formData.identificacao });
+      await blocksApi.updateBlock(blockId.toString(), { name: formData.name });
       console.log("Block information successfully updated.");
   
-      if (formData.planta) {
+      if (formData.photo) {
         const formDataToUpload = new FormData();
-        formDataToUpload.append("photo", formData.planta); 
+        formDataToUpload.append("photo", formData.photo);
   
         await blocksApi.uploadBlockImage(blockId.toString(), formDataToUpload);
         console.log("Block image successfully updated.");
@@ -96,7 +96,7 @@ export default function AtualizaBloco() {
         <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
           <Card title="ATUALIZAR" size="2xl">
             <div className="flex flex-col space-y-6">
-              {[{ label: "Identificação", name: "identificacao" }].map(
+              {[{ label: "Identificação", name: "name" }].map(
                 (input) => (
                   <Input
                     key={input.name}
@@ -111,7 +111,7 @@ export default function AtualizaBloco() {
               )}
               <LoadInput
                 label="Carregar Planta"
-                name="planta"
+                name="photo"
                 onChange={handleFileChange}
               />
             </div>
