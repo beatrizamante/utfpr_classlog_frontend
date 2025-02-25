@@ -64,6 +64,7 @@ export default function NovoProfessor() {
           password: "",
           password_confirmation: "",
         });
+        navigate(-1)
       } else {
         setModalMessage("Erro ao criar o professor. Tente novamente.");
         setShowModal(true);
@@ -128,8 +129,8 @@ export default function NovoProfessor() {
             </div>
           </Card>
         </div>
-      </div>
       <Footer />
+      </div>
        <ModalAlert
               description={modalMessage}
               isVisible={showModal}

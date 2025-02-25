@@ -6,6 +6,7 @@ import GuestRoute from "./GuestRoute";
 import HomeSchedules from "../pages";
 import SchedulesByBlock from "../pages/SchedulesByBlock";
 import Logout from "../pages/logout";
+import RegisterUser from "../pages/login/RegisterUser";
 
 const authenticathedAs = () => {
   return true;
@@ -14,19 +15,13 @@ const authenticathedAs = () => {
 const Router: React.FC = () => (
   <BrowserRouter>
     <Routes>
-
       <Route path="/" element={<HomeSchedules />} />
       <Route path="/schedules/block/:id" element={<SchedulesByBlock />} />
       <Route path="/login" element={<LoginScreen />} />
+      <Route path="/register" element={<RegisterUser />} />{" "}
       <Route path="/logout" element={<Logout />} />
-      <Route
-        path="/guest/*"
-        element={ <GuestRoute />}
-      />
-      <Route
-        path="/professor/*"
-        element={ <ProfessorRoute />}
-      />
+      <Route path="/guest/*" element={<GuestRoute />} />
+      <Route path="/professor/*" element={<ProfessorRoute />} />
       <Route
         path="/admin/*"
         element={authenticathedAs() ? <AdminRoute /> : <Navigate to="/" />}

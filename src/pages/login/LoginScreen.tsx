@@ -109,7 +109,7 @@ export default function LoginScreen() {
               ENTRAR
             </Button>
             <Button
-              onClick={() => navigate("/recover-password")}
+              onClick={() => navigate("/register")}
               color="utfpr_red"
             >
               REGISTRAR USUÁRIO

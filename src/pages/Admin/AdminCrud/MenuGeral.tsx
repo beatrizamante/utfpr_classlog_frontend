@@ -51,7 +51,14 @@ export default function MenuGeral() {
             >
               BLOCO
             </Button>
-            <Button onClick={() => navigate(`/admin/horarios${action ? `/${action}` : ""}`)} height={"80px"}>
+            <Line />
+
+            <Button
+              onClick={() =>
+                navigate(`/admin/horarios${action ? `/${action}` : ""}`)
+              }
+              height={"80px"}
+            >
               HORÁRIOS
             </Button>
           </Card>
