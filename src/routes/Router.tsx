@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginScreen from "../pages/login/LoginScreen";
 import AdminRoute from "./AdminRoute";
 import ProfessorRoute from "./ProfessorRoute";
-import GuestRoute from "./GuestRoute";
 import HomeSchedules from "../pages";
 import SchedulesByBlock from "../pages/SchedulesByBlock";
 import Logout from "../pages/logout";
@@ -20,7 +19,6 @@ const Router: React.FC = () => (
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterUser />} />{" "}
       <Route path="/logout" element={<Logout />} />
-      <Route path="/guest/*" element={<GuestRoute />} />
       <Route path="/professor/*" element={<ProfessorRoute />} />
       <Route
         path="/admin/*"

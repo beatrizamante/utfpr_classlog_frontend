@@ -82,11 +82,6 @@
                       listOf={schedules.map((schedule) => ({
                         ...schedule,
                         id: schedule.id,
-                        className: schedule.is_canceled
-                            ? "bg-red-500 text-white" // Vermelho se cancelado
-                            : schedule.exceptional_day
-                                ? "bg-blue-500 text-white" // Azul se dia excepcional
-                                : "bg-white", // Branco por padrão
                       }))}
                       onSelected={(id: number | null) => setSelectId(id)}
                       selectedId={selectId}
@@ -102,9 +97,9 @@
                     }
                     height={"80px"}
                 >
-                  Cancelar
+                  CANCELAR
                 </Button>
-                <Button onClick={() => window.history.back()}>Voltar</Button>
+                <Button onClick={() => navigate(-1)}>VOLTAR</Button>
 
               </div>
             </Card>
