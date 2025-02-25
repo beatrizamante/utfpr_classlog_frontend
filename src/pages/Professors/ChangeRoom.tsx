@@ -10,109 +10,98 @@ import Footer from "../../components/Footer";
 import api from "../../services/api";
 
 export default function ChangeRoom() {
-    const [schedules, setSchedules] = useState<Schedules[]>([]);
-    const [selectId, setSelectId] = useState<number | null>(null);
-    const [showModal, setShowModal] = useState(false);
-    const navigate = useNavigate();
-    const listRef = useRef<HTMLUListElement>(null);
-    const handleList = async () => {
-        try {
-            const token = localStorage.getItem("authToken");
-            console.log(token)
-            const response  = await  api.get(`/schedules/professor/${token}`)
-            setSchedules(Array.isArray(response.data) ? response.data : []);
-            console.log(schedules)
-        } catch (err) {
-            console.error("An error occurred: ", err);
-        }
+  const [schedules, setSchedules] = useState<Schedules[]>([]);
+  const [selectId, setSelectId] = useState<number | null>(null);
+  const navigate = useNavigate();
+  const listRef = useRef<HTMLUListElement>(null);
+
+  const handleList = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      console.log(token);
+      const response = await api.get(`/schedules/professor/${token}`);
+      setSchedules(Array.isArray(response.data) ? response.data : []);
+      console.log(schedules);
+    } catch (err) {
+      console.error("An error occurred: ", err);
+    }
+  };
+
+  useEffect(() => {}, [schedules]);
+
+  const getScheduleLabel = (item: Schedules): string =>
+    `${item.id} - ${item.subject_subject_name} - horaŕio: ${item.start_time} - ${item.end_time} - ${item.block_name} - ${item.classroom_name}`;
+  const getMappedItemId = (
+    item: Schedules & { id: number | null }
+  ): number | null => item.id;
+
+  useEffect(() => {
+    console.log("Item clicked with id after state update:", selectId);
+  }, [selectId]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      const clickedInsideList =
+        listRef.current && listRef.current.contains(target);
+      const clickedOnButton = (event.target as HTMLElement).closest("button");
+
+      if (!clickedInsideList && !clickedOnButton) {
+        setSelectId(null);
+      }
     };
 
-    useEffect(() => {
-    }, [schedules]);
+    document.addEventListener("mousedown", handleClickOutside);
 
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [selectId]);
 
-    const getScheduleLabel = (item: Schedules): string =>
-        `${item.id} - ${item.subject_subject_name} - horaŕio: ${item.start_time} - ${item.end_time} - ${item.block_name} - ${item.classroom_name}`;
-    const getMappedItemId = (
-        item: Schedules & { id: number | null }
-    ): number | null => item.id;
+  useEffect(() => {
+    handleList();
+  }, []);
 
-
-    useEffect(() => {
-        console.log("Item clicked with id after state update:", selectId);
-    }, [selectId]);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            const target = event.target as Node;
-            const clickedInsideList =
-                listRef.current && listRef.current.contains(target);
-            const clickedOnButton = (event.target as HTMLElement).closest("button");
-
-            if (!showModal && !clickedInsideList && !clickedOnButton) {
-                setSelectId(null);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [showModal, selectId]);
-
-    useEffect(() => {
-        handleList();
-    }, []);
-
-    return (
-        <div
-            className="min-h-screen flex flex-col bg-cover bg-center"
-            style={{
-                backgroundImage: `url(${background})`,
-                mixBlendMode: "soft-light",
-            }}
-        >
-            <div className="absolute inset-0 bg-utfpr_dark_gray opacity-40 z-0"></div>
-            <Header />
-            <div className="flex justify-center pb-8 relative flex-grow pt-12">
-                <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
-                    <Card title="HORÁRIOS" size="2xl">
-                        <div className="mx-4 mb-4">
-                            <ul ref={listRef}>
-                                <List
-                                    listOf={schedules.map((schedule) => ({
-                                        ...schedule,
-                                        id: schedule.id,
-                                        className: schedule.is_canceled
-                                            ? "bg-red-500 text-white" // Vermelho se cancelado
-                                            : schedule.exceptional_day
-                                                ? "bg-blue-500 text-white" // Azul se dia excepcional
-                                                : "bg-white", // Branco por padrão
-                                    }))}
-                                    onSelected={(id: number | null) => setSelectId(id)}
-                                    selectedId={selectId}
-                                    getItemLabel={getScheduleLabel}
-                                    getItemId={getMappedItemId}
-                                />
-                            </ul>
-                        </div>
-                        <div className="flex flex-col items-center gap-4 w-full pt-10">
-                            <Button
-                                onClick={() =>
-                                    navigate(`/professor/change-room/${selectId}`)
-                                }
-                                height={"80px"}
-                            >
-                                Trocar Sala
-                            </Button>
-                            <Button onClick={() => window.history.back()}>Voltar</Button>
-
-                        </div>
-                    </Card>
-                </div>
+  return (
+    <div
+      className="min-h-screen flex flex-col bg-cover bg-center"
+      style={{
+        backgroundImage: `url(${background})`,
+        mixBlendMode: "soft-light",
+      }}
+    >
+      <div className="absolute inset-0 bg-utfpr_dark_gray opacity-40 z-0"></div>
+      <Header />
+      <div className="flex justify-center pb-8 relative flex-grow pt-12">
+        <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
+          <Card title="HORÁRIOS" size="2xl">
+            <div className="mx-4 mb-4">
+              <ul ref={listRef}>
+                <List
+                  listOf={schedules.map((schedule) => ({
+                    ...schedule,
+                    id: schedule.id,
+                  }))}
+                  onSelected={(id: number | null) => setSelectId(id)}
+                  selectedId={selectId}
+                  getItemLabel={getScheduleLabel}
+                  getItemId={getMappedItemId}
+                />
+              </ul>
             </div>
-            <Footer />
+            <div className="flex flex-col items-center gap-4 w-full pt-10">
+              <Button
+                onClick={() => navigate(`/professor/change-room/${selectId}`)}
+                height={"80px"}
+              >
+                TROCAR SALA
+              </Button>
+              <Button onClick={() => navigate(-1)} color="utfpr_red">VOLTAR</Button>
+            </div>
+          </Card>
         </div>
-    );
+      </div>
+      <Footer />
+    </div>
+  );
 }

@@ -18,7 +18,7 @@ export default function List<T>({
 }: ListProps<T>) {
   return (
     <div className="flex justify-center pb-8 relative mx-8 py-4 -z-0 bg-transparent max-h-[30vh] overflow-y-auto overflow-x-hidden">
-      <ul className="space-y-8">
+      <ul className="space-y-8 px-4">
         {listOf.map((item) => (
           <Item
             key={getItemId(item)} 

@@ -1,40 +1,32 @@
-import React from 'react';
+import React from "react";
 
 interface ScheduleCardProps {
-  subjectName: string;
   professorName: string;
-  blockName: string;
+  subjectName: string;
   classroomName: string;
-  date: string | null;
-  isCanceled: boolean;
-  exceptionalDay: boolean;
-  dayOfWeek: string;
   startTime: string;
   endTime: string;
+  dayOfWeek: number;
+  blockName: string;
+  date: string | null;
+  selectedDate: string | null;
+  handleDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ScheduleCard: React.FC<ScheduleCardProps> = ({
-  subjectName,
   professorName,
-  blockName,
+  subjectName,
   classroomName,
-  date,
-  isCanceled,
-  exceptionalDay,
-  dayOfWeek,
   startTime,
   endTime,
+  dayOfWeek,
+  blockName,
+  date,
+  selectedDate,
+  handleDateChange,
 }) => {
-  const backgroundColor = isCanceled
-    ? 'bg-utfpr_red'
-    : exceptionalDay
-    ? 'bg-utfpr_blue'
-    : 'bg-utfpr_black';
-
   return (
-    <div
-      className={`flex flex-col border border-utfpr_yellow p-4 rounded-md shadow-lg mb-4 ${backgroundColor} text-utfpr_gray text-left gap-2`}
-    >
+    <div className="flex flex-col border border-utfpr_yellow p-6 rounded-md shadow-lg mb-6 bg-utfpr_black text-utfpr_gray text-left gap-4">
       <h2 className="text-xl font-semibold text-utfpr_yellow">{subjectName}</h2>
       
       <div className="flex justify-between">
@@ -58,23 +50,23 @@ const ScheduleCard: React.FC<ScheduleCardProps> = ({
       </div>
       
       <div className="flex justify-between">
-        <span>Cancelada:</span>
-        <span>{isCanceled ? 'Sim' : 'Não'}</span>
-      </div>
-      
-      <div className="flex justify-between">
-        <span>Excepcional:</span>
-        <span>{exceptionalDay ? 'Sim' : 'Não'}</span>
-      </div>
-      
-      <div className="flex justify-between">
         <span>Dia da Semana:</span>
         <span>{dayOfWeek}</span>
       </div>
-      
+
       <div className="flex justify-between">
         <span>Horário:</span>
         <span>{startTime} - {endTime}</span>
+      </div>
+
+      <div className="flex flex-col items-center justify-end gap-2 mt-auto">
+        <span>Alterar Data:</span>
+        <input
+          type="date"
+          value={selectedDate ?? ""}
+          onChange={handleDateChange}
+          className="bg-utfpr_black text-utfpr_gray p-2 mt-2 rounded border border-utfpr_yellow"
+        />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../../../../components/Forms/Item/Input";
 import Card from "../../../../components/Forms/Card";
 import Button from "../../../../components/Button";
@@ -7,8 +7,8 @@ import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate } from "react-router";
 import { classroomsApi } from "../../../../api/admin/apiClassroom";
-import {blocksApi} from "../../../../api/admin/apiBlock";
-import {Block} from "../../../../interfaces/AdmInterfaces";
+import { blocksApi } from "../../../../api/admin/apiBlock";
+import { Block } from "../../../../interfaces/AdmInterfaces";
 
 type formDataInput = {
   block_id: number;
@@ -21,7 +21,6 @@ export default function NovaSala() {
     name: "",
   });
   const [blocks, setBlocks] = useState<Block[]>([]);
-
 
   const inputConfig = [
     {
@@ -43,10 +42,9 @@ export default function NovaSala() {
   };
 
   const handleListBlocks = async () => {
-
     try {
       const response = await blocksApi.getBlocks();
-      console.log(response.data)
+      console.log(response.data);
       setBlocks(response.data);
       console.log("Success! List formed!");
     } catch (err) {
@@ -65,7 +63,7 @@ export default function NovaSala() {
           name: formData.name,
           block_id: Number(formData.block_id),
         };
-        console.log("Create Room", newClassroom)
+        console.log("Create Room", newClassroom);
 
         await classroomsApi.createClassroom(newClassroom);
         console.log("Room successfully created.");
@@ -111,27 +109,26 @@ export default function NovaSala() {
           <Card title="NOVA SALA" size="2xl">
             <div className="flex flex-col space-y-6">
               {inputConfig.map((input) => (
-                  <Input
-                      key={input.name}
-                      label={input.label}
-                      name={input.name}
-                      value={String(input.value)}
-                      onChange={handleInputChange}
-                  />
+                <Input
+                  key={input.name}
+                  label={input.label}
+                  name={input.name}
+                  value={String(input.value)}
+                  onChange={handleInputChange}
+                />
               ))}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Bloco</label>
                 <select
-                    name="block_id"
-                    value={formData.block_id}
-                    onChange={handleSelectChange}
-                    className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  name="block_id"
+                  value={formData.block_id}
+                  onChange={handleSelectChange}
+                  className="text-utfpr_white mt-1 block w-full py-2 px-3 border-utfpr_yellow bg-utfpr_dark_gray rounded-md shadow-sm focus:outline-none focus:ring-1 focus:bg-utpr_dark_gray focus:border-utfpr_yellow "
                 >
                   <option value={0}>Selecione o bloco</option>
                   {blocks.map((block) => (
-                      <option key={block.id} value={String(block.id)}>
-                        {block.name}
-                      </option>
+                    <option key={block.id} value={String(block.id)}>
+                      {block.name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -146,7 +143,7 @@ export default function NovaSala() {
           </Card>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

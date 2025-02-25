@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../../../components/Forms/Item/Input";
-import LoadInput from "../../../../components/Forms/Item/LoadInput"; // Import the reusable InputLoad component
+import LoadInput from "../../../../components/Forms/Item/LoadInput"; 
 import Card from "../../../../components/Forms/Card";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
@@ -75,9 +75,10 @@ export default function AtualizaBloco() {
         await blocksApi.uploadBlockImage(blockId.toString(), formDataToUpload);
         console.log("Block image successfully updated.");
       }
-  
+      alert("Atualizado com sucesso!")
       navigate(-1);
     } catch (err) {
+      alert("Erro ao atualizar!")
       console.error("An error occurred while updating the block:", err);
     }
   };
@@ -117,6 +118,7 @@ export default function AtualizaBloco() {
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">
               <Button onClick={handleUpdate}>ATUALIZAR</Button>
+              <Button onClick={() => console.log("Ver blueprint")}>VER IMAGE</Button>
               <Button onClick={() => navigate(-1)} color="utfpr_red">CANCELAR</Button>
             </div>
           </Card>

@@ -54,12 +54,13 @@ export default function AtualizaSala() {
           name: formData.name,
         };
         await classroomsApi.updateClassroom(roomId.toString(), dataToUpdate);
-        console.log("Room successfully updated.");
+        alert("Atualizado com sucesso!");
         navigate(-1);
       } else {
         console.error("Room ID or form data is missing.");
       }
     } catch (err) {
+      alert("Erro ao atualizar!");
       console.error("An error occurred while updating the room:", err);
     }
   };
