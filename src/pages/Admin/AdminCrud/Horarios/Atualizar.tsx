@@ -206,10 +206,12 @@ export default function UpdateSchedule() {
           classroom: "",
           date: "",
         });
+        alert("Atualizado com sucesso!")
       } else {
         console.error("All fields must be filled.");
       }
     } catch (err) {
+      alert("Erro ao atualizar!")
       console.error("An error occurred: ", err);
     }
   };

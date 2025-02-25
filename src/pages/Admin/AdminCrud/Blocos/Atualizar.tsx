@@ -75,9 +75,10 @@ export default function AtualizaBloco() {
         await blocksApi.uploadBlockImage(blockId.toString(), formDataToUpload);
         console.log("Block image successfully updated.");
       }
-  
+      alert("Atualizado com sucesso!")
       navigate(-1);
     } catch (err) {
+      alert("Erro ao atualizar!")
       console.error("An error occurred while updating the block:", err);
     }
   };
