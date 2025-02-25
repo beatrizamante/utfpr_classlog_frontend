@@ -15,20 +15,6 @@ export default function ChangeRoom() {
   const navigate = useNavigate();
   const listRef = useRef<HTMLUListElement>(null);
 
-  const handleList = async () => {
-    try {
-      const token = localStorage.getItem("authToken");
-      console.log(token);
-      const response = await api.get(`/schedules/professor/${token}`);
-      setSchedules(Array.isArray(response.data) ? response.data : []);
-      console.log(schedules);
-    } catch (err) {
-      console.error("An error occurred: ", err);
-    }
-  };
-
-  useEffect(() => {}, [schedules]);
-
   const getScheduleLabel = (item: Schedules): string =>
     `${item.id} - ${item.subject_subject_name} - horaŕio: ${item.start_time} - ${item.end_time} - ${item.block_name} - ${item.classroom_name}`;
   const getMappedItemId = (
@@ -40,27 +26,19 @@ export default function ChangeRoom() {
   }, [selectId]);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      const clickedInsideList =
-        listRef.current && listRef.current.contains(target);
-      const clickedOnButton = (event.target as HTMLElement).closest("button");
-
-      if (!clickedInsideList && !clickedOnButton) {
-        setSelectId(null);
+    const handleList = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        console.log(token);
+        const response = await api.get(`/schedules/professor/${token}`);
+        setSchedules(Array.isArray(response.data) ? response.data : []);
+        console.log(schedules);
+      } catch (err) {
+        console.error("An error occurred: ", err);
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [selectId]);
-
-  useEffect(() => {
     handleList();
-  }, []);
+  }, [schedules]);
 
   return (
     <div

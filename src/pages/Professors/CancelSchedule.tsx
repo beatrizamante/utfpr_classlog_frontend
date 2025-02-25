@@ -12,22 +12,8 @@
   export default function CancelSchedule() {
     const [schedules, setSchedules] = useState<Schedules[]>([]);
     const [selectId, setSelectId] = useState<number | null>(null);
-    const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
     const listRef = useRef<HTMLUListElement>(null);
-    const handleList = async () => {
-      try {
-        const response  = await  api.get(`/schedules/professor/`)
-        setSchedules(Array.isArray(response.data) ? response.data : []);
-        console.log(schedules)
-      } catch (err) {
-        console.error("An error occurred: ", err);
-      }
-    };
-
-    useEffect(() => {
-    }, [schedules]);
-
 
     const getScheduleLabel = (item: Schedules): string =>
         `${item.id} - ${item.subject_subject_name} - horaŕio: ${item.start_time} - ${item.end_time} - ${item.block_name} - ${item.classroom_name}`;
@@ -47,7 +33,7 @@
           listRef.current && listRef.current.contains(target);
         const clickedOnButton = (event.target as HTMLElement).closest("button");
 
-        if (!showModal && !clickedInsideList && !clickedOnButton) {
+        if (!clickedInsideList && !clickedOnButton) {
           setSelectId(null);
         }
       };
@@ -57,11 +43,20 @@
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
       };
-    }, [showModal, selectId]);
+    }, [selectId]);
 
     useEffect(() => {
+      const handleList = async () => {
+        try {
+          const response  = await  api.get(`/schedules/professor/`)
+          setSchedules(Array.isArray(response.data) ? response.data : []);
+          console.log(schedules)
+        } catch (err) {
+          console.error("An error occurred: ", err);
+        }
+      };
       handleList();
-    }, []);
+    }, [schedules]);
 
     return (
       <div

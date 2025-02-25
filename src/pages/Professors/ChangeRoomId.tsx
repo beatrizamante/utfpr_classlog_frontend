@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import background from "../../assets/images/background.png";
 import Header from "../../components/Header";
 import Card from "../../components/Forms/Card";
 import Button from "../../components/Button";
 import Footer from "../../components/Footer";
-import { Classroom } from "../../interfaces/AdmInterfaces";
-import { classroomsApi } from "../../api/admin/apiClassroom";
 import api from "../../services/api";
 import ScheduleCardChange from "../../components/ScheduleChangeCard";
 import ModalAlert from "../../components/ModalAlert";
@@ -36,36 +33,17 @@ export default function ChangeRoomId() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const scheduleId = Number(id);
+  const [rooms, setRooms] = useState<{ id: number; name: string }[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [modalDescription, setModalDescription] = useState<string>("");
   const [schedule, setSchedule] = useState<Schedule | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
-  const [rooms, setRooms] = useState<Classroom[]>([]);
   const [selectedRoom, setSelectedRoom] = useState<string | number>("");
 
-  const handleShow = async () => {
-    try {
-      const response = await api.get(`/schedules/${scheduleId}`);
-      const data = response.data;
-      setSchedule(data);
-      setSelectedDate(data.date ?? "");
-      setStartTime(data.start_time);
-      setEndTime(data.end_time);
-      setSelectedRoom(data.classroom_id ?? "");
-    } catch (err) {
-      console.error("An error occurred: ", err);
-    }
-  };
-
-  const handleClassroomList = async () => {
-    try {
-      const response = await classroomsApi.getClassrooms();
-      setRooms(response.data);
-    } catch (err) {
-      console.error("An error occurred: ", err);
-    }
+  const handleRoomChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedRoom(e.target.value);
   };
 
   const handleChange = async () => {
@@ -88,10 +66,26 @@ export default function ChangeRoomId() {
   };
 
   useEffect(() => {
+    const handleShow = async () => {
+      try {
+        const scheduleResponse = await api.get(`/schedules/${scheduleId}`);
+        const scheduleData = scheduleResponse.data;
+        setSchedule(scheduleData);
+        setSelectedDate(scheduleData.date ?? "");
+        setStartTime(scheduleData.start_time);
+        setEndTime(scheduleData.end_time);
+        setSelectedRoom(scheduleData.classroom_id ?? "");
+  
+        const roomsResponse = await api.get(`/classrooms`);
+        const roomsData = roomsResponse.data;
+        setRooms(roomsData);
+      } catch (err) {
+        console.error("An error occurred: ", err);
+      }
+    };
     handleShow();
-    handleClassroomList();
   }, [scheduleId]);
-
+  
   return (
     <div
       className="min-h-screen flex flex-col bg-cover bg-center text-white"
@@ -119,9 +113,10 @@ export default function ChangeRoomId() {
                   selectedDate={selectedDate}
                   handleDateChange={(e) => setSelectedDate(e.target.value)}
                   selectedRoom={selectedRoom}
-                  handleRoomChange={(e) => setSelectedRoom(e.target.value)}
+                  handleRoomChange={handleRoomChange} // Passa a função para o componente
                   handleStartTimeChange={(e) => setStartTime(e.target.value)}
                   handleEndTimeChange={(e) => setEndTime(e.target.value)}
+                  rooms={rooms} // Passa a lista de salas para o componente
                 />
               ) : (
                 <p>Loading schedule...</p>
@@ -139,8 +134,7 @@ export default function ChangeRoomId() {
       </div>
       <ModalAlert
         isVisible={modalVisible}
-        onClose={() => {setModalVisible(false);
-                        navigate(-1)}}
+        onClose={() => {setModalVisible(false); navigate(-1)}}
         description={modalDescription}
       />
     </div>

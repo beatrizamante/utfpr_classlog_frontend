@@ -39,15 +39,6 @@ export default function CancelScheduleId() {
     schedule?.date ?? null
   );
 
-  const handleShow = async () => {
-    try {
-      const response = await api.get(`/schedules/${scheduleId}`);
-      setSchedule(response.data);
-    } catch (err) {
-      console.error("An error occurred: ", err);
-    }
-  };
-
   const handleCancel = async () => {
     console.log(scheduleId, selectedDate);
 
@@ -71,6 +62,14 @@ export default function CancelScheduleId() {
   };
 
   useEffect(() => {
+    const handleShow = async () => {
+      try {
+        const response = await api.get(`/schedules/${scheduleId}`);
+        setSchedule(response.data);
+      } catch (err) {
+        console.error("An error occurred: ", err);
+      }
+    };
     handleShow();
   }, [scheduleId]);
 

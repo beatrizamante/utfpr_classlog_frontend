@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authApi } from "../api/login/authentication";
 
 type AuthContextType = {
   isLogoutModalOpen: boolean;
@@ -17,7 +18,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const openLogoutModal = () => setIsLogoutModalOpen(true);
   const closeLogoutModal = () => setIsLogoutModalOpen(false);
 
-  const logout = () => {
+  const logout = async () => {
+    await authApi.logout();
     console.log("Usuário deslogado!"); 
     closeLogoutModal();
     navigate("/"); 

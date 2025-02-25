@@ -3,7 +3,6 @@ import Card from "../components/Forms/Card";
 import Button from "../components/Button";
 import background from "../assets/images/background.png";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
 import ViewList from "../components/ViewList/ViewList";
@@ -13,20 +12,20 @@ export default function SchedulesByBlock() {
   const blockId = id;
   const [schedules, setSchedules] = useState<any[]>([]);
 
-  const handleSchedules = async () => {
-    try {
-      const response = await api.get(
-        `/schedules/blocks-index?block_id=${blockId}`
-      );
-      setSchedules(response.data.schedules);
-    } catch (err) {
-      console.error("An error occurred: ", err);
-    }
-  };
-
   useEffect(() => {
+    const handleSchedules = async () => {
+      try {
+        const response = await api.get(
+          `/schedules/blocks-index?block_id=${blockId}`
+        );
+        setSchedules(response.data.schedules);
+      } catch (err) {
+        console.error("An error occurred: ", err);
+      }
+    };
+  
     handleSchedules();
-  }, []);
+  }, [blockId]);
 
   const navigate = useNavigate();
 
