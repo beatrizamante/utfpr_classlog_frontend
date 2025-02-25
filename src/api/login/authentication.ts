@@ -1,12 +1,12 @@
 import axios from "axios";
+import api from "../../services/api";
 
-const API_URL = process.env.REACT_APP_API_URL;
 
 export const authApi = {
   async login(university_registry: string, password?: string) {
     console.log(university_registry, password)
     try {
-      const response = await axios.post(`${API_URL}/login`, {
+      const response = await api.post(`/login`, {
         university_registry,
         password,
       });
@@ -17,7 +17,7 @@ export const authApi = {
             console.log(data);
         if (data.success) {
           if (data.token) {
-            localStorage.setItem("authToken", data.token);
+            localStorage.setItem("token", data.token);
             console.log("Login bem-sucedido!");
           } else {
             console.error("Erro ao fazer login");

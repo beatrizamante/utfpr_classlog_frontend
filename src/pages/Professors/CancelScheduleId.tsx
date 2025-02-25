@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import Card from "../../components/Forms/Card";
 import Button from "../../components/Button";
 import Footer from "../../components/Footer";
+import api from "../../services/api";
 const API_URL = process.env.REACT_APP_API_URL;
 interface Schedule {
     id: number;
@@ -36,7 +37,7 @@ export default function CancelScheduleId() {
 
     const handleShow = async () => {
         try {
-            const response = await axios.get(`${API_URL}/schedules/${scheduleId}`);
+            const response = await api.get(`/schedules/${scheduleId}`);
             setSchedule(response.data);
         } catch (err) {
             console.error("An error occurred: ", err);
@@ -47,7 +48,7 @@ export default function CancelScheduleId() {
         console.log(scheduleId, selectedDate);
 
         try {
-            const response = await axios.post(`${API_URL}/schedules/cancel`, {
+            const response = await api.post(`/schedules/cancel`, {
                 id: scheduleId,
                 date: selectedDate
             });

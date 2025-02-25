@@ -10,6 +10,7 @@
   import Modal from "../../components/Modal";
   import axios from "axios";
   import {subjectsApi} from "../../api/admin/apiSubject";
+  import api from "../../services/api";
   const API_URL = process.env.REACT_APP_API_URL;
   export default function CancelSchedule() {
     const [schedules, setSchedules] = useState<Schedules[]>([]);
@@ -19,8 +20,7 @@
     const listRef = useRef<HTMLUListElement>(null);
     const handleList = async () => {
       try {
-        const token = localStorage.getItem("authToken");
-        const response  = await  axios.get(`${API_URL}/schedules/professor/${token}`)
+        const response  = await  api.get(`/schedules/professor/`)
         setSchedules(Array.isArray(response.data) ? response.data : []);
         console.log(schedules)
       } catch (err) {

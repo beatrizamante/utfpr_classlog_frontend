@@ -8,14 +8,15 @@ import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { classroomsApi } from "../api/admin/apiClassroom";
+import api from "../services/api";
 const API_URL = process.env.REACT_APP_API_URL;
 export default function HomeSchedules() {
-    const [schedules, setSchedules] = useState<any[]>([]);  // Defina o tipo para a resposta
+    const [schedules, setSchedules] = useState<any[]>([]);
 
     const handleSchedules = async () => {
         try {
-            const response = await axios.get(`${API_URL}/`);  // Substitua pela URL correta
-            setSchedules(response.data.schedules);  // Atribua os dados ao estado
+            const response = await api.get(`/`);
+            setSchedules(response.data.schedules);
         } catch (err) {
             console.error("An error occurred: ", err);
         }

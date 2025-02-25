@@ -10,6 +10,7 @@ import { schedulesApi } from "../../../../api/admin/apiSchedules";
 import {Classroom, Schedules} from "../../../../interfaces/AdmInterfaces";
 import {classroomsApi} from "../../../../api/admin/apiClassroom";
 import axios from "axios";
+import api from "../../../../services/api";
 const API_URL = process.env.REACT_APP_API_URL;
 
 type FormDataInput = {
@@ -66,7 +67,7 @@ export default function UpdateSchedule() {
 
     const handleProfessorsList = async () => {
         try {
-            const response = await axios.get(`${API_URL}/user-subjects`);
+            const response = await api.get(`/user-subjects`);
             setUserSubjects(response.data.data);
         } catch (err) {
             console.error("An error occurred: ", err);

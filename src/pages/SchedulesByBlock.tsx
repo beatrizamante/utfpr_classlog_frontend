@@ -8,6 +8,7 @@ import Header from "../components/Header";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import { classroomsApi } from "../api/admin/apiClassroom";
+import api from "../services/api";
 const API_URL = process.env.REACT_APP_API_URL;
 export default function SchedulesByBlock() {
     const { id } = useParams<{ id: string }>();
@@ -16,7 +17,7 @@ export default function SchedulesByBlock() {
 
     const handleSchedules = async () => {
         try {
-            const response = await axios.get(`${API_URL}/schedules/blocks-index?block_id=${blockId}`);  // Substitua pela URL correta
+            const response = await api.get(`/schedules/blocks-index?block_id=${blockId}`);  // Substitua pela URL correta
             setSchedules(response.data.schedules);  // Atribua os dados ao estado
         } catch (err) {
             console.error("An error occurred: ", err);
