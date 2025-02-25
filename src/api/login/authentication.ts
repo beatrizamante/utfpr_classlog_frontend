@@ -1,7 +1,6 @@
 import axios from "axios";
 import api from "../../services/api";
 
-
 export const authApi = {
   async login(university_registry: string, password?: string) {
     console.log(university_registry, password);
@@ -53,7 +52,7 @@ export const authApi = {
     password_confirmation: string
   ) {
     try {
-      const response = await axios.post(`${API_URL}/register`, {
+      const response = await api.post(`/register`, {
         name,
         university_registry,
         password,
