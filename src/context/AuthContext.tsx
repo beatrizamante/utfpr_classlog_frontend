@@ -22,7 +22,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await authApi.logout();
     console.log("Usuário deslogado!"); 
     closeLogoutModal();
-    navigate("/"); 
+    navigate("/", { replace: true }); 
   };
 
   return (
