@@ -113,10 +113,10 @@ export default function ChangeRoomId() {
                   selectedDate={selectedDate}
                   handleDateChange={(e) => setSelectedDate(e.target.value)}
                   selectedRoom={selectedRoom}
-                  handleRoomChange={handleRoomChange} // Passa a função para o componente
+                  handleRoomChange={handleRoomChange}
                   handleStartTimeChange={(e) => setStartTime(e.target.value)}
                   handleEndTimeChange={(e) => setEndTime(e.target.value)}
-                  rooms={rooms} // Passa a lista de salas para o componente
+                  rooms={rooms} 
                 />
               ) : (
                 <p>Loading schedule...</p>
