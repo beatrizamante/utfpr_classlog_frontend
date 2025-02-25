@@ -24,29 +24,6 @@ export default function HomeSchedules() {
   };
 
   useEffect(() => {
-    console.log("Item clicked with id after state update:", selectId);
-  }, [selectId]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      const clickedInsideList =
-        listRef.current && listRef.current.contains(target);
-      const clickedOnButton = (event.target as HTMLElement).closest("button");
-
-      if (!clickedInsideList && !clickedOnButton) {
-        setSelectId(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [selectId]);
-
-  useEffect(() => {
     handleSchedules();
   }, []);
 
@@ -63,7 +40,7 @@ export default function HomeSchedules() {
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
-          <Card title={"Todos os Blocos"} color="utfpr_white" size="2xl">
+          <Card title={"TODOS OS BLOCOS"} size="2xl">
             <div className="mt-8 px-2">
               <ul ref={listRef}>
                 <List

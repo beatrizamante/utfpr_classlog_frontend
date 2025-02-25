@@ -14,7 +14,7 @@ export default function Card({
   children,
 }: CardProps) {
   return (
-    <div className="bg-utfpr_black w-[373px] opacity-95 px-8 py-8">
+    <div className="bg-utfpr_black w-[480px] opacity-95 px-8 py-8">
       <div className="pb-8 text-center">
         <span
           className={`text-${color} font-bold ${

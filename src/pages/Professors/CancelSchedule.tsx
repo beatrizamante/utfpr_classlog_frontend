@@ -7,11 +7,8 @@
   import List from "../../components/List/List";
   import Button from "../../components/Button";
   import Footer from "../../components/Footer";
-  import Modal from "../../components/Modal";
-  import axios from "axios";
-  import {subjectsApi} from "../../api/admin/apiSubject";
   import api from "../../services/api";
-  const API_URL = process.env.REACT_APP_API_URL;
+  
   export default function CancelSchedule() {
     const [schedules, setSchedules] = useState<Schedules[]>([]);
     const [selectId, setSelectId] = useState<number | null>(null);
