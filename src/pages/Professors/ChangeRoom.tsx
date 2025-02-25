@@ -7,7 +7,6 @@ import Card from "../../components/Forms/Card";
 import List from "../../components/List/List";
 import Button from "../../components/Button";
 import Footer from "../../components/Footer";
-import Modal from "../../components/Modal";
 import axios from "axios";
 import {subjectsApi} from "../../api/admin/apiSubject";
 import api from "../../services/api";

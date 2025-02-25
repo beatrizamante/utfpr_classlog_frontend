@@ -11,7 +11,6 @@ import { subjectsApi } from "../../api/admin/apiSubject";
 import { professorApi } from "../../api/professors/apiProfessor";
 
 export default function ListarMaterias() {
-  const professorId = localStorage.getItem("professor_register");
   const [subjects, setSubjects] = useState<Subjects[]>([]);
   const [selectId, setSelectId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);

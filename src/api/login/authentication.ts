@@ -4,7 +4,7 @@ import api from "../../services/api";
 
 export const authApi = {
   async login(university_registry: string, password?: string) {
-    console.log(university_registry, password)
+    console.log(university_registry, password);
     try {
       const response = await api.post(`/login`, {
         university_registry,
@@ -12,9 +12,8 @@ export const authApi = {
       });
 
       if (response.status === 200) {
-
         const data = response.data;
-            console.log(data);
+        console.log(data);
         if (data.success) {
           if (data.token) {
             localStorage.setItem("token", data.token);
@@ -24,7 +23,10 @@ export const authApi = {
           }
           return { success: true, role: data.role };
         } else {
-          return { success: false, message: "Erro no login: token não recebido" };
+          return {
+            success: false,
+            message: "Erro no login: token não recebido",
+          };
         }
       }
     } catch (error) {
@@ -44,14 +46,34 @@ export const authApi = {
     }
   },
 
-  async logout() {
+  async registerUser(
+    name: string,
+    university_registry: string,
+    password: string,
+    password_confirmation: string
+  ) {
+    try {
+      const response = await axios.post(`${API_URL}/register`, {
+        name,
+        university_registry,
+        password,
+        password_confirmation,
+      });
+
+      return response.data;
+    } catch (err) {
+      console.error(err);
+      return { error: "Erro ao registrar usuário" };
+    }
   },
+
+  async logout() {},
 
   async getRole() {
     return localStorage.getItem("role");
   },
 
   async getUserId() {
-    return localStorage.getItem("university_registry"); 
-  }
+    return localStorage.getItem("university_registry");
+  },
 };

@@ -112,7 +112,7 @@ export default function LoginScreen() {
               onClick={() => navigate("/recover-password")}
               color="utfpr_red"
             >
-              RECUPERAR SENHA
+              REGISTRAR USUÁRIO
             </Button>
           </div>
         </div>

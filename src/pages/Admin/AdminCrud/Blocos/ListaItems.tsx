@@ -9,7 +9,6 @@ import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
 import { blocksApi } from "../../../../api/admin/apiBlock";
-import axios from "axios";
 
 export default function Listas() {
   const [blocks, setBlocks] = useState<Block[]>([]);

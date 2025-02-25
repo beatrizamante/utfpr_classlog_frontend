@@ -47,7 +47,6 @@ export default function NovoBloco() {
       const blockData = { name: formData.name };
       const blockResponse = await blocksApi.createBlock(blockData);
 
-    console.log(blockResponse.data.data.id)
       if (blockResponse.data && blockResponse.data.data.id) {
         const blockId = blockResponse.data.data.id;
   
@@ -71,7 +70,6 @@ export default function NovoBloco() {
       alert("Ocorreu um erro ao salvar. Tente novamente.");
     }
   };
-  
 
   const onCancel = () => {
     setFormData({
