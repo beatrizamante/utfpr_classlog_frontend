@@ -9,6 +9,7 @@ import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import Modal from "../../../../components/Modal";
 import { subjectsApi } from "../../../../api/admin/apiSubject";
+import api from "../../../../services/api";
 
 export default function ListarHorarios() {
   const [schedules, setSchedules] = useState<Schedules[]>([]);
@@ -21,7 +22,7 @@ export default function ListarHorarios() {
     console.log(selectId);
     try {
       if (selectId != null) {
-        await subjectsApi.deleteSubject(selectId.toString());
+        await api.delete("/schedules/" + selectId.toString());
         console.log("Deletion successful");
         setShowModal(false);
         setSelectId(null);
@@ -40,7 +41,7 @@ export default function ListarHorarios() {
 
   const handleList = async () => {
     try {
-      const response = await subjectsApi.getSubjects();
+      const response = await api.get("/schedules");
       setSchedules(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
       console.error("An error occurred: ", err);
@@ -53,7 +54,7 @@ export default function ListarHorarios() {
 
 
   const getScheduleLabel = (item: Schedules): string =>
-      `${item.id} - ${item.name} - Semestre: ${item.semester}`;
+      `${item.id} - ${item.subject_name} - Professor: ${item.professor_name}`;
   const getMappedItemId = (
     item: Schedules & { id: number | null }
   ): number | null => item.id;
@@ -115,17 +116,7 @@ export default function ListarHorarios() {
               </ul>
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">
-              <Button
-                  onClick={() => {
-                    if (selectId) {
-                      navigate(`/admin/horarios/atualizar/${selectId}`)
-                      console.log(`Navegar para atualizar o ID: ${selectId}`);
-                    }
-                  }}
-                  disabled={!selectId}
-              >
-                ATUALIZAR
-              </Button>
+
               <Button
                 onClick={() => {
                   if (selectId) {
@@ -137,6 +128,7 @@ export default function ListarHorarios() {
               >
                 EXCLUIR
               </Button>
+              <Button onClick={() => navigate(-1)} color="utfpr_red">VOLTAR</Button>
             </div>
           </Card>
         </div>

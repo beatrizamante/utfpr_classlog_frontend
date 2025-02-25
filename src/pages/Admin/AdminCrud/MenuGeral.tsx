@@ -51,7 +51,24 @@ export default function MenuGeral() {
             >
               BLOCO
             </Button>
+            {action !== "atualizar" && (
+                <Line />
+            )}
+
+            {action !== "atualizar" && (
+                <Button
+                    onClick={() =>
+                        navigate(`/admin/professor-subjects${action ? `/${action}` : ""}`)
+                    }
+                    height={"80px"}
+                >
+                  Matéria/Professor
+                </Button>
+            )}
+            {action !== "atualizar" && (
             <Line />
+            )}
+            {action !== "atualizar" && (
 
             <Button
               onClick={() =>
@@ -61,6 +78,10 @@ export default function MenuGeral() {
             >
               HORÁRIOS
             </Button>
+                )}
+            <Line />
+
+            <Button onClick={() => navigate("/admin")} color="utfpr_red">VOLTAR</Button>
           </Card>
         </div>
         <Footer />

@@ -15,7 +15,7 @@ export const schedulesApi = {
     return api.post(`/schedules`, data);
   },
 
-  async updateSchedule(scheduleId: string, data: Object) {
+  async updateSchedule(scheduleId: string| undefined, data: Object) {
     return api.put(`/schedules/${scheduleId}`, data);
   },
 

@@ -29,10 +29,8 @@ export default function ChangeRoom() {
     const handleList = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        console.log(token);
         const response = await api.get(`/schedules/professor/${token}`);
         setSchedules(Array.isArray(response.data) ? response.data : []);
-        console.log(schedules);
       } catch (err) {
         console.error("An error occurred: ", err);
       }
