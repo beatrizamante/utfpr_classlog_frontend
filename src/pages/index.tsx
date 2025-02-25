@@ -3,7 +3,6 @@ import Card from "../components/Forms/Card";
 import Button from "../components/Button";
 import background from "../assets/images/background.png";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import List from "../components/List/List";
@@ -14,16 +13,15 @@ export default function HomeSchedules() {
   const listRef = useRef<HTMLUListElement>(null);
   const [selectId, setSelectId] = useState<number | null>(null);
 
-  const handleSchedules = async () => {
-    try {
-      const response = await api.get(`/blocks`);
-      setBlocks(response.data);
-    } catch (err) {
-      console.error("An error occurred: ", err);
-    }
-  };
-
   useEffect(() => {
+    const handleSchedules = async () => {
+      try {
+        const response = await api.get(`/blocks`);
+        setBlocks(response.data);
+      } catch (err) {
+        console.error("An error occurred: ", err);
+      }
+    };
     handleSchedules();
   }, []);
 
@@ -48,6 +46,7 @@ export default function HomeSchedules() {
                   }))}
                   onSelected={(id: number | null) => {
                     if (id !== null) {
+                      setSelectId(id);
                       navigate(`/schedules/block/${id}`);
                     }
                   }}
@@ -59,9 +58,6 @@ export default function HomeSchedules() {
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-4">
               <Button onClick={() => navigate("/login")}>LOGIN</Button>
-              <Button onClick={() => navigate(-1)} color="utfpr_red">
-                VOLTAR
-              </Button>
             </div>
           </Card>
         </div>

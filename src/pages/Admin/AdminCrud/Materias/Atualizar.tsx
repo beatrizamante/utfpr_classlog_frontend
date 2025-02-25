@@ -5,7 +5,7 @@ import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
 import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
-import { data, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { subjectsApi } from "../../../../api/admin/apiSubject";
 
 type FormDataInput = {

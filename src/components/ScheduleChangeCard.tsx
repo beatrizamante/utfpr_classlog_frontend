@@ -15,6 +15,7 @@ interface ScheduleCardProps {
   handleRoomChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   handleStartTimeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleEndTimeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  rooms: { id: number; name: string }[];
 }
 
 const ScheduleCardChange: React.FC<ScheduleCardProps> = ({
@@ -32,6 +33,7 @@ const ScheduleCardChange: React.FC<ScheduleCardProps> = ({
   handleRoomChange,
   handleStartTimeChange,
   handleEndTimeChange,
+  rooms
 }) => {
   return (
     <div className="flex flex-col border border-utfpr_yellow p-6 rounded-md shadow-lg mb-6 bg-utfpr_black text-utfpr_gray text-left gap-4">
@@ -47,15 +49,19 @@ const ScheduleCardChange: React.FC<ScheduleCardProps> = ({
         <span>{blockName}</span>
       </div>
 
-      <div className="flex justify-between">
-        <span>Sala de Aula:</span>
+      <div className="flex justify-between align-middle">
+        <span className="pr-4">Sala de Aula:</span>
         <select
           value={selectedRoom ?? ""}
           onChange={handleRoomChange}
           className="bg-utfpr_black text-utfpr_gray p-2 mt-2 rounded border border-utfpr_yellow"
         >
-          <option value="room1">Sala 1</option>
-          <option value="room2">Sala 2</option>
+          <option value="">Selecione uma sala</option>
+          {rooms.map((room) => (
+            <option key={room.id} value={room.id}>
+              {room.name}
+            </option>
+          ))}
         </select>
       </div>
 

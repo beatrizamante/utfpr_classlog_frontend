@@ -67,12 +67,14 @@ export default function LoginScreen() {
             loginResponse?.message ||
               "Falha no login. Verifique suas credenciais."
           );
+          alert(error)
         }
       } catch (err) {
         console.error("Erro no login:", err);
         setError(
           "Ocorreu um erro ao tentar logar. Tente novamente mais tarde."
         );
+        alert(error)
       }
 
   };

@@ -143,15 +143,34 @@ export default function NovoHorario() {
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  
+    if (name === "start_time" || name === "end_time") {
+      const timeValue = value;
+      
+      const timeParts = timeValue.split(":");
+    
+      const formattedTime =
+        timeParts.length === 2 && timeParts[0].length === 1
+          ? `0${timeParts[0]}:${timeParts[1]}`
+          : timeValue;
+    
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: formattedTime,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+    
   };
+  
 
   const handleSave = async () => {
     try {
-      console.log(formData);
+      console.log("Formdata", formData);
       if (
         formData.start_time &&
         formData.end_time &&
