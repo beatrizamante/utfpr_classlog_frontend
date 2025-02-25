@@ -6,8 +6,8 @@ import Card from "../../components/Forms/Card";
 import Button from "../../components/Button";
 import Footer from "../../components/Footer";
 import api from "../../services/api";
-import Item from "../../components/ViewList/Item/Item";
 import ScheduleCard from "../../components/ScheduleCard";
+import ModalAlert from "../../components/ModalAlert";
 interface Schedule {
   id: number;
   start_time: string;
@@ -29,7 +29,9 @@ interface Schedule {
 }
 
 export default function CancelScheduleId() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalDescription, setModalDescription] = useState<string>("");
   const { id } = useParams<{ id: string }>();
   const scheduleId = Number(id);
   const [schedule, setSchedule] = useState<Schedule | null>(null);
@@ -55,8 +57,12 @@ export default function CancelScheduleId() {
         date: selectedDate,
       });
       console.log(response);
+      setModalDescription("Aula cancelada com sucesso!");
+      setModalVisible(true);
     } catch (err) {
       console.error("An error occurred: ", err);
+      setModalDescription("Ocorreu um erro ao tentar realizar a alteração.");
+      setModalVisible(true);
     }
   };
 
@@ -83,7 +89,7 @@ export default function CancelScheduleId() {
           <Card title="DETALHES DO SCHEDULE" size="2xl">
             <div className="flex flex-col space-y-6">
               {schedule ? (
-                  <ScheduleCard
+                <ScheduleCard
                   professorName={schedule.subject_professor_name}
                   subjectName={schedule.subject_subject_name}
                   classroomName={schedule.classroom_name}
@@ -107,8 +113,16 @@ export default function CancelScheduleId() {
             </div>
           </Card>
         </div>
-      <Footer />
+        <Footer />
       </div>
+      <ModalAlert
+        isVisible={modalVisible}
+        onClose={() => {
+          setModalVisible(false);
+          navigate(-1);
+        }}
+        description={modalDescription}
+      />
     </div>
   );
 }
