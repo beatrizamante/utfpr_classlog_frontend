@@ -59,7 +59,7 @@ export default function AtualizaSala() {
           name: formData.name,
         };
         await subjectsApi.updateSubject(subjectId.toString(), dataToUpdate);
-        alert("Room successfully updated.");
+        alert("Atualizado com sucesso!");
         navigate(-1);
       } else {
         console.error("Room ID or form data is missing.");

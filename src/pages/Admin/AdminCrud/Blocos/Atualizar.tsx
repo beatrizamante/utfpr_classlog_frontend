@@ -118,6 +118,7 @@ export default function AtualizaBloco() {
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">
               <Button onClick={handleUpdate}>ATUALIZAR</Button>
+              <Button onClick={() => console.log("Ver blueprint")}>VER IMAGE</Button>
               <Button onClick={() => navigate(-1)} color="utfpr_red">CANCELAR</Button>
             </div>
           </Card>
