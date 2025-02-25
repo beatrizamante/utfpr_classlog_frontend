@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from "../services/api";
 const API_URL = process.env.REACT_APP_API_URL;
 
 export default function HomeSchedules() {
@@ -14,7 +15,7 @@ export default function HomeSchedules() {
 
     const handleSchedules = async () => {
         try {
-            const response = await axios.get(`${API_URL}/blocks`);
+            const response = await api.get(`/blocks`);
             setBlocks(response.data);
         } catch (err) {
             console.error("An error occurred: ", err);

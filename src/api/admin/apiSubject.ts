@@ -1,32 +1,25 @@
-import axios from "axios";
+import api from "../../services/api";
 
-const API_URL = process.env.REACT_APP_API_URL;
-// axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("authToken")}`;
 export const subjectsApi = {
   getSubjects() {
-    const token = localStorage.getItem("authToken");
-    return axios.get(`${API_URL}/subjects`, {
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json", // Exemplo de adicionar um header
-      }
-    });
+
+    return api.get(`/subjects`);
   },
 
   getSubjectById(subjectId: string) {
-    return axios.get(`${API_URL}/subjects/${subjectId}`);
+    return api.get(`/subjects/${subjectId}`);
   },
 
 
   createSubject(data: Object) {
-    return axios.post(`${API_URL}/subjects`, data);
+    return api.post(`/subjects`, data);
   },
 
   updateSubject(subjectId: string, data: Object) {
-    return axios.put(`${API_URL}/subjects/${subjectId}`, data);
+    return api.put(`/subjects/${subjectId}`, data);
   },
 
   deleteSubject(subjectId: string) {
-    return axios.delete(`${API_URL}/subjects/${subjectId}`);
+    return api.delete(`/subjects/${subjectId}`);
   },
 };

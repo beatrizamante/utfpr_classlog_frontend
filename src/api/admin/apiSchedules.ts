@@ -1,37 +1,37 @@
-import axios from "axios";
+import api from "../../services/api";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const schedulesApi = {
   async getSchedules() {
-    return axios.get(`${API_URL}/schedules`);
+    return api.get(`/schedules`);
   },
 
   async getScheduleById(scheduleId: string) {
-    return axios.get(`${API_URL}/schedules/${scheduleId}`);
+    return api.get(`/schedules/${scheduleId}`);
   },
 
   async createSchedule(data: Object) {
-    return axios.post(`${API_URL}/schedules`, data);
+    return api.post(`/schedules`, data);
   },
 
   async updateSchedule(scheduleId: string, data: Object) {
-    return axios.put(`${API_URL}/schedules/${scheduleId}`, data);
+    return api.put(`/schedules/${scheduleId}`, data);
   },
 
   async deleteSchedule(scheduleId: string) {
-    return axios.delete(`${API_URL}/schedules/${scheduleId}`);
+    return api.delete(`/schedules/${scheduleId}`);
   },
 
   async cancelSchedule() {
-    return axios.post(`${API_URL}/schedules/cancel/`);
+    return api.post(`/schedules/cancel/`);
   },
 
   async changeSchedule() { 
-    return axios.post(`${API_URL}/schedules/change/`)
+    return api.post(`/schedules/change/`)
   },
 
   async cancelDeleteSchedule(scheduleId: string) { 
-    return axios.post(`${API_URL}/schedules/cancel/${scheduleId}`)
+    return api.post(`/schedules/cancel/${scheduleId}`)
   }
 };

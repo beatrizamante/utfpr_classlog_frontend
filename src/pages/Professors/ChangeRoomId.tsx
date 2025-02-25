@@ -8,6 +8,7 @@ import Button from "../../components/Button";
 import Footer from "../../components/Footer";
 import { Classroom } from "../../interfaces/AdmInterfaces";
 import { classroomsApi } from "../../api/admin/apiClassroom";
+import api from "../../services/api";
 const API_URL = process.env.REACT_APP_API_URL;
 
 interface Schedule {
@@ -43,7 +44,7 @@ export default function ChangeRoomId() {
 
     const handleShow = async () => {
         try {
-            const response = await axios.get(`${API_URL}/schedules/${scheduleId}`);
+            const response = await api.get(`/schedules/${scheduleId}`);
             const data = response.data;
             setSchedule(data);
             setSelectedDate(data.date ?? "");
@@ -66,7 +67,7 @@ export default function ChangeRoomId() {
 
     const handleChange = async () => {
         try {
-            const response = await axios.post(`${API_URL}/schedules/change`, {
+            const response = await api.post(`/schedules/change`, {
                 date: selectedDate,
                 schedule_id: scheduleId,
                 classroom_id: selectedRoom,

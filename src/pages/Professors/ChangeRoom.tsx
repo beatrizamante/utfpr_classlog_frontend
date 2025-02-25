@@ -10,6 +10,7 @@ import Footer from "../../components/Footer";
 import Modal from "../../components/Modal";
 import axios from "axios";
 import {subjectsApi} from "../../api/admin/apiSubject";
+import api from "../../services/api";
 const API_URL = process.env.REACT_APP_API_URL;
 export default function ChangeRoom() {
     const [schedules, setSchedules] = useState<Schedules[]>([]);
@@ -21,7 +22,7 @@ export default function ChangeRoom() {
         try {
             const token = localStorage.getItem("authToken");
             console.log(token)
-            const response  = await  axios.get(`${API_URL}/schedules/professor/${token}`)
+            const response  = await  api.get(`/schedules/professor/${token}`)
             setSchedules(Array.isArray(response.data) ? response.data : []);
             console.log(schedules)
         } catch (err) {
