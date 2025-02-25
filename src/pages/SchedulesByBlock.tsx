@@ -38,9 +38,8 @@ export default function SchedulesByBlock() {
         mixBlendMode: "soft-light",
       }}
     >
-      <div className="absolute inset-0 bg-utfpr_dark_gray opacity-40 z-0"></div>
+      <div className="absolute inset-0 opacity-40 z-0"></div>
 
-      <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
           <Card title={"TODAS AS AULAS"} color="utfpr_yellow" size="2xl">

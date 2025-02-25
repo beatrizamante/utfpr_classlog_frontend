@@ -3,7 +3,6 @@ import Footer from "../../components/Footer";
 import Button from "../../components/Button";
 import Input from "../../components/Forms/Item/Input";
 import { ReactComponent as Logo } from "../../assets/icons/utfpr logo.svg";
-import { DropdownMenu } from "../../components/DropDown";
 import { useNavigate } from "react-router";
 import background from "../../assets/images/background.png";
 import { authApi } from "../../api/login/authentication";
@@ -87,7 +86,7 @@ export default function LoginScreen() {
         mixBlendMode: "soft-light",
       }}
     >
-      <div className="absolute inset-0 bg-utfpr_dark_gray opacity-40 z-0"></div>
+      <div className="absolute inset-0 opacity-40 z-0"></div>
 
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="h-[714px] w-[373px] bg-utfpr_dark_gray flex flex-col items-center justify-between pt-4 pb-4 relative z-10">
