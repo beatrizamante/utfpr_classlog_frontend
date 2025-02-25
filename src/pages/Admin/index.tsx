@@ -18,7 +18,7 @@ export default function AdminPage() {
         mixBlendMode: "soft-light",
       }}
     >
-      <div className="absolute inset-0 bg-utfpr_dark_gray opacity-40 z-0"></div>
+      <div className="absolute inset-0 opacity-40 z-0"></div>
 
       <Header />
       <div className="flex justify-center pb-8 relative flex-grow pt-12">

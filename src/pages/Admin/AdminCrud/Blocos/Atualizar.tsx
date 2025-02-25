@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../../../components/Forms/Item/Input";
-import LoadInput from "../../../../components/Forms/Item/LoadInput"; 
+import LoadInput from "../../../../components/Forms/Item/LoadInput";
 import Card from "../../../../components/Forms/Card";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
@@ -22,6 +22,7 @@ export default function AtualizaBloco() {
     name: "",
     photo: null,
   });
+  const [imageUrl, setImageUrl] = useState<string>("");
 
   useEffect(() => {
     const fetchBlock = async () => {
@@ -33,6 +34,9 @@ export default function AtualizaBloco() {
               name: response.data.data.name,
               photo: null,
             });
+            if (response.data.data.photo) {
+              setImageUrl(response.data.data.photo);
+            }
           }
         }
       } catch (err) {
@@ -64,25 +68,25 @@ export default function AtualizaBloco() {
         console.error("Block ID or form data is missing.");
         return;
       }
-  
+
       await blocksApi.updateBlock(blockId.toString(), { name: formData.name });
       console.log("Block information successfully updated.");
-  
+
       if (formData.photo) {
         const formDataToUpload = new FormData();
         formDataToUpload.append("photo", formData.photo);
-  
+
         await blocksApi.uploadBlockImage(blockId.toString(), formDataToUpload);
         console.log("Block image successfully updated.");
       }
-      alert("Atualizado com sucesso!")
+      alert("Atualizado com sucesso!");
       navigate(-1);
     } catch (err) {
-      alert("Erro ao atualizar!")
+      alert("Erro ao atualizar!");
       console.error("An error occurred while updating the block:", err);
     }
   };
-  
+
   return (
     <div
       className="min-h-screen flex flex-col bg-cover bg-center"
@@ -97,19 +101,26 @@ export default function AtualizaBloco() {
         <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
           <Card title="ATUALIZAR" size="2xl">
             <div className="flex flex-col space-y-6">
-              {[{ label: "Identificação", name: "name" }].map(
-                (input) => (
-                  <Input
-                    key={input.name}
-                    label={input.label}
-                    name={input.name}
-                    value={
-                      formData[input.name as keyof FormDataInput] as string
-                    }
-                    onChange={handleInputChange}
+              {[{ label: "Identificação", name: "name" }].map((input) => (
+                <Input
+                  key={input.name}
+                  label={input.label}
+                  name={input.name}
+                  value={formData[input.name as keyof FormDataInput] as string}
+                  onChange={handleInputChange}
+                />
+              ))}
+
+              {imageUrl && (
+                <div className="flex flex-col items-center">
+                  <img
+                    src={imageUrl}
+                    alt="Imagem do bloco"
+                    className="w-40 h-40 object-cover rounded-md border border-utfpr_yellow"
                   />
-                )
+                </div>
               )}
+
               <LoadInput
                 label="Carregar Planta"
                 name="photo"
@@ -118,8 +129,9 @@ export default function AtualizaBloco() {
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-10">
               <Button onClick={handleUpdate}>ATUALIZAR</Button>
-              <Button onClick={() => console.log("Ver blueprint")}>VER IMAGE</Button>
-              <Button onClick={() => navigate(-1)} color="utfpr_red">CANCELAR</Button>
+              <Button onClick={() => navigate(-1)} color="utfpr_red">
+                CANCELAR
+              </Button>
             </div>
           </Card>
         </div>

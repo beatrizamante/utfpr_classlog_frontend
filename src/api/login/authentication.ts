@@ -66,7 +66,17 @@ export const authApi = {
     }
   },
 
-  async logout() {},
+  async logout() {
+    try {
+      await api.post(`/logout`, {
+        credentials: "include",
+      });
+
+      localStorage.removeItem("token");
+    } catch (error) {
+      console.error("Erro ao deslogar:", error);
+    }
+  },
 
   async getRole() {
     return localStorage.getItem("role");

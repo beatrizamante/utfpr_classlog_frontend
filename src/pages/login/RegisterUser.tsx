@@ -64,7 +64,7 @@ export default function NovoProfessor() {
           password: "",
           password_confirmation: "",
         });
-        navigate(-1)
+        navigate(-1);
       } else {
         setModalMessage("Erro ao criar o professor. Tente novamente.");
         setShowModal(true);
@@ -93,8 +93,7 @@ export default function NovoProfessor() {
         mixBlendMode: "soft-light",
       }}
     >
-      <div className="absolute inset-0 bg-utfpr_dark_gray opacity-40 z-0"></div>
-      <Header />
+      <div className="absolute inset-0 opacity-40 z-0"></div>
       <div className="flex justify-center pb-8 relative flex-grow pt-12">
         <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
           <Card title="NOVO PROFESSOR" size="2xl">
@@ -129,13 +128,13 @@ export default function NovoProfessor() {
             </div>
           </Card>
         </div>
-      <Footer />
+        <Footer />
       </div>
-       <ModalAlert
-              description={modalMessage}
-              isVisible={showModal}
-              onClose={() => setShowModal(false)}
-            />
+      <ModalAlert
+        description={modalMessage}
+        isVisible={showModal}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 }
