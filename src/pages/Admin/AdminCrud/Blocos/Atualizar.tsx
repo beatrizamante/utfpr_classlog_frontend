@@ -29,13 +29,15 @@ export default function AtualizaBloco() {
       try {
         if (blockId) {
           const response = await blocksApi.getBlockById(blockId.toString());
+          console.log("See response", response.data);
           if (response.data) {
             setFormData({
               name: response.data.data.name,
               photo: null,
             });
             if (response.data.data.photo) {
-              setImageUrl(response.data.data.photo);
+              const baseUrl = process.env.REACT_APP_API_URL;
+              setImageUrl(`${baseUrl}${response.data.data.photo}`);
             }
           }
         }
@@ -135,8 +137,8 @@ export default function AtualizaBloco() {
             </div>
           </Card>
         </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 }
