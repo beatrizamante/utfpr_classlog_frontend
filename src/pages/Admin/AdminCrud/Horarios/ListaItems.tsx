@@ -41,13 +41,7 @@ export default function ListarHorarios() {
   const handleList = async () => {
     try {
       const response = await subjectsApi.getSubjects();
-
-      // console.log(response.data)
-      // console.log("Schedules antes do set:", response.data);
       setSchedules(Array.isArray(response.data) ? response.data : []);
-      // console.log("Schedules no estado após o set:", schedules);
-      // setSchedules(response.data);
-      // console.log("Success! List formed!");
     } catch (err) {
       console.error("An error occurred: ", err);
     }
@@ -146,8 +140,8 @@ export default function ListarHorarios() {
             </div>
           </Card>
         </div>
-      </div>
       <Footer />
+      </div>
       <Modal
         message="Tem certeza que deseja deletar essas informações?"
         isVisible={showModal}

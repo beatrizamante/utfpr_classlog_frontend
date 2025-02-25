@@ -136,8 +136,8 @@ export default function Listas() {
              </div>
            </Card>
          </div>
-       </div>
        <Footer />
+       </div>
        <Modal
          message="Tem certeza que deseja deletar essas informações?"
          isVisible={showModal}

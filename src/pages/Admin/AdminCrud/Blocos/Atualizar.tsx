@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../../../components/Forms/Item/Input";
-import LoadInput from "../../../../components/Forms/Item/LoadInput"; // Import the reusable InputLoad component
+import LoadInput from "../../../../components/Forms/Item/LoadInput"; 
 import Card from "../../../../components/Forms/Card";
 import Button from "../../../../components/Button";
 import Footer from "../../../../components/Footer";
