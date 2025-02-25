@@ -38,8 +38,6 @@ export default function Listas() {
      }
    };
 
-
-
    const handleList = async () => {
      try {
        const response = await classroomsApi.getClassrooms();
