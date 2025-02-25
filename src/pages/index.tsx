@@ -40,29 +40,30 @@ export default function HomeSchedules() {
             <div className="mt-8 px-2">
               <ul ref={listRef}>
                 <List
-                  listOf={blocks.map((block) => ({
-                    ...block,
-                    id: block.id,
-                  }))}
-                  onSelected={(id: number | null) => {
-                    if (id !== null) {
-                      setSelectId(id);
-                      navigate(`/schedules/block/${id}`);
-                    }
-                  }}
-                  selectedId={selectId}
-                  getItemLabel={(block) => block.name}
-                  getItemId={(block) => block.id}
+                    listOf={blocks.map((block) => ({
+                      ...block,
+                      id: block.id,
+                    }))}
+                    onSelected={(id: number | null) => {
+                      if (id !== null) {
+                        setSelectId(id);
+                        navigate(`/schedules/block/${id}`);
+                      }
+                    }}
+                    selectedId={selectId}
+                    getItemLabel={(block) => block.name}
+                    getItemId={(block) => block.id}
                 />
               </ul>
             </div>
             <div className="flex flex-col items-center gap-4 w-full pt-4">
+              <Button onClick={() => navigate("/fullSchedules")}>Todos os Horários</Button>
               <Button onClick={() => navigate("/login")}>LOGIN</Button>
             </div>
           </Card>
         </div>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 }
