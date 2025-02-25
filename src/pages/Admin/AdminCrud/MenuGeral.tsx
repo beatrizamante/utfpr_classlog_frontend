@@ -54,6 +54,16 @@ export default function MenuGeral() {
             <Line />
 
             <Button
+                onClick={() =>
+                    navigate(`/admin/professor-subjects${action ? `/${action}` : ""}`)
+                }
+                height={"80px"}
+            >
+              Matéria/Professor
+            </Button>
+            <Line />
+
+            <Button
               onClick={() =>
                 navigate(`/admin/horarios${action ? `/${action}` : ""}`)
               }
