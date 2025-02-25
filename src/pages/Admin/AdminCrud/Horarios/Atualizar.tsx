@@ -174,7 +174,6 @@ export default function UpdateSchedule() {
 
   const handleSave = async () => {
     try {
-      console.log(formData);
       if (
         formData.start_time &&
         formData.end_time &&
@@ -194,7 +193,7 @@ export default function UpdateSchedule() {
           date: formData.date,
         };
 
-        const response = await schedulesApi.createSchedule(newSchedule);
+        const response = await schedulesApi.updateSchedule(id, newSchedule);
         console.log(response);
         console.log("Schedule successfully created.");
         setFormData({

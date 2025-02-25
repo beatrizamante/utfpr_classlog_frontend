@@ -103,7 +103,7 @@ export default function ListProfessorsSubjects() {
        <Header />
        <div className="flex justify-center pb-8 relative flex-grow pt-12">
          <div className="flex flex-col items-center justify-between pt-6 pb-6 relative z-10 space-y-4">
-           <Card title="SALAS DE AULA" size="2xl">
+           <Card title="Matéria/Professor" size="2xl">
              <div className="mx-4 mb-4">
                <ul ref={listRef}>
                  <List
@@ -124,17 +124,6 @@ export default function ListProfessorsSubjects() {
                <Button
                  onClick={() => {
                    if (selectId) {
-                    navigate(`/admin/salas/atualizar/${selectId}`)
-                    console.log(`Navegar para atualizar o ID: ${selectId}`);
-                   }
-                 }}
-                 disabled={!selectId}
-               >
-                 ATUALIZAR
-               </Button>
-               <Button
-                 onClick={() => {
-                   if (selectId) {
                      setShowModal(true);
                    }
                  }}
@@ -143,6 +132,8 @@ export default function ListProfessorsSubjects() {
                >
                  EXCLUIR
                </Button>
+                 <Button onClick={() => navigate(-1)} color="utfpr_red">VOLTAR</Button>
+
              </div>
            </Card>
          </div>

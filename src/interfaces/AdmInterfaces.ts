@@ -28,6 +28,8 @@ export interface Schedules {
     classroom_id: number; // Sala de Aula, também um número
     date: string; // Data no formato "YYYY-MM-DD"
     subject_subject_name?: string | null;
+    subject_name?: string | null;
+    professor_name?: string | null;
     classroom_name?: string | null;
     block_name?: string | null;
     is_canceled?: boolean | null;

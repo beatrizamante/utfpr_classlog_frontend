@@ -133,6 +133,7 @@ export default function Listas() {
                >
                  EXCLUIR
                </Button>
+                 <Button onClick={() => navigate(-1)} color="utfpr_red">VOLTAR</Button>
              </div>
            </Card>
          </div>
