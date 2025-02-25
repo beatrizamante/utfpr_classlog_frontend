@@ -7,7 +7,7 @@ import background from "../../../../assets/images/background.png";
 import Header from "../../../../components/Header";
 import { useNavigate } from "react-router";
 import { schedulesApi } from "../../../../api/admin/apiSchedules";
-import { Classroom, Schedules } from "../../../../interfaces/AdmInterfaces";
+import { Classroom } from "../../../../interfaces/AdmInterfaces";
 import { classroomsApi } from "../../../../api/admin/apiClassroom";
 import api from "../../../../services/api";
 
@@ -121,7 +121,7 @@ export default function NovoHorario() {
       type: "select",
       options: userSubjects.map((userSubject) => ({
         label: `${userSubject.user.user_name} - ${userSubject.subject.subject_name}`,
-        value: userSubject.id, // O valor será o 'id' do userSubject
+        value: userSubject.id, 
       })),
     },
     {
